@@ -1,0 +1,14 @@
+﻿Control;Contrôle à SS Astraeus.
+Tom;hmm ?
+Control;Nous avons des mauvaises nouvelles.
+Tom;hmm hmm ?
+Control;Eh bien...;Tu sais...;hum...;Ce stagiaire dont je te parlais la semaine dernière ?
+Tom;hmm ?
+Control;Oui, c'est lui.;Eh bien, il a merdé.;Il était assigné à la détection des astéroïdes pendant que tu traverses la ceinture d'astéroïdes.;Et...;Comment dire ?;Il faisait du bon boulot le premier mois, du coup je ne l'ai pas tellement surveillé dernièrement.;Et ce gamin, pendant qu'il était censé surveiller les astéroïdes s'approchant, il passait son temps à jouer à Bandy Crush sur Fakebook et...
+Tom;IL A PROFITÉ DE MON ABSCENCE POUR BATTRE MON SCORE !?!?!?!?
+Control;Non...;hum...;Pour faire court : Tu te diriges droit dans une zone très dense de la ceinture d'astéroïdes.;Étant donné ta vitesse, il n'y a aucune chance que tu l'évites.;En fait, tu peux atteindre cette région d'une seconde à l'autre.
+Tom;hmm ?
+Control;Ouais.;Si tu es assez chanceux pour ne pas percuter un astéroïde énorme, tu devras quand même faire face à une pluie de micrométéorites qui va déchiqueter ton vaisseau.
+Tom;Donc...;Quel est le plan ?
+Control;Tu vas avoir une mort douloureuse.
+Tom;hmm ?

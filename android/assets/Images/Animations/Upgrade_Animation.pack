@@ -1,0 +1,215 @@
+
+Upgrade_Animation.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Upgrade_Animation
+  rotate: false
+  xy: 1, 685
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 0
+Upgrade_Animation
+  rotate: false
+  xy: 1, 514
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 1
+Upgrade_Animation
+  rotate: false
+  xy: 133, 685
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 2
+Upgrade_Animation
+  rotate: false
+  xy: 1, 343
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 3
+Upgrade_Animation
+  rotate: false
+  xy: 133, 514
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 4
+Upgrade_Animation
+  rotate: false
+  xy: 265, 685
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 5
+Upgrade_Animation
+  rotate: false
+  xy: 1, 172
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 6
+Upgrade_Animation
+  rotate: false
+  xy: 133, 343
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 7
+Upgrade_Animation
+  rotate: false
+  xy: 265, 514
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 8
+Upgrade_Animation
+  rotate: false
+  xy: 397, 685
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 9
+Upgrade_Animation
+  rotate: false
+  xy: 1, 1
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 10
+Upgrade_Animation
+  rotate: false
+  xy: 133, 172
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 11
+Upgrade_Animation
+  rotate: false
+  xy: 265, 343
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 12
+Upgrade_Animation
+  rotate: false
+  xy: 397, 514
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 13
+Upgrade_Animation
+  rotate: false
+  xy: 529, 685
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 14
+Upgrade_Animation
+  rotate: false
+  xy: 133, 1
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 15
+Upgrade_Animation
+  rotate: false
+  xy: 265, 172
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 16
+Upgrade_Animation
+  rotate: false
+  xy: 397, 343
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 17
+Upgrade_Animation
+  rotate: false
+  xy: 529, 514
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 18
+Upgrade_Animation
+  rotate: false
+  xy: 661, 685
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 19
+Upgrade_Animation
+  rotate: false
+  xy: 265, 1
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 20
+Upgrade_Animation
+  rotate: false
+  xy: 397, 172
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 21
+Upgrade_Animation
+  rotate: false
+  xy: 529, 343
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 22
+Upgrade_Animation
+  rotate: false
+  xy: 661, 514
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 23
+Upgrade_Animation
+  rotate: false
+  xy: 793, 685
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 24
+Upgrade_Animation
+  rotate: false
+  xy: 397, 1
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 25
+Upgrade_Animation
+  rotate: false
+  xy: 529, 172
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 26
+Upgrade_Animation
+  rotate: false
+  xy: 661, 343
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 27
+Upgrade_Animation
+  rotate: false
+  xy: 793, 514
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 28
+Upgrade_Animation
+  rotate: false
+  xy: 529, 1
+  size: 130, 169
+  orig: 130, 169
+  offset: 0, 0
+  index: 29

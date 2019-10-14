@@ -1,0 +1,628 @@
+
+Images.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+MenuWindow
+  rotate: false
+  xy: 2, 1304
+  size: 1000, 741
+  orig: 1000, 741
+  offset: 0, 0
+  index: -1
+GameFinishedWindow
+  rotate: false
+  xy: 1007, 1736
+  size: 1003, 309
+  orig: 1003, 309
+  offset: 0, 0
+  index: -1
+JetPackButton
+  rotate: false
+  xy: 2, 795
+  size: 504, 504
+  orig: 504, 504
+  offset: 0, 0
+  index: -1
+JetPackButtonCheck
+  rotate: false
+  xy: 2, 286
+  size: 504, 504
+  orig: 504, 504
+  offset: 0, 0
+  index: -1
+ScreenTitle
+  rotate: false
+  xy: 1007, 1561
+  size: 818, 170
+  orig: 818, 170
+  offset: 0, 0
+  index: -1
+LeftButton
+  rotate: false
+  xy: 511, 934
+  size: 467, 365
+  orig: 467, 365
+  offset: 0, 0
+  index: -1
+LeftButtonCheck
+  rotate: false
+  xy: 511, 564
+  size: 467, 365
+  orig: 467, 365
+  offset: 0, 0
+  index: -1
+RightButton
+  rotate: false
+  xy: 511, 194
+  size: 467, 365
+  orig: 467, 365
+  offset: 0, 0
+  index: -1
+RightButtonCheck
+  rotate: false
+  xy: 1007, 1191
+  size: 467, 365
+  orig: 467, 365
+  offset: 0, 0
+  index: -1
+LevelButton
+  rotate: false
+  xy: 1830, 1446
+  size: 215, 285
+  orig: 215, 285
+  offset: 0, 0
+  index: -1
+BackButton
+  rotate: false
+  xy: 983, 1053
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+BackButtonCheck
+  rotate: false
+  xy: 983, 915
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+HomeButton
+  rotate: false
+  xy: 983, 777
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+HomeButtonCheck
+  rotate: false
+  xy: 983, 639
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+NextButton
+  rotate: false
+  xy: 983, 501
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+NextButtonCheck
+  rotate: false
+  xy: 983, 363
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+PlayButton
+  rotate: false
+  xy: 983, 225
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+FullVersion_DE
+  rotate: false
+  xy: 1479, 1256
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+PlayButtonCheck
+  rotate: false
+  xy: 983, 87
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+BackButtonIcon
+  rotate: false
+  xy: 2, 15
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+FullVersion_EN
+  rotate: false
+  xy: 1507, 951
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+FullVersion_ES
+  rotate: false
+  xy: 1507, 646
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+FullVersion_FR
+  rotate: false
+  xy: 1507, 341
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Facebook
+  rotate: false
+  xy: 1507, 37
+  size: 300, 299
+  orig: 300, 299
+  offset: 0, 0
+  index: -1
+RestartButton
+  rotate: false
+  xy: 285, 56
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+RevolvingObjectLarge
+  rotate: false
+  xy: 285, 26
+  size: 400, 25
+  orig: 400, 25
+  offset: 0, 0
+  index: -1
+LevelButtonCheck
+  rotate: false
+  xy: 1812, 1156
+  size: 215, 285
+  orig: 215, 285
+  offset: 0, 0
+  index: -1
+LevelButtonInactive
+  rotate: false
+  xy: 1812, 866
+  size: 215, 285
+  orig: 215, 285
+  offset: 0, 0
+  index: -1
+CrateHorizontal
+  rotate: false
+  xy: 1812, 761
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+LinearButton
+  rotate: false
+  xy: 1812, 638
+  size: 182, 118
+  orig: 182, 118
+  offset: 0, 0
+  index: -1
+LinearButtonCheck
+  rotate: false
+  xy: 1812, 515
+  size: 182, 118
+  orig: 182, 118
+  offset: 0, 0
+  index: -1
+PauseButtonCheck
+  rotate: false
+  xy: 1812, 376
+  size: 134, 134
+  orig: 134, 134
+  offset: 0, 0
+  index: -1
+PauseButton
+  rotate: false
+  xy: 809, 56
+  size: 133, 133
+  orig: 133, 133
+  offset: 0, 0
+  index: -1
+SliderBackground
+  rotate: false
+  xy: 690, 35
+  size: 258, 16
+  orig: 258, 16
+  offset: 0, 0
+  index: -1
+UIWindow
+  rotate: false
+  xy: 1812, 255
+  size: 116, 116
+  split: 58, 57, 57, 57
+  orig: 116, 116
+  offset: 0, 0
+  index: -1
+RevolvingObjectMedium
+  rotate: false
+  xy: 285, 256
+  size: 200, 25
+  orig: 200, 25
+  offset: 0, 0
+  index: -1
+CrateMetal
+  rotate: false
+  xy: 1812, 150
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+CrateSpace1
+  rotate: false
+  xy: 1812, 45
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+CrateSpace2
+  rotate: false
+  xy: 285, 201
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+CrateSpace2_Large
+  rotate: false
+  xy: 390, 201
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+Server
+  rotate: false
+  xy: 1951, 408
+  size: 51, 102
+  orig: 51, 102
+  offset: 0, 0
+  index: -1
+FuelRefill
+  rotate: false
+  xy: 983, 1249
+  size: 19, 50
+  orig: 19, 50
+  offset: 0, 0
+  index: -1
+OxygenRefill
+  rotate: false
+  xy: 983, 1194
+  size: 19, 50
+  orig: 19, 50
+  offset: 0, 0
+  index: -1
+SliderKnob
+  rotate: false
+  xy: 1784, 1472
+  size: 34, 84
+  orig: 34, 84
+  offset: 0, 0
+  index: -1
+CrateSpace1_Large
+  rotate: false
+  xy: 1933, 271
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+CrateSquare
+  rotate: false
+  xy: 1917, 150
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+MovingObstacle
+  rotate: false
+  xy: 1917, 45
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Debris2
+  rotate: false
+  xy: 1933, 256
+  size: 100, 10
+  orig: 100, 10
+  offset: 0, 0
+  index: -1
+Debris4
+  rotate: false
+  xy: 285, 11
+  size: 100, 10
+  orig: 100, 10
+  offset: 0, 0
+  index: -1
+Door
+  rotate: false
+  xy: 690, 5
+  size: 100, 25
+  orig: 100, 25
+  offset: 0, 0
+  index: -1
+RevolvingObject
+  rotate: false
+  xy: 795, 5
+  size: 100, 25
+  orig: 100, 25
+  offset: 0, 0
+  index: -1
+Debris1
+  rotate: false
+  xy: 1951, 393
+  size: 50, 10
+  orig: 50, 10
+  offset: 0, 0
+  index: -1
+Debris3
+  rotate: false
+  xy: 390, 11
+  size: 50, 10
+  orig: 50, 10
+  offset: 0, 0
+  index: -1
+Button
+  rotate: false
+  xy: 953, 9
+  size: 73, 73
+  split: 36, 36, 36, 36
+  orig: 73, 73
+  offset: 0, 0
+  index: -1
+ButtonCheck
+  rotate: false
+  xy: 1031, 9
+  size: 73, 73
+  split: 36, 36, 36, 36
+  orig: 73, 73
+  offset: 0, 0
+  index: -1
+Gyrophare
+  rotate: false
+  xy: 1109, 18
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+PistonAxis
+  rotate: false
+  xy: 1178, 32
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+PistonAxisHorizontal
+  rotate: false
+  xy: 1233, 32
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+PistonHead
+  rotate: false
+  xy: 1288, 32
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+PistonHeadHorizontal
+  rotate: false
+  xy: 1343, 32
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+SwitchOff
+  rotate: false
+  xy: 1398, 32
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+DialogueImage
+  rotate: false
+  xy: 1453, 35
+  size: 47, 47
+  split: 23, 23, 23, 23
+  orig: 47, 47
+  offset: 0, 0
+  index: -1
+imageTable
+  rotate: false
+  xy: 1178, 2
+  size: 25, 25
+  split: 12, 12, 12, 12
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+SmallMetalBox
+  rotate: false
+  xy: 1208, 2
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+MenuButton
+  rotate: false
+  xy: 1999, 721
+  size: 36, 35
+  split: 17, 16, 17, 15
+  orig: 36, 35
+  offset: 0, 0
+  index: -1
+MenuButtonCheck
+  rotate: false
+  xy: 1999, 681
+  size: 36, 35
+  split: 17, 16, 17, 15
+  orig: 36, 35
+  offset: 0, 0
+  index: -1
+Lightning
+  rotate: false
+  xy: 2015, 2016
+  size: 16, 29
+  split: 7, 8, 14, 14
+  orig: 16, 29
+  offset: 0, 0
+  index: -1
+ConeLight
+  rotate: false
+  xy: 1479, 1246
+  size: 17, 5
+  orig: 17, 5
+  offset: 0, 0
+  index: -1
+WhiteSquare
+  rotate: false
+  xy: 1501, 1250
+  size: 1, 1
+  split: 0, 0, 0, 0
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+
+Images2.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+RestartButtonCheck
+  rotate: false
+  xy: 2, 883
+  size: 519, 133
+  orig: 519, 133
+  offset: 0, 0
+  index: -1
+MoreGames_DE
+  rotate: false
+  xy: 2, 578
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+MoreGames_EN
+  rotate: false
+  xy: 2, 273
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+BackButtonIconCheck
+  rotate: false
+  xy: 2, 2
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+MoreGames_ES
+  rotate: false
+  xy: 307, 578
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+MoreGames_FR
+  rotate: false
+  xy: 307, 273
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+HomeButtonIcon
+  rotate: false
+  xy: 285, 2
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+Rate
+  rotate: false
+  xy: 612, 716
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Stars
+  rotate: false
+  xy: 612, 411
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Twitter
+  rotate: false
+  xy: 917, 716
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+HomeButtonIconCheck
+  rotate: false
+  xy: 917, 445
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+NextButtonIcon
+  rotate: false
+  xy: 1222, 750
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+NextButtonIconCheck
+  rotate: false
+  xy: 1505, 750
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+PlayButtonIcon
+  rotate: false
+  xy: 612, 140
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+PlayButtonIconCheck
+  rotate: false
+  xy: 917, 174
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+RestartButtonIcon
+  rotate: false
+  xy: 1222, 479
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+RestartButtonIconCheck
+  rotate: false
+  xy: 1505, 479
+  size: 278, 266
+  orig: 278, 266
+  offset: 0, 0
+  index: -1
+SwitchOn
+  rotate: false
+  xy: 526, 966
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1

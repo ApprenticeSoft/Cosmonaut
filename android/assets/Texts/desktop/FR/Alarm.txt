@@ -1,0 +1,6 @@
+Alarm;ATTENTION
+Tom;Merde !
+Alarm;FUITE D'OXYGÈNE DÉTECTÉE
+Tom;Je dois rejoindre la capsule de sauvetage.
+Alarm;MODULE DE GRAVITÉ ARTIFICIELLE ENDOMMAGÉ
+Tom;Où est ma combinaison spatiale ?

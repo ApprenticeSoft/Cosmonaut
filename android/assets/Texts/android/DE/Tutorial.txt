@@ -1,0 +1,15 @@
+﻿1;OK;Alles ist OK...;Ich bin am Leben und habe meinen Raumanzug.;Ich kann mich noch retten.;Ich muss es nur zur Rettungskapsel schaffen...
+2;Lass uns den Raumanzug testen.;Ich kann mich nach links und rechts drehen durch drücken der Tasten 'A' und 'D'.;Sauber, das funktioniert.;Nun probieren wir den Jetpack aus durch drücken der Taste 'W'.;Super!;Ich kann mich nach links und rechts drehen mit diesen Tasten.;Nun probieren wir den Jetpack aus.;Ich kann mich durch Wischen nach links und rechts drehen.;Nun probieren wir den Jetpack aus durch berühren der rechten Seite des Bildschirms.
+3;Ich muss zum Ausgang gelangen.
+4;Zuerst müssen wir den Schalter betätigen um die Tür zu öffnen.
+5;Ich muss vorsichtig sein.;Mein Sauerstoffvorrat wird über die Zeit aufgebraucht.;Der Treibstoff wird bei jeder Benutzung des Jetpacks weniger.;Ich muss den Jetpack intelligent einsetzen wenn ich bis zum Ausgang kommen möchte.
+6;Dies sind upgrade Punkte.;Wenn ich genug davon finde, kann ich meine Ausrüstung verbessern.
+7;Um Treibstoff zu sparen kann ich mich von den Wänden abstoßen.;Das probieren wir gleich mal aus durch drücken von 'A' oder 'D'.
+8;Dies sind Sauerstoff und Treibstofftanks!;Sie sind überlebenswichtig für dieses Abenteuer.
+9;Um Treibstoff zu sparen kann ich mich von den Wänden abstoßen.;Das probieren wir gleich mal aus durch drücken von 'Links' oder 'Rechts'.
+10;Um Treibstoff zu sparen kann ich mich von den Wänden abstoßen.;Das probieren wir gleich mal aus durch wischen nach links oder rechts.
+11;Ich habe schon die hälfte von meinem Treibstoff verbraucht!;Ich muss besser aufpassen wenn ich den Jetpack benutze.;Am besten benutze ich ihn nur in kleinen Schüben und schwebe in die gewünschte Richtung.
+12;Ich habe schon die Hälfte von meinem Sauerstoff verbraucht!;Ich muss mich beeilen den Ausgang zu erreichen!
+13;Ich habe kein Treibstoff mehr!;Nein, nein, nein.;Das kann so nicht enden.;Das müssen wir noch einmal versuchen. Aber dieses Mal passen wir besser auf.
+14;Ich habe kein Sauerstoff mehr!;So darf es nicht enden.;Lass es uns noch einmal versuchen. Dieses Mal beeilen wir uns den Asugang zu erreichen.
+15;Der Schub meines Jetpacks ist ausschliesslich vertikal.;Das ist wichtig für genaues Navigieren.

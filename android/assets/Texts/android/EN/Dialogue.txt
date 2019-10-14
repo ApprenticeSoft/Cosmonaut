@@ -1,0 +1,14 @@
+﻿Control;Ground control to SS Astraeus.
+Tom;hmm ?
+Control;We've got bad news.
+Tom;hmm hmm ?
+Control;Well...;You know...;hum...;That intern I told you about last week ?
+Tom;hmm ?
+Control;Yeah, that's him.;Well, he fucked up.;He was assigned to the asteroid detection while you cross the asteroid belt.;And...;How to say ?;He was doing a good job the 1st month, thus I didn't watch him that much lately.;And this little brat, while he was supposed to monitor the approaching asteroids, spent his time playing to Bandy Crush on Fakebook and...
+Tom;HE TOOK ADVANTAGE OF MY ABSENCE TO BEAT MY SCORE !?!?!?!?
+Control;No...;hum...;Long story short : You are going right into a very dense region of the asteroid belt.;And given your speed, there is no way you can avoid it.;Actually you can reach this region at any moment.
+Tom;hmm ?
+Control;Yeah.;If you are lucky enough to don't hit a huge asteroid you'll still have to face a micrometeoroid rain that will shatter your spaceship.
+Tom;So...;What's the plan ?
+Control;You'll have a painful death.
+Tom;hmm ?

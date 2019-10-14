@@ -1,0 +1,6 @@
+﻿Alarm;WARNING
+Tom;Damn !
+Alarm;OXYGEN LEAK DETECTED
+Tom;I have to reach the safety capsule.
+Alarm;ARTIFICIAL GRAVITY MODULE DAMAGED
+Tom;Where is my space suit ?

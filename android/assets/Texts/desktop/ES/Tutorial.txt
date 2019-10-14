@@ -1,0 +1,15 @@
+1;OK;Todo está bien...;Estoy vivo y tengo mi traje espacial.;Todavía puedo salir de esto.;Sólo necesito llegar a la cápsula de seguridad...
+2;Vamos a probar este traje espacial.;Puedo girar a izquierda y derecha pulsando 'A' y 'D'.;Bueno, eso funciona.;Ahora, vamos a usar el jetpack presionando 'W'.;¡Estupendo!;Puedo girar a izquierda y derecha presionando estos botones.;Ahora, vamos a usar el jetpack.;Puedo girar deslizando izquierda y derecha.;Ahora, vamos a usar el jetpack tocando el lado derecho de la pantalla.
+3;Necesito llegar a la puerta de salida.
+4;En primer lugar, vamos a activar el interruptor para abrir esta puerta de la habitación.
+5;Tengo que ser cuidadoso.;Mi nivel de oxígeno disminuye con el tiempo.;Y mi nivel de combustible disminuye cada vez que mi jetpack se activa.;Tengo que usar mi jetpack sabiamente si quiero poder llegar a la salida.
+6;Este es un punto de actualización.;Si recojo lo suficiente, puedo actualizar mi equipo.
+7;Para ahorrar combustible, puedo moverme presionando las paredes cuando estoy lo suficientemente cerca;Intentemos esto presionando 'A' o 'D'.
+8;¡Estos son combustible y recargas de oxígeno!;¡Será de vital importancia durante la aventura!
+9;Para ahorrar combustible, puedo moverme empujando las paredes cuando estoy lo suficientemente cerca;Intentemos esto presionando 'Izquierda' o 'Derecha'.
+10;Para ahorrar combustible, puedo moverme presionando las paredes cuando estoy lo suficientemente cerca;Intentemos esto deslizando 'Izquierda' o 'Derecha'.
+11;¡Ya consumí la mitad de mi combustible!;Necesito usar mi jetpack con más cuidado.;La mejor manera es usar el jetpack por chorros pequeños y dejarme flotar en la dirección elegida.
+12;¡Ya he consumido la mitad de mi oxígeno!;¡Tengo que darme prisa para llegar a la puerta de salida!
+13;¡Estoy sin combustible!;No no no.;Esto no puede terminar así.;Intentemos otra vez más cuidadosamente.
+14;¡Estoy sin oxígeno!;No se supone que suceda así.;¡Terminemos este nivel más rápido!
+15;Mi jetpack es un jetpack con empuje vertical.;Es importante saber esto para dirigirme correctamente.

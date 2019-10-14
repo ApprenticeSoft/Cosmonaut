@@ -1,0 +1,897 @@
+
+Controls_Animation.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 0
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 1
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 2
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 3
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 4
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 5
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 6
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 7
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 8
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 9
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 10
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 11
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 12
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 13
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 14
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 15
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 16
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 17
+
+Controls_Animation2.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 18
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 19
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 20
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 21
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 22
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 23
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 24
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 25
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 26
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 27
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 28
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 29
+
+Controls_Animation3.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 30
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 31
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 32
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 33
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 34
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 35
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 36
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 37
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 38
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 39
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 40
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 41
+
+Controls_Animation4.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 42
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 43
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 44
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 45
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 46
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 47
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 48
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 49
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 50
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 51
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 52
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 53
+
+Controls_Animation5.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 54
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 55
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 56
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 57
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 58
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 59
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 60
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 61
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 62
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 63
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 64
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 65
+
+Controls_Animation6.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 66
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 67
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 68
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 69
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 70
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 71
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 72
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 73
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 74
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 75
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 76
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 77
+
+Controls_Animation7.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 78
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 79
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 80
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 81
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 82
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 83
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 84
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 85
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 86
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 87
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 88
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 89
+
+Controls_Animation8.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 90
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 91
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 92
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 93
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 94
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 95
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 96
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 97
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 98
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 99
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 100
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 101
+
+Controls_Animation9.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 102
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 103
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 104
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 105
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 106
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 107
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 108
+Controls_Animation
+  rotate: false
+  xy: 314, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 109
+Controls_Animation
+  rotate: false
+  xy: 627, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 110
+Controls_Animation
+  rotate: false
+  xy: 314, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 111
+Controls_Animation
+  rotate: false
+  xy: 627, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 112
+Controls_Animation
+  rotate: false
+  xy: 627, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 113
+
+Controls_Animation10.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Controls_Animation
+  rotate: false
+  xy: 1, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 114
+Controls_Animation
+  rotate: false
+  xy: 1, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 115
+Controls_Animation
+  rotate: false
+  xy: 314, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 116
+Controls_Animation
+  rotate: false
+  xy: 1, 234
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 117
+Controls_Animation
+  rotate: false
+  xy: 314, 467
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 118
+Controls_Animation
+  rotate: false
+  xy: 627, 700
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 119
+Controls_Animation
+  rotate: false
+  xy: 1, 1
+  size: 311, 231
+  orig: 311, 231
+  offset: 0, 0
+  index: 120

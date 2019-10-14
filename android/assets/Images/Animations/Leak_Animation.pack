@@ -1,0 +1,75 @@
+
+Leak_Animation.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Leak_Animation
+  rotate: false
+  xy: 2, 57
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 1
+Leak_Animation
+  rotate: false
+  xy: 2, 2
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 2
+Leak_Animation
+  rotate: false
+  xy: 107, 57
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 3
+Leak_Animation
+  rotate: false
+  xy: 107, 2
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 4
+Leak_Animation
+  rotate: false
+  xy: 212, 57
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 5
+Leak_Animation
+  rotate: false
+  xy: 212, 2
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 6
+Leak_Animation
+  rotate: false
+  xy: 317, 57
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 7
+Leak_Animation
+  rotate: false
+  xy: 317, 2
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 8
+Leak_Animation
+  rotate: false
+  xy: 422, 57
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 9
+Leak_Animation
+  rotate: false
+  xy: 422, 2
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: 10

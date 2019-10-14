@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="128" tileheight="128" nextobjectid="102">
+ <properties>
+  <property name="Ambiant Light Min" value="0.2"/>
+ </properties>
+ <tileset firstgid="1" name="Room_red" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="56" columns="7">
+  <image source="Tilesets/Room_red.png" width="910" height="1040"/>
+ </tileset>
+ <tileset firstgid="57" name="Floor_blue" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="36" columns="6">
+  <image source="Tilesets/Floor_blue.png" width="780" height="780"/>
+ </tileset>
+ <tileset firstgid="93" name="Floor_red" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="36" columns="6">
+  <image source="Tilesets/Floor_red.png" width="780" height="780"/>
+ </tileset>
+ <tileset firstgid="129" name="Pipes" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="36" columns="6">
+  <image source="Tilesets/Pipes.png" width="780" height="780"/>
+ </tileset>
+ <tileset firstgid="165" name="Items" tilewidth="128" tileheight="128" tilecount="8" columns="4">
+  <image source="Tilesets/Items.png" width="520" height="260"/>
+ </tileset>
+ <layer name="Background" width="28" height="18">
+  <data encoding="base64" compression="zlib">
+   eJzVVe0OwyAI5H22qulc7fs/2SSRBC8oMaY/RkK0Rbjjw5bo/+VbNVWNTVFeVd8bK8YUnDDAO6t+NtbbwGOsy7Dp/ISXx9/KZcUmPFPjhfxneOxzTPAsm9efNMHjmHnR5vUnOHij/K3esWA+N/V9HNWLqJ/BaKh1LzAfvj+XesaaaN56pkLjZuFGw2d1LdTPlPTLw9u5d1KLUT3FPpvxJyTC3lLsRWmKPlJfeZ8G8Ty8DPG0n95LfWexrHnhfGS+NUc9EwfEZbF6KO8S+Gl+WZ0rTs4aT84GxRf/EaNv0NPyAz4PNPQ=
+  </data>
+ </layer>
+ <layer name="Calque 2" width="28" height="18">
+  <data encoding="base64" compression="zlib">
+   eJxjYBi5oHvUvlH7sIAJWHAjEE+kkX3YQCcd7Gijs33IYLjbR29Ab//1A3ELDsyAxm6ls9uGSzlEDQAA254QFw==
+  </data>
+ </layer>
+ <layer name="Walls" width="28" height="18">
+  <data encoding="base64" compression="zlib">
+   eJytVAEOwyAI5Fu1trHttnf0KXtKn7KnDedYmBEV4iUEAgU5ik4AMA2UFeA1ozim0XfW4hZNNdG+IMPMznOFuAVUs1SPYg+hHwtchV+M3UHHz2OOS/WAtGdx4oBzvaSY1E+tfy4817GZ5TxmAz/eo1Sz1ctIfrc0x9+++m9sRxtjT7oXGn5xJivbf567d9SJNXr5+axvz+xeOAW/EdDwawHneba+ifwWPC+gvaH06gNnmfsPwb+lXj6w8gtCjuQnWP/f9r+XZ8lfgpUf3/2guBMj9rPFiSPyi+9r/g5r9KL4Hs+CN+G6cjg=
+  </data>
+ </layer>
+ <objectgroup name="Objects">
+  <object id="1" x="0" y="128" width="128" height="2048"/>
+  <object id="4" x="128" y="128" width="2304" height="128"/>
+  <object id="6" x="1280" y="512" width="768" height="640"/>
+  <object id="8" x="128" y="1536" width="3200" height="128"/>
+  <object id="9" type="Moving" x="1152" y="384">
+   <properties>
+    <property name="Height" value="2"/>
+    <property name="Loop" value="true"/>
+    <property name="Speed" value="13"/>
+    <property name="Width" value="2"/>
+   </properties>
+   <polyline points="0,0 1024,0 1024,1024 0,1024"/>
+  </object>
+  <object id="11" type="Moving" x="2176" y="1408">
+   <properties>
+    <property name="Association Number" value="3"/>
+    <property name="Height" value="2"/>
+    <property name="Loop" value="true"/>
+    <property name="Speed" value="13"/>
+    <property name="Width" value="2"/>
+   </properties>
+   <polyline points="0,0 -1024,0 -1024,-1024 0,-1024"/>
+  </object>
+  <object id="14" x="2304" y="256" width="128" height="896"/>
+  <object id="15" x="2304" y="1408" width="128" height="128"/>
+  <object id="16" x="3072" y="896" width="512" height="128"/>
+  <object id="17" type="Piston" x="2688" y="1024" width="128" height="416">
+   <properties>
+    <property name="Group" value="1"/>
+    <property name="Part" value="Axis"/>
+    <property name="Speed" value="15"/>
+   </properties>
+  </object>
+  <object id="18" type="Piston" x="2656" y="1440" width="192" height="96">
+   <properties>
+    <property name="Group" value="1"/>
+    <property name="Part" value="Head"/>
+    <property name="Speed" value="15"/>
+   </properties>
+  </object>
+  <object id="19" x="3456" y="1024" width="128" height="1280"/>
+  <object id="20" x="0" y="2176" width="3456" height="128"/>
+  <object id="22" x="2432" y="1664" width="128" height="384"/>
+  <object id="25" x="2048" y="1792" width="128" height="384"/>
+  <object id="26" x="1664" y="1664" width="128" height="384"/>
+  <object id="31" type="Piston" x="1152" y="1760" width="128" height="416">
+   <properties>
+    <property name="Group" value="2"/>
+    <property name="Part" value="Axis"/>
+    <property name="Pause" type="float" value="2.5"/>
+    <property name="Speed" value="17"/>
+   </properties>
+  </object>
+  <object id="32" type="Piston" x="1120" y="1664" width="192" height="96">
+   <properties>
+    <property name="Group" value="2"/>
+    <property name="Part" value="Head"/>
+    <property name="Speed" value="17"/>
+   </properties>
+  </object>
+  <object id="33" type="Exit" x="256" y="1856" width="128" height="128"/>
+  <object id="35" type="Leak" x="3072" y="1888" width="128" height="288">
+   <properties>
+    <property name="Force" value="22"/>
+   </properties>
+  </object>
+  <object id="36" type="Door" x="3328" y="1568" width="128" height="64">
+   <properties>
+    <property name="Association Number" value="1"/>
+   </properties>
+  </object>
+  <object id="38" type="Light" x="1856" y="1792" width="96" height="96" rotation="7.10165">
+   <properties>
+    <property name="Texture" value="CrateSpace1"/>
+   </properties>
+  </object>
+  <object id="39" type="Light" x="352" y="1760" width="67.4652" height="67.4652" rotation="-26.8578">
+   <properties>
+    <property name="Impulse" value="True"/>
+    <property name="Texture" value="CrateSpace1_Large"/>
+    <property name="Weight" value="0.8"/>
+   </properties>
+  </object>
+  <object id="40" type="Light" x="323.238" y="1974.67" width="96" height="96" rotation="-292.898">
+   <properties>
+    <property name="Impulse" value="True"/>
+    <property name="Texture" value="CrateSpace1"/>
+    <property name="Weight" value="0.8"/>
+   </properties>
+  </object>
+  <object id="41" type="Light" x="576" y="1920" width="96" height="96" rotation="7.10165">
+   <properties>
+    <property name="Impulse" value="True"/>
+    <property name="Texture" value="CrateSpace1_Large"/>
+    <property name="Weight" value="0.8"/>
+   </properties>
+  </object>
+  <object id="42" type="Light" x="704" y="1216" width="96" height="96" rotation="-292.898">
+   <properties>
+    <property name="Association Number" value="5"/>
+    <property name="Texture" value="CrateMetal"/>
+    <property name="Weight" value="0.8"/>
+   </properties>
+  </object>
+  <object id="43" type="Light" x="800" y="768" width="96" height="96" rotation="7.10165">
+   <properties>
+    <property name="Impulse" value="True"/>
+    <property name="Texture" value="CrateSpace1_Large"/>
+    <property name="Weight" value="0.8"/>
+   </properties>
+  </object>
+  <object id="48" type="Camera" x="320" y="1920">
+   <polyline points="0,0 2816,-32 2816,-704 160,-800"/>
+  </object>
+  <object id="85" x="1280" y="1152" width="384" height="128"/>
+  <object id="86" x="1792" y="1152" width="256" height="128"/>
+  <object id="89" type="Leak" x="649.52" y="416" width="256" height="96">
+   <properties>
+    <property name="Force" type="float" value="-43"/>
+   </properties>
+  </object>
+  <object id="91" x="2432" y="512" width="512" height="512"/>
+  <object id="92" x="2560" y="0" width="128" height="512"/>
+  <object id="93" x="2688" y="0" width="512" height="128"/>
+  <object id="94" x="3200" y="0" width="128" height="896"/>
+  <object id="95" type="Leak" x="2944" y="672" width="224" height="96">
+   <properties>
+    <property name="Force" type="float" value="33"/>
+   </properties>
+  </object>
+  <object id="96" type="ConeLight" x="2944" y="128">
+   <properties>
+    <property name="Color" value="1,0,0,1"/>
+    <property name="Distance" value="27"/>
+    <property name="Pulse" value="0,0,0,1"/>
+   </properties>
+   <polyline points="0,0 0,128"/>
+  </object>
+  <object id="101" type="ConeLight" x="1664" y="1824">
+   <properties>
+    <property name="Angle" type="float" value="23"/>
+    <property name="Color" value="0.78,.78,.78,1"/>
+    <property name="Distance" type="float" value="65"/>
+    <property name="Flicker" value="2"/>
+   </properties>
+   <polyline points="0,0 -32,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Spawn">
+  <object id="81" name="Tom" gid="170" x="384" y="1280" width="128" height="128"/>
+  <object id="82" type="Switch" gid="166" x="3328" y="1152" width="128" height="128">
+   <properties>
+    <property name="Association Number" value="1"/>
+   </properties>
+  </object>
+  <object id="83" type="Upgrade" gid="168" x="256" y="512" width="128" height="128">
+   <properties>
+    <property name="ID" value="1"/>
+   </properties>
+  </object>
+  <object id="87" type="Upgrade" gid="168" x="1664" y="1280" width="128" height="128">
+   <properties>
+    <property name="ID" value="2"/>
+   </properties>
+  </object>
+  <object id="88" type="Fuel" gid="171" x="2560" y="1792" width="128" height="128"/>
+  <object id="90" type="Upgrade" gid="168" x="2688" y="384" width="128" height="128">
+   <properties>
+    <property name="ID" value="3"/>
+   </properties>
+  </object>
+  <object id="100" type="Gyrophare" gid="169" x="672" y="928" width="128" height="128">
+   <properties>
+    <property name="Angle" type="float" value="15"/>
+    <property name="Color" value="0.97,.2,.2,1"/>
+    <property name="Distance" type="float" value="75"/>
+    <property name="Speed" type="int" value="7"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

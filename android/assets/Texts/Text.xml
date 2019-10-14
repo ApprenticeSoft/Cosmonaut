@@ -1,0 +1,66 @@
+<Text>
+    <PressAnyKey EN="Press Any Key" FR="Appuyez Sur Une Touche" ES="Presione Cualquier Tecla" DE="Eine Taste drücken" />
+    <TouchScreen EN="Touch The Screen" FR="Touchez l'Écran" ES="Tocar la pantalla" DE="Den Bildschirm berühren" />
+    <Start EN="Start" FR="Commencer" ES="Commenzar" DE="Start" />
+    <Play EN="Play" FR="Jouer" ES="Jugar" DE="Spielen" />
+    <Upgrades EN="Upgrades" FR="Améliorations" ES="Mejoras" DE="Upgrades" />
+	    <Oxygen EN="Oxygen" FR="Oxygène" ES="Oxígeno" DE="Sauerstoff" />
+	    <OxygenDescription EN="Increases the amount of oxygen" FR="Augmente la quantité d'oxygène" ES="Aumenta la cantidad de oxígeno" DE="Sauerstoffmenge erhöhen" />
+	    <Fuel EN="Fuel" FR="Carburant" ES="Combustible" DE="Treibstoff" />
+	    <FuelDescription EN="Increases the amount of fuel" FR="Augmente la quantité de carburant" ES="Aumenta la cantidad de combustible" DE="Treibstoffmenge erhöhen" />
+	    <Power EN="Power" FR="Puissance" ES="Potencia" DE="Schubkraft" />
+	    <PowerDescription EN="Increases the power of the jetpack" FR="Augmente la puissance du jetpack" ES="Aumenta la potencia del jetpack" DE="Schubkraft erhöhen" />
+	    <Cost EN="Cost" FR="Coût" ES="Coste" DE="Kosten" />
+	    <Maximum EN="Maximum" FR="Maximum" ES="Máximo" DE="Maximum" />
+	    <Buy EN="Buy" FR="Acheter" ES="Comprar" DE="Kaufen" />
+    <Options EN="Options" FR="Options" ES="Opciones" DE="Optionen" />
+	    <Controls EN="Controls" FR="Contrôles" ES="Controles" DE="Steuerung" />
+		    <Displacement EN="Displacement" FR="Déplacement" ES="Desplazamiento" DE="Bewegung" />
+		    <Zoom EN="Zoom" FR="Zoom" ES="Zoom" DE="Vergrößern" />
+		    <Pause EN="Pause" FR="Pause" ES="Pausa" DE="Pause" />
+		    <Gesture EN="Gesture" FR="Geste" ES="Gesto" DE="Geste" />
+		    <Buttons EN="Buttons" FR="Boutons" ES="Botones" DE="Tasten" />
+		    	<Size EN="Size" FR="Taille" ES="Tamaño" DE="Größe"/>
+		    	<Opacity EN="Opacity" FR="Opacité" ES="Opacidad" DE="Opazität" />
+    	<Language EN="Language" FR="Langue" ES="Idioma" DE="Sprache" />	
+    	<Reset EN="Reset" FR="Réinitialiser" ES="Restablecer" DE="Zurücksetzen" />
+    		<ResetWarning EN="This will reset your data and erase your game progression." FR="Ceci réinitialisera vos données et effacera votre progression de jeu." ES="Esto reajustará sus datos y borrará la progresión de su juego." DE="Dies setzt Ihre Daten zurück und löscht den Spielstand." />
+    		<DoYouWantToContinue EN="Do you want to continue ?" FR="Voulez-vous continuer?" ES="¿Desea continuar?" DE="Wollen Sie fortfahren?" />
+    		<ResetComplete EN="Your game progress has been erased" FR="La progression de votre jeu a été effacée" ES="Se ha borrado el progreso del juego" DE="Der Spielstand wurde gelöscht" />
+    		<Yes EN="Yes" FR="Oui" ES="Si" DE="Ja" />
+    		<No EN="No" FR="Non" ES="No" DE="Nein" />
+    		<OK EN="OK" FR="OK" ES="OK" DE="OK" />
+   		<DoYouLike EN="Do you enjoy Cosmonaut?" FR="Vous aimez Cosmonaut?" ES="¿Te gusta Cosmonaut?" DE="Gefällt ihnen Cosmonaut?" />		
+   		<DoYouRate EN="Do you want to rate it?" FR="Voulez vous le noter?" ES="¿Le evalúe?" DE="Wollen Sie es Bewerten?" />
+    		<Later EN="Later" FR="Plus tard" ES="Más tarde" DE="Später" />
+    		<Never EN="Never" FR="Jamais" ES="Nunca" DE="Nie" />
+   		<GetFullVersion EN="Do you want to get the full version?" FR="Voulez-vous obtenir la version complète?" ES="¿Quieres obtener la versión completa?" DE="Wollen Sie die Vollversion kaufen?" />
+   			<MoreLevels EN="24 levels" FR="24 niveaux" ES="24 niveles" DE="24 Levels" />
+   			<LongerLevels EN="Longer and more complex levels" FR="Des niveaux plus longs et plus complexes" ES="Niveles más largos y más complejos" DE="Längere und komplexere Levels" />
+   			<RemoveAds EN="Remove all ads" FR="Supprime toutes les publicités" ES="Elimina todos los anuncios" DE="Entfernt die Werbung" />
+   			<FreeVersion EN="The free version only give access to the " FR="La version gratuite donne seulement accès aux " ES="La versión gratuita sólo da acceso a los " DE="Die freie Version gibt nur Zugang zu den " />
+   			<FirstLevels EN=" first levels" FR=" premiers niveaux" ES=" primeros niveles" DE=" ersten Leveln" />
+   			<ThankYou EN="Thank you for playing!" FR="Merci d'avoir joué!" ES="¡Gracias por jugar!" DE="Danke dass Sie gespielt haben" />
+   			<Features EN="The full version features:" FR="La version complète comporte:" ES="La versión completa incluye:" DE="Die Vollversion enthält:" />
+    <Quit EN="Quit" FR="Quitter" ES="Dejar" DE="Beenden" />
+    <LevelSelection EN="Levels" FR="Niveaux" ES="Niveles" DE="Levels" />
+    <Resume EN="Resume" FR="Reprendre" ES="Reanudar" DE="Fortfahren" />
+    <Restart EN="Restart" FR="Recommencer" ES="Reiniciar" DE="Neustart" />
+    <Home EN="Home" FR="Accueil" ES="Home" DE="Home" />
+    <Crushed EN="Crushed!" FR="Écrasé!" ES="Aplastado!" DE="Zerschmettert!" />
+    <Electrocuted EN="Electrocuted!" FR="Électrocuté!" ES="Electrocutado!" DE="Stromschlag!" />
+    <OutOfOxygen EN="Out of Oxygen!" FR="Plus d'oxygène!" ES="Fuera de oxígeno!" DE="Kein Sauerstoff mehr!" />
+    <LevelCleared EN="Level Cleared" FR="Niveau Terminé" ES="Nivel Completado" DE="Level geschafft" />
+    <Next EN="Next" FR="Suivant" ES="Siguiente" DE="Nächster" />
+    <PressEsc EN="Press ESC to restart" FR="Appuyez sur ESC pour recommencer" ES="Presione ESC para iniciar" DE="Drücke ESC um neu zu starten" /> 
+    <PressPause EN="Press Pause to restart" FR="Appuyez sur Pause pour recommencer" ES="Presione Pausa para iniciar" DE="Drücke Pause um neu zu starten" />  
+    <Continue EN="Continue" FR="Continuer" ES="Continuar" DE="Weiter" />
+    <Somewhere EN="Somewhere between Mars and Jupiter" FR="Quelque part entre Mars et Jupiter" ES="En algún lugar entre Marte y Júpiter" DE="Irgendwo zwischen Mars und Jupiter" />
+    <GameBy EN="A game by" FR="Un jeu de" ES="Un juego de" DE="Ein Spiel vorbei" />
+    <CodeBy EN="Code by" FR="Code par" ES="Código por" DE="Code von" />
+    <GraphicsBy EN="Graphics by" FR="Graphismes par" ES="Gráficos por" DE="Grafiken von" />
+    <ArtBy EN="Art by" FR="Art par" ES="Arte por" DE="Kunst von" />
+    <SoundsBy EN="Sound effects by" FR="Effets sonores par" ES="Efectos de sonido por" DE="Soundeffekte von" />
+    <MusicBy EN="Music by" FR="Musique par" ES="Musica por" DE="Musik von" />
+    <GermanVersionBy EN="German version by" FR="Version allemande par" ES="Versión alemana de" DE="Deutsche version von" />
+</Text>

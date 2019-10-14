@@ -1,0 +1,15 @@
+﻿1;OK;Everything is OK...;I am alive and I have my space suit.;I can still get out of this.;I only need to reach the safety capsule...
+2;Let's test this space suit.;I can rotate left and right by pressing 'A' and 'D'.;Good, that works.;Now, let's use the jetpack by pressing 'W'.;Great!;I can rotate left and right by pressing these buttons.;Now, let's use the jetpack.;I can rotate by swiping left and right.;Now, let's use the jetpack touching the right side of the screen.
+3;I need to reach the exit door.
+4;First, let's activate the switch to open this room door.
+5;I have to be careful.;My oxygen level decreases with time.;And my fuel level decreases each time my jetpack is activated.;I have to use my jetpack wisely if I want to be able to reach the exit.
+6;This is an upgrade point.;If I collect enough of them, I can upgrade my gear.
+7;To save fuel, I can move by pushing on the walls when I am close enough.;Let's try this by pressing 'A' or 'D'.
+8;These are fuel and oxygen refills!; They will be of vital importance during the adventure!
+9;To save fuel, I can move by pushing on the walls when I am close enough.;Let's try this by pressing 'Left' or 'Right'.
+10;To save fuel, I can move by pushing on the walls when I am close enough.;Let's try this by swiping left or right.
+11;I already consumed half of my fuel!;I need to use my jetpack more carefully.;The best way is to use the jetpack by small spurts and let me float in the chosen direction.
+12;I already consumed half of my oxygen!;I must hurry to reach the exit door!
+13;I am out of fuel!;No, no, no.;This can't end like this.;Let's try again more carefully.
+14;I am out of oxygen!;It's not supposed to happen like that.;Let's finish this level faster!
+15;My jetpack is a jetpack with vertical thrust.;It is important to know this to properly direct me.

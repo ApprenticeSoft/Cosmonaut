@@ -1,0 +1,180 @@
+
+Fleche_Animation.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Fleche_Animation
+  rotate: false
+  xy: 2, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 0
+Fleche_Animation
+  rotate: false
+  xy: 2, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 1
+Fleche_Animation
+  rotate: false
+  xy: 58, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 2
+Fleche_Animation
+  rotate: false
+  xy: 58, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 3
+Fleche_Animation
+  rotate: false
+  xy: 114, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 4
+Fleche_Animation
+  rotate: false
+  xy: 114, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 5
+Fleche_Animation
+  rotate: false
+  xy: 170, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 6
+Fleche_Animation
+  rotate: false
+  xy: 170, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 7
+Fleche_Animation
+  rotate: false
+  xy: 226, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 8
+Fleche_Animation
+  rotate: false
+  xy: 226, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 9
+Fleche_Animation
+  rotate: false
+  xy: 282, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 10
+Fleche_Animation
+  rotate: false
+  xy: 282, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 11
+Fleche_Animation
+  rotate: false
+  xy: 338, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 12
+Fleche_Animation
+  rotate: false
+  xy: 338, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 13
+Fleche_Animation
+  rotate: false
+  xy: 394, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 14
+Fleche_Animation
+  rotate: false
+  xy: 394, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 15
+Fleche_Animation
+  rotate: false
+  xy: 450, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 16
+Fleche_Animation
+  rotate: false
+  xy: 450, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 17
+Fleche_Animation
+  rotate: false
+  xy: 506, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 18
+Fleche_Animation
+  rotate: false
+  xy: 506, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 19
+Fleche_Animation
+  rotate: false
+  xy: 562, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 20
+Fleche_Animation
+  rotate: false
+  xy: 562, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 21
+Fleche_Animation
+  rotate: false
+  xy: 618, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 22
+Fleche_Animation
+  rotate: false
+  xy: 618, 2
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 23
+Fleche_Animation
+  rotate: false
+  xy: 674, 232
+  size: 51, 225
+  orig: 51, 225
+  offset: 0, 0
+  index: 24

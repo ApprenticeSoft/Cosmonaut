@@ -1,0 +1,14 @@
+Control;Bodenkontrolle an SS Astraeus.
+Tom;hmm ?
+Control;Wir haben schlecht Nachrichten.
+Tom;hmm hmm ?
+Control;Ja...;Erinnern Sie sich...;hum...;Der Praktikant von dem ich Ihnen letzte Woche erzählte?
+Tom;hmm ?
+Control;Also, das ist er.;Er hat es verbockt;Er war für die Asteroidenerkennung eingeteilt während Sie den Asteroidengürtel durchquerten.;Und...;Wie soll ich das nun sagen ?;Im ersten Monat machte er eine klasse Figur, also hab ich ihn weniger kontrolliert in letzter Zeit.;Der kleine Scheisser hat statt die Monitore nach Asteroiden abzusuchen lieber seine Zeit mit Bandy Crush auf Fakebook vergeudet und ...
+Tom;ER HAT MEINE ABWESENHEIT DAZU AUSGENUTZT MEINEN HIGHSCORE ZU KNACKEN ?!?!?!?
+Control;Nein...;hum...;Lange Rede kurzer Sinn : Sie steuern direkt auf eine Region im Asteroidengürtel mit einer sehr hohen Anzahl an Objekten zu.;Bei Ihrer derzeitigen Geschwindigkeit gibt es keine Möglichkeit dem auszuweichen.;Im Grunde erreichen Sie die Region jeden Augenblick.
+Tom;hmm ?
+Control;Ja.;Wenn Sie das Glück haben nicht von einem Asteroiden getroffen zu werden, wird Ihr Raumschiff doch von einem Mikrometeoritenregen zerstört.
+Tom;Also...;Was ist der Plan ?
+Control;Sie werden einen schmerzhaften Tod haben.
+Tom;hmm ?

@@ -1,0 +1,145 @@
+
+Jetpack_Control_Animation.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Jetpack_Control
+  rotate: false
+  xy: 2, 698
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 0
+Jetpack_Control
+  rotate: false
+  xy: 2, 524
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 1
+Jetpack_Control
+  rotate: false
+  xy: 196, 698
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 2
+Jetpack_Control
+  rotate: false
+  xy: 2, 350
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 3
+Jetpack_Control
+  rotate: false
+  xy: 196, 524
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 4
+Jetpack_Control
+  rotate: false
+  xy: 390, 698
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 5
+Jetpack_Control
+  rotate: false
+  xy: 2, 176
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 6
+Jetpack_Control
+  rotate: false
+  xy: 196, 350
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 7
+Jetpack_Control
+  rotate: false
+  xy: 390, 524
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 8
+Jetpack_Control
+  rotate: false
+  xy: 584, 698
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 9
+Jetpack_Control
+  rotate: false
+  xy: 2, 2
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 10
+Jetpack_Control
+  rotate: false
+  xy: 196, 176
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 11
+Jetpack_Control
+  rotate: false
+  xy: 390, 350
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 12
+Jetpack_Control
+  rotate: false
+  xy: 584, 524
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 13
+Jetpack_Control
+  rotate: false
+  xy: 778, 698
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 14
+Jetpack_Control
+  rotate: false
+  xy: 196, 2
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 15
+Jetpack_Control
+  rotate: false
+  xy: 390, 176
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 16
+Jetpack_Control
+  rotate: false
+  xy: 584, 350
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 17
+Jetpack_Control
+  rotate: false
+  xy: 778, 524
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 18
+Jetpack_Control
+  rotate: false
+  xy: 390, 2
+  size: 189, 169
+  orig: 189, 169
+  offset: 0, 0
+  index: 19

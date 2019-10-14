@@ -1,0 +1,304 @@
+
+Rotation_Control_Animation.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 0
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 1
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 2
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 3
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 4
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 5
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 6
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 7
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 8
+Rotation_Control
+  rotate: false
+  xy: 2, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 9
+Rotation_Control
+  rotate: false
+  xy: 2, 770
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 10
+Rotation_Control
+  rotate: false
+  xy: 264, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 11
+Rotation_Control
+  rotate: false
+  xy: 2, 642
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 12
+Rotation_Control
+  rotate: false
+  xy: 264, 770
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 13
+Rotation_Control
+  rotate: false
+  xy: 526, 898
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 14
+Rotation_Control
+  rotate: false
+  xy: 2, 514
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 15
+Rotation_Control
+  rotate: false
+  xy: 264, 642
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 16
+Rotation_Control
+  rotate: false
+  xy: 526, 770
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 17
+Rotation_Control
+  rotate: false
+  xy: 2, 386
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 18
+Rotation_Control
+  rotate: false
+  xy: 264, 514
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 19
+Rotation_Control
+  rotate: false
+  xy: 526, 642
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 20
+Rotation_Control
+  rotate: false
+  xy: 2, 258
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 21
+Rotation_Control
+  rotate: false
+  xy: 264, 386
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 22
+Rotation_Control
+  rotate: false
+  xy: 526, 514
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 23
+Rotation_Control
+  rotate: false
+  xy: 2, 130
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 24
+Rotation_Control
+  rotate: false
+  xy: 2, 2
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 25
+Rotation_Control
+  rotate: false
+  xy: 264, 258
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 26
+Rotation_Control
+  rotate: false
+  xy: 526, 386
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 27
+Rotation_Control
+  rotate: false
+  xy: 264, 130
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 28
+Rotation_Control
+  rotate: false
+  xy: 264, 2
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 29
+Rotation_Control
+  rotate: false
+  xy: 526, 258
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 30
+Rotation_Control
+  rotate: false
+  xy: 526, 130
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 31
+Rotation_Control
+  rotate: false
+  xy: 526, 2
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 32
+
+Rotation_Control_Animation2.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+Rotation_Control
+  rotate: false
+  xy: 2, 386
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 33
+Rotation_Control
+  rotate: false
+  xy: 2, 258
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 34
+Rotation_Control
+  rotate: false
+  xy: 264, 386
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 35
+Rotation_Control
+  rotate: false
+  xy: 2, 130
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 36
+Rotation_Control
+  rotate: false
+  xy: 2, 2
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 37
+Rotation_Control
+  rotate: false
+  xy: 264, 258
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 38
+Rotation_Control
+  rotate: false
+  xy: 526, 386
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 39
+Rotation_Control
+  rotate: false
+  xy: 264, 130
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 40
+Rotation_Control
+  rotate: false
+  xy: 264, 2
+  size: 257, 123
+  orig: 257, 123
+  offset: 0, 0
+  index: 41

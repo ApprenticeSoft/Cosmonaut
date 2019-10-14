@@ -1,0 +1,147 @@
+
+Images_Fin.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Fin_Couloir2
+  rotate: false
+  xy: 2, 622
+  size: 1515, 1190
+  orig: 1515, 1190
+  offset: 0, 0
+  index: -1
+Surface_Vaisseau
+  rotate: false
+  xy: 2, 2
+  size: 1471, 615
+  orig: 1471, 615
+  offset: 0, 0
+  index: -1
+
+Images_Fin2.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Fin_Mur
+  rotate: false
+  xy: 2, 535
+  size: 1493, 1188
+  orig: 1493, 1188
+  offset: 0, 0
+  index: -1
+Vaisseau_Survie
+  rotate: false
+  xy: 2, 2
+  size: 1484, 528
+  orig: 1484, 528
+  offset: 0, 0
+  index: -1
+
+Images_Fin3.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Vaisseau_Mere
+  rotate: false
+  xy: 2, 1641
+  size: 1398, 361
+  orig: 1398, 361
+  offset: 0, 0
+  index: -1
+Fin_Personnage_Dos
+  rotate: false
+  xy: 2, 537
+  size: 888, 1099
+  orig: 888, 1099
+  offset: 0, 0
+  index: -1
+Porte_Bas
+  rotate: false
+  xy: 895, 622
+  size: 1055, 1014
+  orig: 1055, 1014
+  offset: 0, 0
+  index: -1
+Fin_Personnage_Face
+  rotate: false
+  xy: 895, 2
+  size: 830, 615
+  orig: 830, 615
+  offset: 0, 0
+  index: -1
+
+Images_Fin4.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Vaisseau_Fin
+  rotate: false
+  xy: 2, 881
+  size: 1232, 874
+  orig: 1232, 874
+  offset: 0, 0
+  index: -1
+Vaisseau_Fin_Reacteur
+  rotate: false
+  xy: 2, 2
+  size: 1232, 874
+  orig: 1232, 874
+  offset: 0, 0
+  index: -1
+Fin_Couloir
+  rotate: false
+  xy: 1239, 855
+  size: 779, 900
+  orig: 779, 900
+  offset: 0, 0
+  index: -1
+
+Images_Fin5.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Porte_Cadre
+  rotate: false
+  xy: 2, 1021
+  size: 1055, 1014
+  orig: 1055, 1014
+  offset: 0, 0
+  index: -1
+Porte_Droite
+  rotate: false
+  xy: 2, 2
+  size: 1055, 1014
+  orig: 1055, 1014
+  offset: 0, 0
+  index: -1
+
+Images_Fin6.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Porte_Gauche
+  rotate: false
+  xy: 2, 1021
+  size: 1055, 1014
+  orig: 1055, 1014
+  offset: 0, 0
+  index: -1
+Porte_Haut
+  rotate: false
+  xy: 2, 2
+  size: 1055, 1014
+  orig: 1055, 1014
+  offset: 0, 0
+  index: -1
+
+Images_Fin7.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Porte_Ouverte_Fin
+  rotate: false
+  xy: 2, 2
+  size: 1055, 1014
+  orig: 1055, 1014
+  offset: 0, 0
+  index: -1

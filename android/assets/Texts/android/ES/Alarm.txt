@@ -1,0 +1,6 @@
+﻿Alarm;ALARMA
+Tom;¡Mierda!
+Alarm;FUGA DE OXÍGENO DETECTADA
+Tom;Debo unirse a la cápsula de salvamento.
+Alarm;MÓDULO GRAVEDAD ARTIFICIAL DAÑADO
+Tom;¿Dónde está mi traje espacial?

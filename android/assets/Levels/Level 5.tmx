@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="23" tilewidth="128" tileheight="128" nextobjectid="33">
+ <properties>
+  <property name="Ambiant Light Min" value="0.27"/>
+ </properties>
+ <tileset firstgid="1" name="Floor_blue" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="36" columns="6">
+  <image source="Tilesets/Floor_blue.png" width="780" height="780"/>
+ </tileset>
+ <tileset firstgid="37" name="Room_blue" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="81" columns="9">
+  <image source="Tilesets/Room_blue.png" width="1170" height="1170"/>
+ </tileset>
+ <tileset firstgid="118" name="Pipes" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="36" columns="6">
+  <image source="Tilesets/Pipes.png" width="780" height="780"/>
+ </tileset>
+ <tileset firstgid="154" name="Items" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="8" columns="4">
+  <image source="Tilesets/Items.png" width="520" height="260"/>
+ </tileset>
+ <layer name="Background" width="25" height="23">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,101,101,101,101,0,0,0,101,101,101,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,101,101,101,101,0,0,0,101,101,101,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,101,101,101,101,0,0,0,101,101,101,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,101,101,101,101,0,0,0,101,101,101,0,0,0,0,0,
+0,0,0,0,0,101,101,101,101,101,101,101,101,101,0,0,0,101,101,101,0,0,0,0,0,
+0,0,0,0,0,101,101,101,101,101,101,101,101,101,0,0,0,101,101,101,0,0,0,0,0,
+0,0,0,0,0,101,101,101,101,101,101,101,101,101,0,0,0,101,101,101,0,0,0,0,0,
+0,0,0,0,0,101,101,0,0,0,101,101,101,101,0,0,0,101,101,101,0,0,0,0,0,
+0,0,0,0,0,101,101,0,0,0,101,101,101,101,101,101,101,101,101,101,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,101,101,101,101,101,101,101,101,101,101,0,0,0,0,0,
+0,0,0,0,0,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,0,0,0,0,0,
+0,0,0,0,0,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Calque 2" width="25" height="23">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,123,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Walls" width="25" height="23">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,3221225478,3221225475,3221225474,3221225475,3221225474,1610612742,1,3221225478,3221225474,3221225475,3221225474,1610612742,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2684354562,0,0,0,0,1610612738,1,2684354562,0,0,0,1610612738,1,1,1,1,
+1,1,1,1,1,1,1,1,14,2684354563,0,0,0,0,1610612739,1,2684354563,0,0,0,1610612739,1,1,1,1,
+1,1,1,1,1,13,1,1,13,2684354562,0,0,0,0,1610612738,1,2684354562,0,0,0,1610612738,1,1,1,1,
+1,1,1,1,3221225478,3221225474,3221225475,3221225474,3221225475,2684354564,0,0,0,0,1610612739,1,2684354563,0,0,0,1610612739,1,1,1,1,
+1,1,1,1,2684354563,0,0,0,0,0,0,0,0,0,1610612738,1,2684354562,0,0,0,1610612738,1,1,1,1,
+1,1,1,1,2684354562,0,0,0,0,0,0,0,0,0,1610612739,14,2684354563,0,0,0,1610612739,1,1,1,1,
+1,1,1,1,2684354563,0,0,0,0,0,0,0,0,0,1610612738,1,2684354562,0,0,0,1610612738,1,1,1,1,
+1,1,1,1,2684354562,0,0,1610612740,3,4,0,0,0,0,3221225476,3221225474,2684354564,0,0,0,1610612739,1,1,1,1,
+1,1,1,1,2684354563,0,0,1610612738,1,2684354563,0,0,0,0,0,0,0,0,0,0,1610612738,1,1,1,1,
+1,1,1,1,2684354565,8,9,2147483660,3221225474,2684354564,0,0,0,0,0,0,0,0,0,0,1610612739,1,1,1,1,
+1,1,1,1,2684354562,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1610612738,1,1,1,1,
+1,1,1,1,2684354563,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1610612739,1,1,1,1,
+1,1,1,1,2684354566,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,6,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <objectgroup name="Objects">
+  <object id="1" x="896" y="1536" width="384" height="384"/>
+  <object id="2" x="640" y="1792" width="256" height="128"/>
+  <object id="3" x="512" y="1152" width="128" height="1152"/>
+  <object id="4" x="640" y="2176" width="2048" height="128"/>
+  <object id="5" x="2560" y="512" width="128" height="1664"/>
+  <object id="6" x="1280" y="512" width="1280" height="128"/>
+  <object id="7" x="512" y="512" width="768" height="640"/>
+  <object id="9" x="1792" y="640" width="384" height="1024"/>
+  <object id="10" type="Piston" x="1888" y="2080" width="192" height="96">
+   <properties>
+    <property name="Group" type="int" value="2"/>
+    <property name="Part" value="Head"/>
+    <property name="Speed" type="float" value="8"/>
+   </properties>
+  </object>
+  <object id="11" type="Piston" x="1920" y="1664" width="128" height="416">
+   <properties>
+    <property name="Group" type="int" value="2"/>
+    <property name="Part" value="Axis"/>
+    <property name="Speed" type="float" value="8"/>
+   </properties>
+  </object>
+  <object id="13" type="Piston" x="2176" y="1184" width="96" height="192">
+   <properties>
+    <property name="Group" type="int" value="3"/>
+    <property name="Part" value="Head"/>
+    <property name="Pause" type="float" value="1.5"/>
+    <property name="Speed" type="float" value="12"/>
+   </properties>
+  </object>
+  <object id="14" type="Piston" x="2272" y="1216" width="288" height="128">
+   <properties>
+    <property name="Group" type="int" value="3"/>
+    <property name="Part" value="Axis"/>
+    <property name="Pause" type="float" value="1.5"/>
+    <property name="Speed" type="float" value="12"/>
+   </properties>
+  </object>
+  <object id="18" type="Piston" x="992" y="1440" width="192" height="96">
+   <properties>
+    <property name="Active" value="0"/>
+    <property name="Association Number" type="int" value="1"/>
+    <property name="Group" type="int" value="1"/>
+    <property name="Part" value="Head"/>
+    <property name="Speed" type="float" value="7"/>
+   </properties>
+  </object>
+  <object id="19" type="Piston" x="1024" y="1152" width="128" height="288">
+   <properties>
+    <property name="Active" value="0"/>
+    <property name="Association Number" type="int" value="1"/>
+    <property name="Group" type="int" value="1"/>
+    <property name="Part" value="Axis"/>
+    <property name="Speed" type="float" value="7"/>
+   </properties>
+  </object>
+  <object id="23" type="Light" x="1446.5" y="1252.68" width="256" height="32" rotation="12.4979">
+   <properties>
+    <property name="Impulse" type="bool" value="true"/>
+    <property name="Texture" value="Debris2"/>
+   </properties>
+  </object>
+  <object id="26" type="ConeLight" x="2560" y="1920">
+   <properties>
+    <property name="Angle" type="float" value="31"/>
+    <property name="Color" value="0.2,0.85,0.2,0.65"/>
+    <property name="Distance" type="float" value="80"/>
+    <property name="Pulse" value="0,0.7,0,0"/>
+   </properties>
+   <polyline points="0,0 -32,0"/>
+  </object>
+  <object id="28" type="ConeLight" x="1792" y="1312">
+   <properties>
+    <property name="Angle" type="float" value="28"/>
+    <property name="Color" value="0.65,0.65,0.65,1"/>
+    <property name="Distance" type="float" value="60"/>
+   </properties>
+   <polyline points="0,0 -32,0"/>
+  </object>
+  <object id="29" type="Exit" x="2304" y="768" width="128" height="128"/>
+  <object id="30" type="Camera" x="2368" y="832">
+   <polyline points="0,0 0,1088 -896,1088 -896,0"/>
+  </object>
+  <object id="31" type="Light" x="1184" y="1984" width="32" height="32" rotation="71">
+   <properties>
+    <property name="Impulse" type="bool" value="true"/>
+    <property name="Texture" value="SmallMetalBox"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Spawn">
+  <object id="20" name="Tom" gid="159" x="1408" y="896" width="128" height="128"/>
+  <object id="21" type="Upgrade" gid="157" x="704" y="1728" width="128" height="128">
+   <properties>
+    <property name="ID" value="1"/>
+   </properties>
+  </object>
+  <object id="22" type="Switch" gid="155" x="640" y="2112" width="128" height="128">
+   <properties>
+    <property name="Association Number" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

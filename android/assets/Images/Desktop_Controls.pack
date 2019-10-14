@@ -1,0 +1,33 @@
+
+Desktop_Controls.png
+format: RGBA8888
+filter: MipMapLinearNearest,MipMapLinearNearest
+repeat: none
+AZERTY
+  rotate: false
+  xy: 2, 148
+  size: 457, 257
+  orig: 457, 257
+  offset: 0, 0
+  index: -1
+QWERTY
+  rotate: false
+  xy: 464, 148
+  size: 457, 257
+  orig: 457, 257
+  offset: 0, 0
+  index: -1
+Zoom
+  rotate: false
+  xy: 2, 2
+  size: 303, 141
+  orig: 303, 141
+  offset: 0, 0
+  index: -1
+Esc
+  rotate: false
+  xy: 310, 3
+  size: 150, 140
+  orig: 150, 140
+  offset: 0, 0
+  index: -1

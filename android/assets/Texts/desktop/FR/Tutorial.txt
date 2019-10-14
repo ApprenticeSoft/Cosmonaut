@@ -1,0 +1,15 @@
+1;OK;Tout va bien...;Je suis vivant et j'ai ma combinaison spatiale.;Je peux toujours m'en sortir.;Je dois seulement atteindre la capsule de sauvetage...
+2;Testons cette combinaison spatiale.;Je peux tourner vers la gauche et vers la droite en appuyant sur 'A' et 'D'.;Bien, ça fonctionne.;Maintenant, utilisons le jetpack en appuyant sur 'W'.;Super!;Je peux tourner vers la gauche et vers la droite en appuyant sur ces boutons.;Maintenant, utilisons le jetpack.;Je peux tourner vers la gauche et vers la droite en balayant vers la gauche et vers la droite.;Maintenant, utilisons le jetpack en touchant le côté droit de l'écran.
+3;Je dois atteindre la porte de sortie.
+4;D'abord, activons l'interrupteur pour ouvrir la porte de cette pièce.
+5;Je dois faire attention.;Mon niveau d'oxygène diminue au cours du temps.;Et mon niveau de carburant diminue lorsque je j'utilise mon jetpack.;Je dois utiliser mon jetpack avec parcimonie je veux atteindre la sortie.
+6;Ceci est un point d'amélioration.;Si j'en récupère assez, je peux améliorer mon matériel.
+7;Pour économiser le carburant, je peux me déplacer en poussant sur les murs quand je suis assez près.;Essayons en appuyant sur 'A' ou 'D'.
+8;Ce sont des recharges de carburant et d'oxygène!; Elles seront d'une importance vitale durant l'aventure!
+9;Pour économiser le carburant, je peux me déplacer en poussant sur les murs quand je suis assez près.;Essayons en appuyant sur 'Gauche' ou 'Droite'.
+10;Pour économiser le carburant, je peux me déplacer en poussant sur les murs quand je suis assez près.;Essayons en balayant vers la gauche ou vers la droite.
+11;J'ai déjà consommé la moitié de mon carburant!;Je dois utiliser mon jetpack plus prudemment;Le meilleur moyen est d'utiliser le jetpack par à-coups et de me laisser flotter dans la direction choisie.
+12;J'ai déjà consommé la moitié de mon oxygène!;Je dois me dépêcher d'atteindre la porte de sortie!
+13;Je suis à court de carburant!;Non, non, non.;Ça ne peut pas se finir de cette façon.;Essayons encore, plus prudemment.
+14;Je suis à court d'oxygène!;Ce n'est pas censé se passer comme ça.;Finissons ce niveau plus rapidement!
+15;Mon jetpack est un jetpack à poussée verticale.;Il est important de le savoir pour me diriger correctement.

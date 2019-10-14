@@ -1,0 +1,38 @@
+
+Images_Intro.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Intro_Mur
+  rotate: false
+  xy: 2, 535
+  size: 1493, 1188
+  orig: 1493, 1188
+  offset: 0, 0
+  index: -1
+Vaisseau_Survie
+  rotate: false
+  xy: 2, 2
+  size: 1484, 528
+  orig: 1484, 528
+  offset: 0, 0
+  index: -1
+
+Images_Intro2.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+Intro_Personnage_Gauche
+  rotate: false
+  xy: 2, 368
+  size: 977, 1195
+  orig: 977, 1195
+  offset: 0, 0
+  index: -1
+Vaisseau_Mere
+  rotate: false
+  xy: 2, 2
+  size: 1398, 361
+  orig: 1398, 361
+  offset: 0, 0
+  index: -1
