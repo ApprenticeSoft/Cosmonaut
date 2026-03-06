@@ -76,7 +76,7 @@ Generated key artifacts:
 
 Latest branch commit:
 
-- `2905842` (`feature/full-upgrade-optimization-html-pi`)
+- Use `git rev-parse --short HEAD` on `feature/full-upgrade-optimization-html-pi` to get the current head.
 
 ## Raspberry Pi Deployment Tracking
 
