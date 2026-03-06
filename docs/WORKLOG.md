@@ -111,6 +111,14 @@ Exact validation results:
   - `/html/html.nocache.js` -> `200 OK`
   - `/assets/assets.txt` -> `200 OK`
 
+TLS note:
+
+- Existing cert in use (`nuage.marcvidal.ca`) does not include `cosmonaut.marcvidal.ca`, so strict TLS validation fails for that host.
+- Attempted fix with Certbot certificate expansion failed at ACME HTTP-01 validation:
+  - `Connection refused` on `http://cosmonaut.marcvidal.ca/.well-known/acme-challenge/...`
+- Required infra fix to complete trusted TLS:
+  - Ensure public TCP/80 for `cosmonaut.marcvidal.ca` reaches this Apache host.
+
 ## Known Risks / Notes
 
 - Launch4j-generated `.exe` is unsigned (expected warning). Code-signing can be added in release hardening.
