@@ -367,8 +367,57 @@ Deployment log:
   - `cosmonaut-static.service` -> `active`
 - Pi-side host-header checks:
   - `/` -> `HTTP/1.1 200 OK`
+- `/html/html.nocache.js` -> `HTTP/1.1 200 OK`
+- `/assets/assets.txt` -> `HTTP/1.1 200 OK`
+
+## 2026-03-06 Mobile Landscape Viewport Initialization Fix
+
+User-reported issue in this pass:
+
+- On phone, intro->level transition worked but gameplay viewport was tiny in landscape with large black side bars.
+- Rotating back to portrait showed the full game, indicating the runtime had initialized using portrait dimensions.
+
+Root cause:
+
+- Mobile runtime size in `HtmlLauncher` used raw viewport dimensions at startup.
+- If the game initialized while browser was still portrait, internal width/height-dependent calculations were portrait-based.
+- Some mobile fullscreen/orientation transitions do not trigger reliable resize events, leaving stale runtime dimensions.
+
+Changes implemented:
+
+- `html/src/com/cosmonaut/client/HtmlLauncher.java`
+  - Mobile target size is now always normalized to landscape coordinates:
+    - `targetWidth = max(browserWidth, browserHeight)`
+    - `targetHeight = min(browserWidth, browserHeight)`
+  - Added resize watchdog timer (`250ms`) to re-apply responsive size on mobile browsers with unreliable resize events.
+  - Added no-op guard to avoid repeated `setWindowedMode(...)` calls when dimensions are unchanged.
+- `html/webapp/index.html`
+  - After immersive/orientation request, dispatches a synthetic `resize` event to accelerate canvas reflow.
+
+Validation performed:
+
+- Build:
+  - `./gradlew :core:compileJava :html:dist` -> SUCCESS
+- Orientation-init probe (start portrait then switch to landscape):
+  - `portrait_init`: `inner=320x658`, `canvas=320x155.6` (landscape aspect preserved at init)
+  - `after_landscape_resize`: `inner=658x320`, `canvas=658x320` (full landscape fill)
+  - screenshots:
+    - `qa/reports/mobile_portrait_init_afterfix.png`
+    - `qa/reports/mobile_landscape_afterfix.png`
+- Full smoke suite:
+  - `node qa/web_smoke.js`
+  - `local-desktop` PASS
+  - `local-mobile` PASS
+  - `rpi-desktop` PASS
+  - `rpi-mobile` PASS
+
+Deployment log:
+
+- Rebuilt web dist and deployed to Pi `/var/www/cosmonaut`.
+- Restarted `cosmonaut-static.service` -> `active`.
+- Verified Pi host-header endpoints:
+  - `/` -> `HTTP/1.1 200 OK`
   - `/html/html.nocache.js` -> `HTTP/1.1 200 OK`
-  - `/assets/assets.txt` -> `HTTP/1.1 200 OK`
 
 ## Fast Resume Checklist
 

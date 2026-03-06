@@ -7,15 +7,26 @@ import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.cosmonaut.MyGdxGame;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 
 public class HtmlLauncher extends GwtApplication {
     private static final float LANDSCAPE_ASPECT = 16f / 9f;
     private final boolean mobileClient = isLikelyMobileClient();
+    private int lastAppliedWidth = -1;
+    private int lastAppliedHeight = -1;
 
     private int[] computeTargetSize(int browserWidth, int browserHeight){
         if(mobileClient){
-            return new int[]{Math.max(1, browserWidth), Math.max(1, browserHeight)};
+            int targetWidth = Math.max(1, browserWidth);
+            int targetHeight = Math.max(1, browserHeight);
+            // Always initialize mobile runtime in landscape coordinates.
+            if(targetWidth < targetHeight){
+                int temp = targetWidth;
+                targetWidth = targetHeight;
+                targetHeight = temp;
+            }
+            return new int[]{targetWidth, targetHeight};
         }
 
         float browserAspect = browserWidth / (float) browserHeight;
@@ -90,6 +101,13 @@ public class HtmlLauncher extends GwtApplication {
                 applyResponsiveSize();
             }
         });
+        // Some mobile browsers do not emit reliable resize events during fullscreen/orientation changes.
+        new Timer() {
+            @Override
+            public void run() {
+                applyResponsiveSize();
+            }
+        }.scheduleRepeating(250);
         applyResponsiveSize();
     }
 
@@ -99,6 +117,12 @@ public class HtmlLauncher extends GwtApplication {
         int[] size = computeTargetSize(browserWidth, browserHeight);
         int targetWidth = size[0];
         int targetHeight = size[1];
+
+        if(lastAppliedWidth == targetWidth && lastAppliedHeight == targetHeight){
+            return;
+        }
+        lastAppliedWidth = targetWidth;
+        lastAppliedHeight = targetHeight;
 
         if (getRootPanel() != null) {
             getRootPanel().setWidth(targetWidth + "px");

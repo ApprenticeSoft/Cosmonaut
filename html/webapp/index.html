@@ -60,6 +60,7 @@
         } catch (err) {
             // Ignore unsupported orientation locking.
         }
+        window.dispatchEvent(new Event('resize'));
     }
 
     function triggerImmersiveRequest() {
