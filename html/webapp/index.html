@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Cosmonaut</title>
     <link href="styles.css" rel="stylesheet" type="text/css">
     <script src="soundmanager2-setup.js"></script>
@@ -11,6 +13,7 @@
 <body>
 <div id="page-root">
     <div id="embed-html"></div>
+    <div id="rotate-hint">Rotate device to landscape</div>
 </div>
 <script type="text/javascript" src="html/html.nocache.js"></script>
 <script>
@@ -19,13 +22,19 @@
         evt.preventDefault();
     }, false);
 
+    const isLikelyMobile = /Android|iPhone|iPad|iPod|Mobile|Silk|Kindle|Opera Mini/i.test(navigator.userAgent || '')
+        || ('maxTouchPoints' in navigator && navigator.maxTouchPoints > 1);
+
     let immersiveRequested = false;
+    let lastImmersiveAttemptAt = 0;
 
     async function requestImmersiveLandscape() {
-        if (immersiveRequested) {
+        if (!isLikelyMobile || immersiveRequested) {
             return;
         }
-        immersiveRequested = true;
+        const now = Date.now();
+        if (now - lastImmersiveAttemptAt < 500) return;
+        lastImmersiveAttemptAt = now;
 
         const root = document.documentElement;
         try {
@@ -35,14 +44,15 @@
                 } else if (root.webkitRequestFullscreen) {
                     root.webkitRequestFullscreen();
                 } else {
-                    immersiveRequested = false;
+                    return;
                 }
             }
         } catch (err) {
             // Allow retry after a blocked fullscreen request.
-            immersiveRequested = false;
+            return;
         }
 
+        immersiveRequested = !!document.fullscreenElement;
         try {
             if (screen.orientation && screen.orientation.lock) {
                 await screen.orientation.lock('landscape');
@@ -56,12 +66,37 @@
         requestImmersiveLandscape();
     }
 
-    window.addEventListener('click', triggerImmersiveRequest, { once: true });
-    window.addEventListener('keydown', triggerImmersiveRequest, { once: true });
+    function updateRotateHint() {
+        const rotateHint = document.getElementById('rotate-hint');
+        if (!rotateHint) return;
+        const portrait = window.matchMedia('(orientation: portrait)').matches;
+        rotateHint.style.display = portrait ? 'flex' : 'none';
+    }
+
+    window.addEventListener('click', triggerImmersiveRequest, { passive: true });
+    window.addEventListener('mousedown', triggerImmersiveRequest, { passive: true });
+    window.addEventListener('touchend', triggerImmersiveRequest, { passive: true });
+    window.addEventListener('pointerup', triggerImmersiveRequest, { passive: true });
+    window.addEventListener('keydown', triggerImmersiveRequest);
+    window.addEventListener('orientationchange', function () {
+        updateRotateHint();
+        triggerImmersiveRequest();
+    });
+    window.addEventListener('resize', function () {
+        updateRotateHint();
+        triggerImmersiveRequest();
+    });
+    window.addEventListener('focus', triggerImmersiveRequest);
+    updateRotateHint();
 
     document.addEventListener('fullscreenchange', function () {
         if (!document.fullscreenElement) {
             immersiveRequested = false;
+        }
+    });
+    document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') {
+            triggerImmersiveRequest();
         }
     });
 </script>

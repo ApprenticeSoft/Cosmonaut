@@ -10,6 +10,8 @@ import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -414,6 +416,26 @@ public class MyGdxGame extends Game implements ApplicationListener{
 			previous.dispose();
 		}
 		runtimeFonts.put(fontKey, bitmapFont);
+	}
+
+	public Texture loadScreenTexture(String internalPath){
+		return loadScreenTexture(internalPath, TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+	}
+
+	public Texture loadScreenTexture(String internalPath, TextureFilter nativeMin, TextureFilter nativeMag){
+		boolean webRuntime = isWebGLRuntime();
+		Texture texture = new Texture(Gdx.files.internal(internalPath), !webRuntime);
+		if(webRuntime){
+			texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		else{
+			texture.setFilter(nativeMin, nativeMag);
+		}
+		return texture;
+	}
+
+	public boolean isWebGLRuntime(){
+		return Gdx.app.getType() == ApplicationType.WebGL;
 	}
 
 	private boolean isMobileWebClient(){

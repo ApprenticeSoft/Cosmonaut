@@ -120,9 +120,16 @@ public class GameScreen implements Screen{
 
         //TEST filter for Tiled Map
         TmxMapLoader.Parameters params = new TmxMapLoader.Parameters();
-        params.generateMipMaps = true;
-        params.textureMagFilter = Texture.TextureFilter.MipMapLinearNearest;
-        params.textureMinFilter = Texture.TextureFilter.MipMapLinearNearest;
+        if(game.isWebGLRuntime()){
+        	params.generateMipMaps = false;
+        	params.textureMagFilter = Texture.TextureFilter.Linear;
+        	params.textureMinFilter = Texture.TextureFilter.Linear;
+        }
+        else{
+        	params.generateMipMaps = true;
+        	params.textureMagFilter = Texture.TextureFilter.MipMapLinearNearest;
+        	params.textureMinFilter = Texture.TextureFilter.MipMapLinearNearest;
+        }
 
         tiledMap = new TmxMapLoader().load("Levels/Level " + GameConstants.SELECTED_LEVEL + ".tmx", params);
 

@@ -12,12 +12,29 @@ import com.google.gwt.user.client.Window;
 public class HtmlLauncher extends GwtApplication {
     private static final float LANDSCAPE_ASPECT = 16f / 9f;
 
+    private int[] computeTargetSize(int browserWidth, int browserHeight){
+        float browserAspect = browserWidth / (float) browserHeight;
+        int targetWidth;
+        int targetHeight;
+
+        if(browserAspect > LANDSCAPE_ASPECT){
+            targetHeight = browserHeight;
+            targetWidth = Math.round(targetHeight * LANDSCAPE_ASPECT);
+        }
+        else{
+            targetWidth = browserWidth;
+            targetHeight = Math.round(targetWidth / LANDSCAPE_ASPECT);
+        }
+        return new int[]{Math.max(1, targetWidth), Math.max(1, targetHeight)};
+    }
+
     @Override
     public GwtApplicationConfiguration getConfig() {
         int browserWidth = Math.max(1, Window.getClientWidth());
         int browserHeight = Math.max(1, Window.getClientHeight());
-        int targetWidth = browserWidth;
-        int targetHeight = Math.min(browserHeight, Math.round(browserWidth / LANDSCAPE_ASPECT));
+        int[] size = computeTargetSize(browserWidth, browserHeight);
+        int targetWidth = size[0];
+        int targetHeight = size[1];
 
         GwtApplicationConfiguration config = new GwtApplicationConfiguration(targetWidth, targetHeight);
         config.padHorizontal = 0;
@@ -41,8 +58,9 @@ public class HtmlLauncher extends GwtApplication {
     private void applyResponsiveSize() {
         int browserWidth = Math.max(1, Window.getClientWidth());
         int browserHeight = Math.max(1, Window.getClientHeight());
-        int targetWidth = browserWidth;
-        int targetHeight = Math.min(browserHeight, Math.round(browserWidth / LANDSCAPE_ASPECT));
+        int[] size = computeTargetSize(browserWidth, browserHeight);
+        int targetWidth = size[0];
+        int targetHeight = size[1];
 
         if (getRootPanel() != null) {
             getRootPanel().setWidth(targetWidth + "px");

@@ -266,6 +266,58 @@ Final validation results (after deploy):
   - `rpi-mobile` PASS
 - `./gradlew :core:compileJava :desktop:build :android:assembleDebug :html:dist` -> **SUCCESS**
 
+## 2026-03-06 HTML Asset/Scaling Pass (Desktop + Mobile)
+
+User-reported regressions in this pass:
+
+- Main menu/intro visuals missing or black on HTML.
+- Desktop web button text appeared too small.
+- Mobile web did not reliably enter fullscreen and landscape.
+
+Changes implemented:
+
+- Web texture safety + intro rendering path (already present in branch) was kept and validated:
+  - screen backgrounds now consistently loaded via web-safe texture parameters,
+  - intro shader path disabled on WebGL with default batch rendering fallback,
+  - intro stage projection matrix is explicitly applied every frame on WebGL.
+- Increased WebGL fallback UI font sizing in HTML supersource `LoadingScreen`:
+  - added desktop/mobile-specific scale boosts for `fontTable`, `fontHUD`, `fontUpgrade`, `fontDialogue`, `fontOption`.
+  - purpose: align button/label readability with portable desktop presentation.
+- Hardened mobile immersive behavior in `html/webapp/index.html`:
+  - fullscreen + landscape requests now retry on subsequent interactions/focus/resize/orientation events (not one-shot).
+  - preserves browser-policy compatibility by keeping it user-gesture driven.
+- Updated `html/webapp/styles.css` for stable full-viewport embedding:
+  - fixed root container to viewport with `100vw/100vh` and `100dvh`,
+  - ensured canvas remains centered and bounded within the viewport.
+
+QA evidence captured:
+
+- Manual desktop/mobile menu/options screenshots:
+  - `qa/reports/manual-check5/desktop_02_menu.png`
+  - `qa/reports/manual-check5/desktop_03_options.png`
+  - `qa/reports/manual-check5/mobile_02_menu.png`
+  - `qa/reports/manual-check5/mobile_03_options.png`
+- Intro animation asset verification (desktop + mobile):
+  - `qa/reports/intro_probe_verification/desktop_intro_t1.png`
+  - `qa/reports/intro_probe_verification/desktop_intro_t2.png`
+  - `qa/reports/intro_probe_verification/mobile_intro_t1.png`
+  - `qa/reports/intro_probe_verification/mobile_intro_t2.png`
+- Automated smoke (local + deployed Pi):
+  - `node qa/web_smoke.js` -> `local-desktop PASS`, `local-mobile PASS`, `rpi-desktop PASS`, `rpi-mobile PASS`.
+
+Deployment log:
+
+- Built web dist: `./gradlew :core:compileJava :html:dist` (SUCCESS).
+- Synced dist to Pi staging: `/home/marc/cosmonaut-deploy`.
+- Deployed to live root: `/var/www/cosmonaut`.
+- Restarted service: `sudo systemctl restart cosmonaut-static.service`.
+- Verified service status: `active`.
+- Verified HTTPS host-header response: `HTTP/1.1 200 OK`.
+
+Known platform constraint:
+
+- Mobile fullscreen/orientation lock remains best-effort due browser permission/policy rules; behavior now retries across user interactions and lifecycle events.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

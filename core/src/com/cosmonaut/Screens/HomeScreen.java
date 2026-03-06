@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -47,8 +46,7 @@ public class HomeScreen implements Screen{
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		//Background
-		backgroundTexture = new Texture(Gdx.files.internal("Images/Logo.jpg"), true);
-		backgroundTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+		backgroundTexture = game.loadScreenTexture("Images/Logo.jpg");
 		backgroundImage = new Image(backgroundTexture);
 		backgroundImage.setWidth(Gdx.graphics.getWidth());
 		backgroundImage.setHeight(backgroundTexture.getHeight() * backgroundImage.getWidth()/backgroundTexture.getWidth());
@@ -56,8 +54,7 @@ public class HomeScreen implements Screen{
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
 
 		//Transition image
-		transitionTexture = new Texture(Gdx.files.internal("Images/LevelScreenBackground.jpg"), true);
-		transitionTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+		transitionTexture = game.loadScreenTexture("Images/LevelScreenBackground.jpg");
 		transitionImage = new Image(transitionTexture);
 		transitionImage.setWidth(Gdx.graphics.getWidth());
 		transitionImage.setHeight(transitionTexture.getHeight() * transitionImage.getWidth()/transitionTexture.getWidth());

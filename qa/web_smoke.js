@@ -138,8 +138,13 @@ async function runScenario(target, mode) {
   const browser = await chromium.launch({ headless: true });
   let context;
   if (mode === 'mobile') {
+    const mobileDescriptor = devices['Galaxy S9+'];
     context = await browser.newContext({
-      ...devices['Galaxy S9+'],
+      ...mobileDescriptor,
+      viewport: {
+        width: mobileDescriptor.viewport.height,
+        height: mobileDescriptor.viewport.width,
+      },
       ignoreHTTPSErrors: true,
       locale: 'en-US',
     });
@@ -184,6 +189,13 @@ async function runScenario(target, mode) {
 
     await getCanvasBox(page);
     result.steps.push('canvas_ready');
+    if (mode === 'mobile') {
+      const box = await getCanvasBox(page);
+      if (box.width <= box.height) {
+        throw new Error(`Mobile canvas is not in landscape (w=${box.width}, h=${box.height}).`);
+      }
+      result.steps.push('mobile_landscape_canvas_confirmed');
+    }
 
     await waitForNonBlack(page, outDir, 'load', 90000);
     result.steps.push('canvas_not_black_after_load');
@@ -196,6 +208,11 @@ async function runScenario(target, mode) {
     const mainMenuShot = menuTransition.shotPath;
     result.steps.push('entered_main_menu');
     result.steps.push(`menu_transition_attempt_${menuTransition.attempts}`);
+    const menuCenterBrightness = regionBrightness(mainMenuShot, 0.28, 0.30, 0.60, 0.72);
+    if (menuCenterBrightness < 1.2) {
+      throw new Error(`Main menu center appears too dark (brightness=${menuCenterBrightness.toFixed(2)}), likely missing background image.`);
+    }
+    result.steps.push('main_menu_background_visible');
 
     // Options and back
     await clickNorm(page, MENU_BUTTON_X, MENU_OPTIONS_Y, useTouch);

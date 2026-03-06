@@ -75,8 +75,9 @@ public class MainMenuScreen implements Screen{
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		//Background
-		backgroundTexture = new Texture(Gdx.files.internal("Images/MainMenuScreenBackground.jpg"), true);
-		backgroundTexture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.MipMapLinearLinear);
+		backgroundTexture = game.loadScreenTexture("Images/MainMenuScreenBackground.jpg",
+				TextureFilter.MipMapLinearLinear,
+				TextureFilter.MipMapLinearLinear);
 		backgroundImage = new Image(backgroundTexture);
 		backgroundImage.setWidth(Gdx.graphics.getWidth());
 		backgroundImage.setHeight(backgroundTexture.getHeight() * backgroundImage.getWidth()/backgroundTexture.getWidth());

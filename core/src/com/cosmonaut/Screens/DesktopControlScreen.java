@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -63,8 +62,7 @@ public class DesktopControlScreen implements Screen{
 			displacementString = "QWERTY";
 
 		//Background
-		backgroundTexture = new Texture(Gdx.files.internal("Images/LevelScreenBackground.jpg"), true);
-		backgroundTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+		backgroundTexture = game.loadScreenTexture("Images/LevelScreenBackground.jpg");
 		backgroundImage = new Image(backgroundTexture);
 		backgroundImage.setColor(1, 1, 1, 0.7f);
 		backgroundImage.setWidth(Gdx.graphics.getWidth());

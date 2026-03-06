@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -87,8 +86,7 @@ public class EndScreen implements Screen{
 		stage.addActor(game.blackImage);
 		
         //Background  
-		backgroundTexture = new Texture(Gdx.files.internal("Images/Space.jpg"), true);
-		backgroundTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+		backgroundTexture = game.loadScreenTexture("Images/Space.jpg");
 		
 		/*
 		 * Test shader

@@ -3,6 +3,7 @@ package com.cosmonaut.Screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -29,6 +31,9 @@ public class LoadingScreen implements Screen {
     final MyGdxGame game;
     OrthographicCamera camera;
     private Texture textureLogo;
+    private Texture barTexture;
+    private Texture knobTexture;
+    private Texture knobBeforeTexture;
     private Image imageLogo;
     private Stage stage;
 
@@ -42,8 +47,7 @@ public class LoadingScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        textureLogo = new Texture(Gdx.files.internal("Images/Logo.jpg"), true);
-        textureLogo.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+        textureLogo = loadWebTexture("Images/Logo.jpg");
         imageLogo = new Image(textureLogo);
         imageLogo.setWidth(Gdx.graphics.getWidth());
         imageLogo.setHeight(textureLogo.getHeight() * imageLogo.getWidth() / textureLogo.getWidth());
@@ -54,9 +58,12 @@ public class LoadingScreen implements Screen {
         else
             stage = new Stage();
 
-        ninePatchBar = new NinePatchDrawable(new NinePatch(new Texture(Gdx.files.internal("Images/Bar.png"), true), 7, 7, 7, 7));
-        ninePatchKnob = new NinePatchDrawable(new NinePatch(new Texture(Gdx.files.internal("Images/Knob.png"), true), 1, 7, 9, 9));
-        ninePatchKnobBefore = new NinePatchDrawable(new NinePatch(new Texture(Gdx.files.internal("Images/KnobBefore.png"), true), 1, 1, 9, 9));
+        barTexture = loadWebTexture("Images/Bar.png");
+        knobTexture = loadWebTexture("Images/Knob.png");
+        knobBeforeTexture = loadWebTexture("Images/KnobBefore.png");
+        ninePatchBar = new NinePatchDrawable(new NinePatch(barTexture, 7, 7, 7, 7));
+        ninePatchKnob = new NinePatchDrawable(new NinePatch(knobTexture, 1, 7, 9, 9));
+        ninePatchKnobBefore = new NinePatchDrawable(new NinePatch(knobBeforeTexture, 1, 1, 9, 9));
 
         progressBarStyle = new ProgressBarStyle(ninePatchBar, ninePatchKnob);
         progressBarStyle.knobBefore = ninePatchKnobBefore;
@@ -125,14 +132,37 @@ public class LoadingScreen implements Screen {
     }
 
     private void registerFallbackFonts() {
-        game.registerRuntimeFont("fontMenu.ttf", new BitmapFont());
-        game.registerRuntimeFont("fontTable.ttf", new BitmapFont());
-        game.registerRuntimeFont("fontHUD.ttf", new BitmapFont());
-        game.registerRuntimeFont("fontUpgrade.ttf", new BitmapFont());
-        game.registerRuntimeFont("fontDialogue.ttf", new BitmapFont());
-        game.registerRuntimeFont("fontOption.ttf", new BitmapFont());
-        game.registerRuntimeFont("fontCosmonaut.ttf", new BitmapFont());
-        game.registerRuntimeFont("fontCredit.ttf", new BitmapFont());
+        float width = Gdx.graphics.getWidth();
+        boolean mobileClient = Gdx.input.isPeripheralAvailable(Peripheral.MultitouchScreen);
+        float buttonFontScaleBoost = mobileClient ? 1.28f : 1.58f;
+        float uiFontScaleBoost = mobileClient ? 1.22f : 1.45f;
+
+        registerFallbackFont("fontMenu.ttf", 0.04f * width);
+        registerFallbackFont("fontTable.ttf", 0.024f * width * buttonFontScaleBoost);
+        registerFallbackFont("fontHUD.ttf", 0.013f * width * uiFontScaleBoost);
+        registerFallbackFont("fontUpgrade.ttf", 0.019f * width * uiFontScaleBoost);
+        registerFallbackFont("fontDialogue.ttf", Math.max(0.019f * width * uiFontScaleBoost, 20f));
+        registerFallbackFont("fontOption.ttf", 0.027f * width * uiFontScaleBoost);
+        registerFallbackFont("fontCosmonaut.ttf", 0.1f * width);
+        registerFallbackFont("fontCredit.ttf", 0.05f * width);
+    }
+
+    private void registerFallbackFont(String fontKey, float targetSizePx) {
+        BitmapFont font = new BitmapFont();
+        float baseLineHeight = Math.max(1f, font.getLineHeight());
+        float scale = Math.max(0.75f, targetSizePx / baseLineHeight);
+        font.getData().setScale(scale);
+        font.setUseIntegerPositions(false);
+        for (TextureRegion region : font.getRegions()) {
+            region.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        }
+        game.registerRuntimeFont(fontKey, font);
+    }
+
+    private Texture loadWebTexture(String internalPath) {
+        Texture texture = new Texture(Gdx.files.internal(internalPath), false);
+        texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        return texture;
     }
 
     @Override
@@ -178,5 +208,8 @@ public class LoadingScreen implements Screen {
     public void dispose() {
         stage.dispose();
         textureLogo.dispose();
+        barTexture.dispose();
+        knobTexture.dispose();
+        knobBeforeTexture.dispose();
     }
 }

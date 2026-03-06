@@ -8,7 +8,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -31,6 +30,8 @@ import com.cosmonaut.Utils.TextBox;
 public class IntroScreen implements Screen{
 
 	final MyGdxGame game;
+	private final boolean webRuntime;
+	private final boolean useIntroShaders;
 	private Stage stage;
 	private Music musicIntro, spaceshipSound;
 	private TextBox textBox;
@@ -63,6 +64,8 @@ public class IntroScreen implements Screen{
 	
 	public IntroScreen(final MyGdxGame game){
 		this.game= game;
+		this.webRuntime = game.isWebGLRuntime();
+		this.useIntroShaders = !webRuntime;
 		Gdx.input.setCursorCatched(true);
 		
 		musicIntro = Gdx.audio.newMusic(Gdx.files.internal("Sounds/Jazz.ogg"));
@@ -93,14 +96,17 @@ public class IntroScreen implements Screen{
 		stage.addActor(labelIntro);
 		
 		//Background
-		backgroundTexture = new Texture(Gdx.files.internal("Images/Space.jpg"), true);
-		backgroundTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+		backgroundTexture = game.loadScreenTexture("Images/Space.jpg");
 		
 		//Spaceship
 		//spaceshipHeight = 0.19f * skin.getRegion("Spaceship").getRegionHeight();
 		spaceshipHeight = 0.32f * Gdx.graphics.getHeight();
 		spaceshipWidth = spaceshipHeight * skin.getRegion("Vaisseau_Mere").getRegionWidth()/skin.getRegion("Vaisseau_Mere").getRegionHeight();
 		spaceshipPosX = -spaceshipHeight * skin.getRegion("Vaisseau_Mere").getRegionWidth()/skin.getRegion("Vaisseau_Mere").getRegionHeight();
+		if(webRuntime){
+			// Show the intro ship much earlier on web so intro does not look like a static black screen.
+			spaceshipPosX = -0.45f * spaceshipWidth;
+		}
 		
 		//Transition
 		transitionImage = new Image(game.skin.getDrawable("WhiteSquare"));
@@ -124,43 +130,44 @@ public class IntroScreen implements Screen{
 		interlocutors.add(alarm);
 		
 		/*******************SHADERS**********************/
-		ShaderProgram.pedantic = false;	//Important pour pouvoir modifier les variables uniformes
-      	vertexShader = Gdx.files.internal("Shaders/PassThrough-vertex.glsl").readString();
-      	fragmentShader = Gdx.files.internal("Shaders/Flicker-fragment.glsl").readString();
-      	flickerShaderProgram = new ShaderProgram(vertexShader,fragmentShader);
-      	System.out.println("Flicker Shader log : " + flickerShaderProgram.getLog());
-      	game.batch.setShader(flickerShaderProgram);
-      	game.batch.setColor(1, 1, 1, 1);
+		if(useIntroShaders){
+			ShaderProgram.pedantic = false;	//Important pour pouvoir modifier les variables uniformes
+	      	vertexShader = Gdx.files.internal("Shaders/PassThrough-vertex.glsl").readString();
+	      	fragmentShader = Gdx.files.internal("Shaders/Flicker-fragment.glsl").readString();
+	      	flickerShaderProgram = new ShaderProgram(vertexShader,fragmentShader);
+	      	System.out.println("Flicker Shader log : " + flickerShaderProgram.getLog());
+	      	game.batch.setShader(flickerShaderProgram);
+	      	game.batch.setColor(1, 1, 1, 1);
 
-      	colorFlicker = Pools.obtain(Vector3.class).set(MathUtils.random(0.78f, 1),	MathUtils.random(0.12f, 0.51f),	MathUtils.random(0, 0.16f));
-      	flickerShaderProgram.begin();
-      	flickerShaderProgram.setUniformf("u_color", colorFlicker);
-      	flickerShaderProgram.end();
-      	
-      	
-      	alphaShaderProgram = new ShaderProgram(vertexShader,Gdx.files.internal("Shaders/AlphaMask-fragment.glsl").readString());
-		map = new Texture(Gdx.files.internal("Images/SmokeMask.png")); 
-		textureTest = new Texture(Gdx.files.internal("Images/Smoke.png"));  
-      	System.out.println("Alpha Shader log : " + alphaShaderProgram.getLog());
-      	
-      	Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
-      	colorReplacementProgram = new ShaderProgram(vertexShader,Gdx.files.internal("Shaders/ColorReplacement-fragment.glsl").readString()); 
-      	colorReplacementProgram.begin();
-      	colorReplacementProgram.setUniformf("u_output_color", colorBlack);
-      	Pools.free(colorBlack);
-      	System.out.println("Color Shader log : " + colorReplacementProgram.getLog());
-   
-      	vignetteProgram = new ShaderProgram(Gdx.files.internal("Shaders/Vignette-vertex.glsl").readString(), Gdx.files.internal("Shaders/Vignette-fragment.glsl").readString());
-      	System.out.println("Vignette Shader log : " + vignetteProgram.getLog());
+	      	colorFlicker = Pools.obtain(Vector3.class).set(MathUtils.random(0.78f, 1),	MathUtils.random(0.12f, 0.51f),	MathUtils.random(0, 0.16f));
+	      	flickerShaderProgram.begin();
+	      	flickerShaderProgram.setUniformf("u_color", colorFlicker);
+	      	flickerShaderProgram.end();
+	      	
+	      	alphaShaderProgram = new ShaderProgram(vertexShader,Gdx.files.internal("Shaders/AlphaMask-fragment.glsl").readString());
+			map = new Texture(Gdx.files.internal("Images/SmokeMask.png"));
+			textureTest = new Texture(Gdx.files.internal("Images/Smoke.png"));
+	      	System.out.println("Alpha Shader log : " + alphaShaderProgram.getLog());
+	      	
+	      	Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
+	      	colorReplacementProgram = new ShaderProgram(vertexShader,Gdx.files.internal("Shaders/ColorReplacement-fragment.glsl").readString());
+	      	colorReplacementProgram.begin();
+	      	colorReplacementProgram.setUniformf("u_output_color", colorBlack);
+	      	Pools.free(colorBlack);
+	      	System.out.println("Color Shader log : " + colorReplacementProgram.getLog());
+	   
+	      	vignetteProgram = new ShaderProgram(Gdx.files.internal("Shaders/Vignette-vertex.glsl").readString(), Gdx.files.internal("Shaders/Vignette-fragment.glsl").readString());
+	      	System.out.println("Vignette Shader log : " + vignetteProgram.getLog());
 
-      	vignetteProgram.begin();
-      	vignetteProgram.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-      	vignetteProgram.setUniformf("u_PosX", 0.38f);
-      	vignetteProgram.setUniformf("u_PosY", 0.5f);
-      	vignetteProgram.setUniformf("outerRadius", 0.75f);
-      	vignetteProgram.setUniformf("innerRadius", 0.12f);
-      	vignetteProgram.setUniformf("intensity", 0.5f);
-      	vignetteProgram.end();
+	      	vignetteProgram.begin();
+	      	vignetteProgram.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	      	vignetteProgram.setUniformf("u_PosX", 0.38f);
+	      	vignetteProgram.setUniformf("u_PosY", 0.5f);
+	      	vignetteProgram.setUniformf("outerRadius", 0.75f);
+	      	vignetteProgram.setUniformf("innerRadius", 0.12f);
+	      	vignetteProgram.setUniformf("intensity", 0.5f);
+	      	vignetteProgram.end();
+		}
       	
       	boolean touchControls = GameConstants.GAME_CONTROLS == GameConstants.ANDROID_BUTTONS_CONTROLS
       			|| GameConstants.GAME_CONTROLS == GameConstants.ANDROID_GESTURE_CONTROLS
@@ -183,6 +190,9 @@ public class IntroScreen implements Screen{
 		}
 		
 		game.assets.update();
+		stage.getViewport().apply();
+		stage.getCamera().update();
+		game.batch.setProjectionMatrix(stage.getCamera().combined);
 		
 		introTimer += Gdx.graphics.getDeltaTime();
 		
@@ -233,7 +243,9 @@ public class IntroScreen implements Screen{
 			}
 			
 			//Images
-		    game.batch.begin();	    
+		    game.batch.setShader(null);
+		    game.batch.setColor(1f, 1f, 1f, 1f);
+		    game.batch.begin();
 		    for(int i = 0; i < 3; i++){
 			    game.batch.draw(backgroundTexture, 
 			    				backgroundPosX + i * Gdx.graphics.getHeight()*backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
@@ -245,14 +257,19 @@ public class IntroScreen implements Screen{
 		    game.batch.end();
 		    //Vaisseau
 		    if(!vuePerso){	
+			    game.batch.setShader(null);
+			    game.batch.setColor(1f, 1f, 1f, 1f);
 			    game.batch.begin();
-			    if(introTimer > 9)
+			    float spaceshipDelay = webRuntime ? 1.5f : 9f;
+			    float spaceshipSpeed = webRuntime ? 42f : 28f;
+			    if(introTimer > spaceshipDelay)
 			    game.batch.draw(skin.getRegion("Vaisseau_Mere"), 
-			    				spaceshipPosX += 28 * Gdx.graphics.getDeltaTime(), 
+			    				spaceshipPosX += spaceshipSpeed * Gdx.graphics.getDeltaTime(), 
 			    				0.4f*Gdx.graphics.getHeight() - 0.5f*spaceshipHeight, 
 			    				spaceshipWidth, 
 			    				spaceshipHeight);
-			    game.batch.setShader(colorReplacementProgram);
+			    if(useIntroShaders)
+			    	game.batch.setShader(colorReplacementProgram);
 			    game.batch.draw(skin.getRegion("Vaisseau_Survie"), 
 			    				spaceshipPosX + 0.65f*spaceshipWidth, 
 			    				0.4f*Gdx.graphics.getHeight() + 0.31f*spaceshipHeight, 
@@ -274,42 +291,60 @@ public class IntroScreen implements Screen{
 		    }
 		    //Personnage
 		    else{
-		  		map.bind(1);
-		  		textureTest.bind(0);
-		  		
-		  		alphaShaderProgram.begin();
-		  		alphaShaderProgram.setUniformf("u_time", shaderTime += Gdx.graphics.getDeltaTime());
-		  		alphaShaderProgram.setUniformi("u_mask", 1);
-		  		alphaShaderProgram.end();
-		         
-		  		colorFlicker.set(MathUtils.random(0.78f, 1), MathUtils.random(0.12f, 0.51f), MathUtils.random(0, 0.16f));
-		    	flickerShaderProgram.begin();
-		      	flickerShaderProgram.setUniformf("u_color", colorFlicker);
-		      	flickerShaderProgram.end();
-		      	
-		    	game.batch.begin();
-		      	//Mur avec hublot
-		    	game.batch.setShader(vignetteProgram);
-		    	game.batch.draw(skin.getRegion("Intro_Mur"),
-		    					0, 
-		    					Gdx.graphics.getHeight()/2 - 0.5f*Gdx.graphics.getWidth() * skin.getRegion("Intro_Mur").getRegionHeight()/skin.getRegion("Intro_Mur").getRegionWidth(), 
-		    					Gdx.graphics.getWidth(), 
-		    					Gdx.graphics.getWidth() * skin.getRegion("Intro_Mur").getRegionHeight()/skin.getRegion("Intro_Mur").getRegionWidth());
-		    	//Fumée
-		  		game.batch.setShader(alphaShaderProgram);
-			    game.batch.draw(textureTest, 
-	    						0.3968f*Gdx.graphics.getWidth(),  
-			    				0.539f*Gdx.graphics.getHeight(), 
-			    				0.05f*Gdx.graphics.getWidth(), 
-			    				0.07f*Gdx.graphics.getWidth() * textureTest.getHeight()/textureTest.getWidth());
-			    game.batch.setShader(flickerShaderProgram);
-		    	//Personnage
-		    	game.batch.draw(skin.getRegion("Intro_Personnage_Gauche"),
-		    					0.42f * Gdx.graphics.getWidth() + 0.78f * Gdx.graphics.getHeight() * skin.getRegion("Intro_Personnage_Gauche").getRegionWidth()/skin.getRegion("Intro_Personnage_Gauche").getRegionHeight(), 
-		    					0, 
-		    					-0.78f * Gdx.graphics.getHeight() * skin.getRegion("Intro_Personnage_Gauche").getRegionWidth()/skin.getRegion("Intro_Personnage_Gauche").getRegionHeight(), 
-		    					0.78f * Gdx.graphics.getHeight());	
-		    	game.batch.end();
+		    	if(useIntroShaders){
+			  		map.bind(1);
+			  		textureTest.bind(0);
+			  		
+			  		alphaShaderProgram.begin();
+			  		alphaShaderProgram.setUniformf("u_time", shaderTime += Gdx.graphics.getDeltaTime());
+			  		alphaShaderProgram.setUniformi("u_mask", 1);
+			  		alphaShaderProgram.end();
+			         
+			  		colorFlicker.set(MathUtils.random(0.78f, 1), MathUtils.random(0.12f, 0.51f), MathUtils.random(0, 0.16f));
+			    	flickerShaderProgram.begin();
+			      	flickerShaderProgram.setUniformf("u_color", colorFlicker);
+			      	flickerShaderProgram.end();
+			      	
+			    	game.batch.begin();
+			      	//Mur avec hublot
+			    	game.batch.setShader(vignetteProgram);
+			    	game.batch.draw(skin.getRegion("Intro_Mur"),
+			    					0, 
+			    					Gdx.graphics.getHeight()/2 - 0.5f*Gdx.graphics.getWidth() * skin.getRegion("Intro_Mur").getRegionHeight()/skin.getRegion("Intro_Mur").getRegionWidth(), 
+			    					Gdx.graphics.getWidth(), 
+			    					Gdx.graphics.getWidth() * skin.getRegion("Intro_Mur").getRegionHeight()/skin.getRegion("Intro_Mur").getRegionWidth());
+			    	//Fumée
+			  		game.batch.setShader(alphaShaderProgram);
+				    game.batch.draw(textureTest, 
+		    						0.3968f*Gdx.graphics.getWidth(),  
+				    				0.539f*Gdx.graphics.getHeight(), 
+				    				0.05f*Gdx.graphics.getWidth(), 
+				    				0.07f*Gdx.graphics.getWidth() * textureTest.getHeight()/textureTest.getWidth());
+				    game.batch.setShader(flickerShaderProgram);
+			    	//Personnage
+			    	game.batch.draw(skin.getRegion("Intro_Personnage_Gauche"),
+			    					0.42f * Gdx.graphics.getWidth() + 0.78f * Gdx.graphics.getHeight() * skin.getRegion("Intro_Personnage_Gauche").getRegionWidth()/skin.getRegion("Intro_Personnage_Gauche").getRegionHeight(), 
+			    					0, 
+			    					-0.78f * Gdx.graphics.getHeight() * skin.getRegion("Intro_Personnage_Gauche").getRegionWidth()/skin.getRegion("Intro_Personnage_Gauche").getRegionHeight(), 
+			    					0.78f * Gdx.graphics.getHeight());	
+			    	game.batch.end();
+		    	}
+		    	else{
+		    		game.batch.setShader(null);
+		    		game.batch.setColor(1f, 1f, 1f, 1f);
+		    		game.batch.begin();
+		    		game.batch.draw(skin.getRegion("Intro_Mur"),
+		    				0,
+		    				Gdx.graphics.getHeight()/2 - 0.5f*Gdx.graphics.getWidth() * skin.getRegion("Intro_Mur").getRegionHeight()/skin.getRegion("Intro_Mur").getRegionWidth(),
+		    				Gdx.graphics.getWidth(),
+		    				Gdx.graphics.getWidth() * skin.getRegion("Intro_Mur").getRegionHeight()/skin.getRegion("Intro_Mur").getRegionWidth());
+		    		game.batch.draw(skin.getRegion("Intro_Personnage_Gauche"),
+		    				0.42f * Gdx.graphics.getWidth() + 0.78f * Gdx.graphics.getHeight() * skin.getRegion("Intro_Personnage_Gauche").getRegionWidth()/skin.getRegion("Intro_Personnage_Gauche").getRegionHeight(),
+		    				0,
+		    				-0.78f * Gdx.graphics.getHeight() * skin.getRegion("Intro_Personnage_Gauche").getRegionWidth()/skin.getRegion("Intro_Personnage_Gauche").getRegionHeight(),
+		    				0.78f * Gdx.graphics.getHeight());
+		    		game.batch.end();
+		    	}
 		    }
 
 		    //Dialogue
@@ -391,6 +426,7 @@ public class IntroScreen implements Screen{
 	    }
 	    
 	    /**********************************************************/
+	    game.batch.setShader(null);
 	    stage.act();
 	    stage.draw();	
 	}
@@ -417,10 +453,24 @@ public class IntroScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		Pools.free(colorFlicker);
+		if(colorFlicker != null)
+			Pools.free(colorFlicker);
 		textBox.dispose();
 		for(int i = 0; i < interlocutors.size; i++)
 			interlocutors.get(i).dispose();
+		if(flickerShaderProgram != null)
+			flickerShaderProgram.dispose();
+		if(alphaShaderProgram != null)
+			alphaShaderProgram.dispose();
+		if(colorReplacementProgram != null)
+			colorReplacementProgram.dispose();
+		if(vignetteProgram != null)
+			vignetteProgram.dispose();
+		if(map != null)
+			map.dispose();
+		if(textureTest != null)
+			textureTest.dispose();
+		game.batch.setShader(null);
 		
 		musicIntro.dispose();
 		alarmSound.dispose();
