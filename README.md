@@ -82,6 +82,16 @@ Notes:
 - The `.exe` launcher is produced with Launch4j.
 - The executable requires Java 17+ on the target machine unless you choose to bundle a JRE in a future packaging pass.
 
+## Self-Contained Windows Build (No Java Install Required)
+
+A GitHub Actions workflow now builds a self-contained Windows package using `jpackage`:
+
+- Workflow: `.github/workflows/windows-jpackage.yml`
+- Main artifact: `cosmonaut-windows-self-contained` (zip)
+- Optional artifact: `cosmonaut-windows-installer` (`.exe`, generated when WiX packaging succeeds)
+
+`jpackage` artifacts embed a runtime, so players do **not** need to install Java 17 manually.
+
 ## HTML Dist Output
 
 Web files are generated at:
@@ -108,6 +118,31 @@ Suggested deployment pattern:
 ```bash
 ./gradlew :core:compileJava :android:assembleDebug :desktop:build :desktop:windowsBundle :html:dist
 ```
+
+## Web Smoke Testing (Desktop + Mobile + Pi)
+
+Automated browser smoke suite is provided at `qa/web_smoke.js`.
+
+Run:
+
+```bash
+cd qa
+npm install
+npx playwright install chromium
+node web_smoke.js
+```
+
+The script validates local and deployed flows (desktop/mobile emulation) including:
+
+- load -> home -> main menu
+- options open/back
+- upgrades open/back
+- level selection
+- level start + input action
+
+Output summary:
+
+- `qa/reports/summary.json`
 
 ## Project Tracking
 

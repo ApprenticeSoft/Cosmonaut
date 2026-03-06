@@ -1,7 +1,6 @@
 package com.cosmonaut.Utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -87,10 +86,13 @@ public class HUD {
 		posFuel = Pools.obtain(Vector2.class).set(posXOxygen, posYOxygen - 2 * heightOxygen);
 		posOxygen = Pools.obtain(Vector2.class).set(posXOxygen, posYOxygen);
 
-		if(Gdx.app.getType() == ApplicationType.Desktop)
-			pressEscString = game.text.get("PressEsc");
-		else if(Gdx.app.getType() == ApplicationType.Android)
+		boolean touchControls = GameConstants.GAME_CONTROLS == GameConstants.ANDROID_BUTTONS_CONTROLS
+				|| GameConstants.GAME_CONTROLS == GameConstants.ANDROID_GESTURE_CONTROLS
+				|| GameConstants.GAME_CONTROLS == 12;
+		if(touchControls)
 			pressEscString = game.text.get("PressPause");
+		else
+			pressEscString = game.text.get("PressEsc");
 
 		hudLabelStyle = new LabelStyle(game.getFont("fontHUD.ttf"), Color.WHITE);
 		

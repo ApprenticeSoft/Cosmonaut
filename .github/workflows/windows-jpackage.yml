@@ -1,0 +1,95 @@
+name: Windows JPackage
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - feature/full-upgrade-optimization-html-pi
+    paths:
+      - '.github/workflows/windows-jpackage.yml'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle/**'
+      - 'core/**'
+      - 'desktop/**'
+
+jobs:
+  package-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build desktop fat JAR
+        run: .\\gradlew.bat :core:jar :desktop:fatJar
+
+      - name: Prepare jpackage input
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path desktop/build/jpackage-input | Out-Null
+          Copy-Item desktop/build/libs/cosmonaut-desktop-2.0.0.jar desktop/build/jpackage-input/
+
+      - name: Build self-contained app image
+        shell: pwsh
+        run: |
+          jpackage `
+            --type app-image `
+            --name Cosmonaut `
+            --app-version 2.0.0 `
+            --vendor ApprenticeSoft `
+            --input desktop/build/jpackage-input `
+            --dest desktop/build/jpackage `
+            --main-jar cosmonaut-desktop-2.0.0.jar `
+            --main-class com.cosmonaut.desktop.DesktopLauncher
+
+      - name: Zip self-contained app image
+        shell: pwsh
+        run: |
+          Compress-Archive -Path desktop/build/jpackage/Cosmonaut -DestinationPath desktop/build/jpackage/Cosmonaut-windows-self-contained.zip -Force
+
+      - name: Install WiX for EXE installer
+        shell: pwsh
+        run: |
+          choco install wixtoolset --no-progress -y
+          'C:\Program Files (x86)\WiX Toolset v3.11\bin' | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Build EXE installer (optional)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          jpackage `
+            --type exe `
+            --name Cosmonaut `
+            --app-version 2.0.0 `
+            --vendor ApprenticeSoft `
+            --input desktop/build/jpackage-input `
+            --dest desktop/build/jpackage `
+            --main-jar cosmonaut-desktop-2.0.0.jar `
+            --main-class com.cosmonaut.desktop.DesktopLauncher `
+            --win-menu `
+            --win-shortcut `
+            --win-dir-chooser
+
+      - name: Upload app-image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmonaut-windows-self-contained
+          path: desktop/build/jpackage/Cosmonaut-windows-self-contained.zip
+
+      - name: Upload EXE installer artifact (if generated)
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmonaut-windows-installer
+          path: desktop/build/jpackage/*.exe
+          if-no-files-found: ignore

@@ -1,7 +1,6 @@
 package com.cosmonaut.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -67,9 +66,9 @@ public class TutorialScreen extends GameScreen{
         tutoTextBox.timeControl = true;
         tutoCoordinate = Pools.obtain(Vector2.class).set(0,0);
         
-        if(Gdx.app.getType() == ApplicationType.Android){
-    		rotationControlAnimation = new Animation<TextureRegion>(0.035f, game.assets.get("Images/Animations/Rotation_Control_Animation.pack", TextureAtlas.class).findRegions("Rotation_Control"), Animation.PlayMode.LOOP);
-    		jetpackControlAnimation = new Animation<TextureRegion>(0.04f, game.assets.get("Images/Animations/Jetpack_Control_Animation.pack", TextureAtlas.class).findRegions("Jetpack_Control"), Animation.PlayMode.LOOP);
+        if(Data.getGameControls() == GameConstants.ANDROID_GESTURE_CONTROLS || Data.getGameControls() == 12){
+	    		rotationControlAnimation = new Animation<TextureRegion>(0.035f, game.assets.get("Images/Animations/Rotation_Control_Animation.pack", TextureAtlas.class).findRegions("Rotation_Control"), Animation.PlayMode.LOOP);
+	    		jetpackControlAnimation = new Animation<TextureRegion>(0.04f, game.assets.get("Images/Animations/Jetpack_Control_Animation.pack", TextureAtlas.class).findRegions("Jetpack_Control"), Animation.PlayMode.LOOP);
         }
         
         directionAnimation = new Animation<TextureRegion>(0.04f, game.assets.get("Images/Animations/Fleche_Animation.pack", TextureAtlas.class).findRegions("Fleche_Animation"), Animation.PlayMode.NORMAL);
@@ -1149,7 +1148,7 @@ public class TutorialScreen extends GameScreen{
 		
 		tutoTextBox.dispose();
 		
-		if(Gdx.app.getType() == ApplicationType.Android){
+		if(Data.getGameControls() == GameConstants.ANDROID_GESTURE_CONTROLS || Data.getGameControls() == 12){
 			game.assets.unload("Images/Animations/Controls_Animation.pack");
 			
 			if(GameConstants.SELECTED_LEVEL == 1 && /*!*/game.levelHandler.isLevelUnlocked(2)){

@@ -58,6 +58,9 @@ tasks.register("fatJar", Jar) {
     }
 
     from sourceSets.main.output
+    from(project.assetsDir) {
+        into("")
+    }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }

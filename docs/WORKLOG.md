@@ -57,6 +57,9 @@ This file is maintained as an interruption-safe engineering log so work can resu
 - Added `:desktop:windowsBundle` output containing:
   - `Cosmonaut.exe`
   - fat desktop jar
+- Added GitHub Actions Windows `jpackage` workflow for self-contained runtime builds:
+  - `.github/workflows/windows-jpackage.yml`
+  - artifact `cosmonaut-windows-self-contained` (no Java install required)
 
 ## Build Verification Status
 
@@ -124,6 +127,46 @@ TLS note:
 - Launch4j-generated `.exe` is unsigned (expected warning). Code-signing can be added in release hardening.
 - Current Windows package requires Java 17+ present on target unless bundling a runtime in a future pass.
 - HTML build is heavy due GWT permutation compile time; expected long step.
+
+## 2026-03-06 Web Black-Screen Incident
+
+Symptom reported:
+
+- Web loading bar reached 100% then screen stayed black on desktop and mobile.
+
+Root causes found:
+
+- `LevelHandler` used `Gdx.files.local(...)`, which is unsupported on GWT/WebGL and caused runtime failure.
+- Multiple screen/control branches were tied only to `ApplicationType.Desktop/Android`, leaving WebGL paths partially uninitialized.
+
+Fixes applied:
+
+- `LevelHandler` now uses browser `Preferences` storage on WebGL and local file storage on native targets.
+- Web-safe control-path updates:
+  - `HomeScreen` prompt selection based on actual control mode.
+  - `HUD` pause/escape prompt selection based on control mode.
+  - `OptionScreen` control-screen routing based on selected controls (not app type).
+  - `IntroScreen` and `TutorialScreen` touch-control asset logic based on control mode.
+
+QA automation added:
+
+- `qa/web_smoke.js` Playwright smoke runner for:
+  - local desktop + local mobile emulation
+  - deployed Pi desktop + deployed Pi mobile emulation
+- Flow coverage per scenario:
+  - load -> home -> main menu
+  - options open/back
+  - upgrades open/back
+  - level selection open
+  - level start + gameplay input action
+- Runtime failure checks:
+  - browser `pageerror`
+  - significant console errors
+
+Latest QA result:
+
+- All four smoke scenarios passed.
+- Summary artifact (local workspace): `qa/reports/summary.json`
 
 ## Fast Resume Checklist
 

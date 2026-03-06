@@ -1,6 +1,8 @@
 package com.cosmonaut.Utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 
@@ -8,20 +10,25 @@ public class LevelHandler {
 
 	private Array<String> niveaux;
 	private FileHandle file;
+	private Preferences preferences;
+	private String storageKey;
 	private String[] fileContent;
 	
 	public LevelHandler(String fileName){
 		niveaux = new Array<String>();	
+		storageKey = fileName + ".dat";
 		
 		/*
 		 * TEST
 		 */
-		file = Gdx.files.local(fileName + ".dat");
-		if(!file.exists()){
-			file.writeString("1,true,false,false,false\n", true);
-			for(int i = 2; i < 25; i++){
-				file.writeString(i + ",false,false,false,false\n", true);
-			}
+		if(Gdx.app.getType() == ApplicationType.WebGL){
+			preferences = Gdx.app.getPreferences("cosmonaut_level_handler");
+		}
+		else{
+			file = Gdx.files.local(storageKey);
+		}
+		if(readStorageText().trim().isEmpty()){
+			writeDefaultState();
 		}
 		refreshFileContent();
 	}
@@ -112,11 +119,11 @@ public class LevelHandler {
 	}
 	
 	public String toString(){
-		return file.readString();
+		return readStorageText();
 	}
 
 	private void refreshFileContent(){
-		String fileText = file.readString();
+		String fileText = readStorageText();
 		if(fileText.trim().isEmpty()){
 			fileContent = new String[0];
 		}
@@ -126,13 +133,44 @@ public class LevelHandler {
 	}
 
 	private void persistFileContent(){
-		file.writeString("", false);
+		StringBuilder builder = new StringBuilder();
 		for(int j = 0; j < fileContent.length; j++){
 			String line = fileContent[j].trim();
 			if(!line.isEmpty()){
-				file.writeString(line + "\n", true);
+				builder.append(line).append('\n');
 			}
 		}
+		writeStorageText(builder.toString());
 		refreshFileContent();
+	}
+
+	private void writeDefaultState(){
+		StringBuilder builder = new StringBuilder();
+		builder.append("1,true,false,false,false\n");
+		for(int i = 2; i < 25; i++){
+			builder.append(i).append(",false,false,false,false\n");
+		}
+		writeStorageText(builder.toString());
+	}
+
+	private String readStorageText(){
+		if(preferences != null){
+			return preferences.getString(storageKey, "");
+		}
+		if(file == null || !file.exists()){
+			return "";
+		}
+		return file.readString();
+	}
+
+	private void writeStorageText(String value){
+		if(preferences != null){
+			preferences.putString(storageKey, value);
+			preferences.flush();
+			return;
+		}
+		if(file != null){
+			file.writeString(value, false);
+		}
 	}
 }

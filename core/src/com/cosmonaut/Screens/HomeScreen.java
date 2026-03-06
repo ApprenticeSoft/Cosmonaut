@@ -1,6 +1,5 @@
 package com.cosmonaut.Screens;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.cosmonaut.MyGdxGame;
+import com.cosmonaut.Utils.GameConstants;
 
 public class HomeScreen implements Screen{
 
@@ -35,10 +35,13 @@ public class HomeScreen implements Screen{
 		if(!game.music.isPlaying())
 			game.music.play();
 		
-		if(Gdx.app.getType() == ApplicationType.Desktop)
-			pressAnyKeyString = game.text.get("PressAnyKey");
-		else if(Gdx.app.getType() == ApplicationType.Android)
+		boolean touchControls = GameConstants.GAME_CONTROLS == GameConstants.ANDROID_BUTTONS_CONTROLS
+				|| GameConstants.GAME_CONTROLS == GameConstants.ANDROID_GESTURE_CONTROLS
+				|| GameConstants.GAME_CONTROLS == 12;
+		if(touchControls)
 			pressAnyKeyString = game.text.get("TouchScreen");
+		else
+			pressAnyKeyString = game.text.get("PressAnyKey");
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

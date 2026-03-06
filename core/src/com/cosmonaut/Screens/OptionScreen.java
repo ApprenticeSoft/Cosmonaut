@@ -2,7 +2,6 @@ package com.cosmonaut.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,6 +25,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pools;
 import com.cosmonaut.Data;
 import com.cosmonaut.MyGdxGame;
+import com.cosmonaut.Utils.GameConstants;
 import com.cosmonaut.Utils.UIWindow;
 
 public class OptionScreen implements Screen{
@@ -239,16 +239,19 @@ public class OptionScreen implements Screen{
 			}
 		});
 
-		controlButton.addListener(new ClickListener(){
-			 @Override
+			controlButton.addListener(new ClickListener(){
+				 @Override
 		        public void clicked(InputEvent event, float x, float y) {
 	            	dispose();            	
-	            	if(Gdx.app.getType() == ApplicationType.Desktop)
+	            	boolean desktopControls = Data.getGameControls() == GameConstants.DESKTOP_KEYBOARD_CONTROLS_QWERTY
+	            			|| Data.getGameControls() == GameConstants.DESKTOP_KEYBOARD_CONTROLS_AZERTY
+	            			|| Data.getGameControls() == GameConstants.DESKTOP_GAMEPAD_CONTROLS;
+	            	if(desktopControls)
 	            		game.setScreen(new DesktopControlScreen(game));
-	            	else if(Gdx.app.getType() == ApplicationType.Android)
+	            	else
 	            		game.setScreen(new AndroidControlScreen(game));
-			 }
-		});
+				 }
+			});
 		
 		languageButton.addListener(new ClickListener(){
 			@Override

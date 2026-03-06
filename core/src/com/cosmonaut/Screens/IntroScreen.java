@@ -1,7 +1,6 @@
 package com.cosmonaut.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -160,8 +159,11 @@ public class IntroScreen implements Screen{
       	vignetteProgram.setUniformf("intensity", 0.5f);
       	vignetteProgram.end();
       	
-      	if(Gdx.app.getType() == ApplicationType.Android){
-			game.assets.load("Images/Animations/Controls_Animation.pack", TextureAtlas.class);
+      	boolean touchControls = GameConstants.GAME_CONTROLS == GameConstants.ANDROID_BUTTONS_CONTROLS
+      			|| GameConstants.GAME_CONTROLS == GameConstants.ANDROID_GESTURE_CONTROLS
+      			|| GameConstants.GAME_CONTROLS == 12;
+      	if(touchControls){
+				game.assets.load("Images/Animations/Controls_Animation.pack", TextureAtlas.class);
 			
 			//if(GameConstants.SELECTED_LEVEL == 1 && !game.levelHandler.isLevelUnlocked(2)){
 				game.assets.load("Images/Animations/Rotation_Control_Animation.pack", TextureAtlas.class);
