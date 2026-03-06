@@ -15,16 +15,9 @@
 <script type="text/javascript" src="html/html.nocache.js"></script>
 <script>
     const embed = document.getElementById('embed-html');
-
-    function preventDefaultPointer(evt) {
+    embed.addEventListener('contextmenu', function(evt) {
         evt.preventDefault();
-    }
-
-    embed.addEventListener('contextmenu', preventDefaultPointer, false);
-    embed.addEventListener('mousedown', preventDefaultPointer, false);
-    embed.addEventListener('mouseup', preventDefaultPointer, false);
-    embed.addEventListener('touchstart', preventDefaultPointer, {passive: false});
-    embed.addEventListener('touchmove', preventDefaultPointer, {passive: false});
+    }, false);
 </script>
 </body>
 </html>

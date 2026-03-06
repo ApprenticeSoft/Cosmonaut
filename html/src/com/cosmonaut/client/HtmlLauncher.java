@@ -10,14 +10,14 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 
 public class HtmlLauncher extends GwtApplication {
-    private static final float PORTRAIT_ASPECT = 9f / 16f;
+    private static final float LANDSCAPE_ASPECT = 16f / 9f;
 
     @Override
     public GwtApplicationConfiguration getConfig() {
         int browserWidth = Math.max(1, Window.getClientWidth());
         int browserHeight = Math.max(1, Window.getClientHeight());
-        int targetWidth = Math.min(browserWidth, Math.round(browserHeight * PORTRAIT_ASPECT));
-        int targetHeight = browserHeight;
+        int targetWidth = browserWidth;
+        int targetHeight = Math.min(browserHeight, Math.round(browserWidth / LANDSCAPE_ASPECT));
 
         GwtApplicationConfiguration config = new GwtApplicationConfiguration(targetWidth, targetHeight);
         config.padHorizontal = 0;
@@ -41,8 +41,8 @@ public class HtmlLauncher extends GwtApplication {
     private void applyResponsiveSize() {
         int browserWidth = Math.max(1, Window.getClientWidth());
         int browserHeight = Math.max(1, Window.getClientHeight());
-        int targetWidth = Math.min(browserWidth, Math.round(browserHeight * PORTRAIT_ASPECT));
-        int targetHeight = browserHeight;
+        int targetWidth = browserWidth;
+        int targetHeight = Math.min(browserHeight, Math.round(browserWidth / LANDSCAPE_ASPECT));
 
         if (getRootPanel() != null) {
             getRootPanel().setWidth(targetWidth + "px");

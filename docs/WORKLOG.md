@@ -168,6 +168,41 @@ Latest QA result:
 - All four smoke scenarios passed.
 - Summary artifact (local workspace): `qa/reports/summary.json`
 
+## 2026-03-06 Mobile Web Orientation/Touch Follow-up
+
+New user-reported symptoms:
+
+- On mobile web after loading: black screen with `Touchez l'Écran`, touching did not progress.
+- Live site appeared in portrait-like layout for a game that should run in landscape.
+- Windows note: local `windows-dist/Cosmonaut.exe` requested Java 17.
+
+Root causes identified:
+
+- Live Pi deployment was still serving an older HTML build using portrait ratio behavior.
+- DOM event prevention in `html/webapp/index.html` was overly aggressive (`mousedown`, `mouseup`, `touchstart`, `touchmove`), which could interfere with touch handling on some mobile browsers.
+
+Fixes applied:
+
+- `HtmlLauncher` ratio logic switched to centered landscape (`16:9`) viewport sizing.
+- Removed aggressive pointer/touch `preventDefault` listeners; kept only context-menu suppression.
+- README clarified Windows packaging expectations:
+  - `desktop/build/windows-dist/Cosmonaut.exe` requires Java 17.
+  - No-Java delivery must use the GitHub Actions `jpackage` artifact (`cosmonaut-windows-self-contained`).
+
+Deployment and verification:
+
+- Rebuilt web: `./gradlew :core:compileJava :html:dist` -> SUCCESS.
+- Deployed fresh `html/build/dist` to Pi web root `/var/www/cosmonaut`.
+- Restarted backend: `cosmonaut-static.service` -> `active`.
+- Landscape verification (mobile emulation):
+  - before deploy on live domain: canvas `320x658` (portrait full-height behavior),
+  - after deploy on live domain: canvas `320x180` (centered landscape behavior).
+- Full smoke suite rerun passed:
+  - local desktop PASS
+  - local mobile PASS
+  - rpi desktop PASS
+  - rpi mobile PASS
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`
