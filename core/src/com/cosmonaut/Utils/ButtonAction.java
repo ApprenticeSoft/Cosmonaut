@@ -33,7 +33,6 @@ public class ButtonAction {
 				}
 				else if(Data.getFullVersion()){
 					if(GameConstants.SELECTED_LEVEL == 24){
-			        	System.out.println("Dernier niveau");
 						game.assets.load("Images/Fin/Images_Fin.pack", TextureAtlas.class);
 						game.assets.finishLoading();
 			        }

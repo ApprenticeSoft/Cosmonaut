@@ -2,6 +2,7 @@ package com.cosmonaut;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.Preferences;
 
 public class Data {
@@ -33,6 +34,12 @@ public class Data {
 			}
 			else if(Gdx.app.getType() == ApplicationType.Android)
 				prefs.putInteger("GameControls", 3);
+			else if(Gdx.app.getType() == ApplicationType.WebGL){
+				if(Gdx.input.isPeripheralAvailable(Peripheral.MultitouchScreen))
+					prefs.putInteger("GameControls", 3);
+				else
+					prefs.putInteger("GameControls", 1);
+			}
 		}
 		
 		if (!prefs.contains("ControlOpacity")) {
@@ -175,7 +182,7 @@ public class Data {
 	
 	public static void setRateCount(int val) {
 	    prefs.putInteger("RateCount", val);
-	    prefs.flush();							//Sert à sauvegarder
+	    prefs.flush();							//Sert Ã  sauvegarder
 	}
 
 	public static int getRateCount() {
@@ -184,7 +191,7 @@ public class Data {
 	
 	public static void setRate(boolean val) {
 	    prefs.putBoolean("Rate", val);
-	    prefs.flush();							//Sert à sauvegarder
+	    prefs.flush();							//Sert Ã  sauvegarder
 	}
 
 	public static boolean getRate() {
@@ -193,7 +200,7 @@ public class Data {
 	
 	public static void setFullVersion(boolean val) {
 	    prefs.putBoolean("FullVersion", val);
-	    prefs.flush();							//Sert à sauvegarder
+	    prefs.flush();							//Sert Ã  sauvegarder
 	}
 
 	public static boolean getFullVersion() {
@@ -202,7 +209,7 @@ public class Data {
 	
 	public static void setIntroPlayed(boolean val) {
 	    prefs.putBoolean("IntroPlayed", val);
-	    prefs.flush();							//Sert à sauvegarder
+	    prefs.flush();							//Sert Ã  sauvegarder
 	}
 
 	public static boolean getIntroPlayed() {

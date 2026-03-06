@@ -84,7 +84,7 @@ public class MyLight {
 		if(mapObject.getProperties().get("Color") != null && !mapObject.getProperties().get("Color").toString().equals("")){
 			color = mapObject.getProperties().get("Color").toString().split(",");
 			if(color.length != 4)
-				System.out.println("Erreur dans la définition de la couleur de la lumière");
+				System.out.println("Erreur dans la dÃ©finition de la couleur de la lumiÃ¨re");
 			else{
 				r = Float.valueOf(color[0]);
 				g = Float.valueOf(color[1]); 
@@ -108,7 +108,7 @@ public class MyLight {
 				flickerFactorA = Integer.valueOf(flickerColors[3]);
 			}
 			else
-				System.out.println("Erreur dans la définition du clignotement de la lumière");
+				System.out.println("Erreur dans la dÃ©finition du clignotement de la lumiÃ¨re");
 		}
 		else {
 			flicker = false;
@@ -130,7 +130,7 @@ public class MyLight {
 				pulseFactorA = Float.valueOf(pulseColors[3]);
 			}
 			else
-				System.out.println("Erreur dans la définition de la pulsation de la lumière");
+				System.out.println("Erreur dans la dÃ©finition de la pulsation de la lumiÃ¨re");
 		}
 		else pulse = false;
 		

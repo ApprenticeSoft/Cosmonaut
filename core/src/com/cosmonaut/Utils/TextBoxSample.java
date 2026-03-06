@@ -74,7 +74,7 @@ public class TextBoxSample {
 		file = Gdx.files.internal(textFile);
 		fileContent = file.readString().split(splitStringParagraph);
 		// Creation of the label
-		labelStyle = new LabelStyle(game.assets.get("fontDialogue.ttf", BitmapFont.class), Color.WHITE);
+		labelStyle = new LabelStyle(game.getFont("fontDialogue.ttf"), Color.WHITE);
 		label = new Label("", labelStyle);
 		label.setWidth(Gdx.graphics.getWidth()/4);
 		label.setWrap(true);

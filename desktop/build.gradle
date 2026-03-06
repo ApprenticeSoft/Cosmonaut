@@ -1,46 +1,168 @@
+apply plugin: "application"
 apply plugin: "java"
 
-sourceCompatibility = 1.6
-sourceSets.main.java.srcDirs = [ "src/" ]
+configurations {
+    launch4j
+    launch4jWorkdir {
+        transitive = false
+    }
+}
 
-project.ext.mainClassName = "com.libgdx.jam.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("../android/assets");
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
-task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
+sourceSets.main.java.srcDirs = ["src/"]
+
+project.ext.mainClassName = "com.cosmonaut.desktop.DesktopLauncher"
+project.ext.assetsDir = new File("../android/assets")
+
+application {
+    mainClass = project.mainClassName
+}
+
+dependencies {
+    implementation project(":core")
+
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+    runtimeOnly "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    runtimeOnly "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    runtimeOnly "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+    launch4j "net.sf.launch4j:launch4j:3.50"
+    launch4jWorkdir "net.sf.launch4j:launch4j:3.50:workdir-linux64"
+}
+
+tasks.named("run", JavaExec).configure {
     workingDir = project.assetsDir
+    standardInput = System.in
     ignoreExitValue = true
 }
 
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
- 
+tasks.register("fatJar", Jar) {
+    group = "build"
+    archiveBaseName.set("cosmonaut-desktop")
+    archiveVersion.set("2.0.0")
+    dependsOn(":core:jar", "classes")
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Main-Class': project.mainClassName
+        attributes("Main-Class": project.mainClassName)
+    }
+
+    from sourceSets.main.output
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
-dist.dependsOn classes
+def desktopVersion = "2.0.0"
+def windowsDistDir = file("$buildDir/windows-dist")
+def launch4jDir = file("$buildDir/launch4j")
+def launch4jHomeDir = file("$launch4jDir/launch4j-3.50-workdir-linux64")
+def launch4jConfigFile = file("$buildDir/tmp/launch4j/cosmonaut.xml")
 
-eclipse {
-    project {
-        name = appName + "-desktop"
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/android/assets'
+tasks.register("prepareLaunch4jTool") {
+    group = "distribution"
+    description = "Prepares local Launch4j toolchain including Linux workdir binaries."
+
+    doLast {
+        delete launch4jDir
+        launch4jDir.mkdirs()
+
+        copy {
+            from(zipTree(configurations.launch4jWorkdir.singleFile))
+            into(launch4jDir)
+        }
+
+        def coreJar = configurations.launch4j.files.find { it.name == "launch4j-3.50.jar" }
+        if (coreJar == null) {
+            throw new GradleException("Could not resolve launch4j core jar.")
+        }
+
+        copy {
+            from(coreJar)
+            into(launch4jHomeDir)
+        }
+
+        new File(launch4jHomeDir, "bin/windres").setExecutable(true)
+        new File(launch4jHomeDir, "bin/ld").setExecutable(true)
     }
 }
 
-task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
-  doLast {
-    def classpath = new XmlParser().parse(file(".classpath"))
-    new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
-    def writer = new FileWriter(file(".classpath"))
-    def printer = new XmlNodePrinter(new PrintWriter(writer))
-    printer.setPreserveWhitespace(true)
-    printer.print(classpath)
-  }
+tasks.register("prepareWindowsDist") {
+    group = "distribution"
+    description = "Prepares Windows packaging directory."
+    dependsOn("fatJar")
+
+    doLast {
+        delete windowsDistDir
+        windowsDistDir.mkdirs()
+        copy {
+            from(tasks.named("fatJar"))
+            into(windowsDistDir)
+        }
+    }
+}
+
+tasks.register("writeLaunch4jConfig") {
+    group = "distribution"
+    description = "Writes Launch4j configuration for Windows EXE packaging."
+    dependsOn("prepareWindowsDist")
+    outputs.file(launch4jConfigFile)
+
+    doLast {
+        launch4jConfigFile.parentFile.mkdirs()
+        def jarPath = new File(windowsDistDir, "cosmonaut-desktop-${desktopVersion}.jar").absolutePath.replace("\\", "/")
+        def exePath = new File(windowsDistDir, "Cosmonaut.exe").absolutePath.replace("\\", "/")
+
+        launch4jConfigFile.text = """<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>${jarPath}</jar>
+  <outfile>${exePath}</outfile>
+  <errTitle>Cosmonaut</errTitle>
+  <chdir>.</chdir>
+  <jre>
+    <minVersion>17</minVersion>
+  </jre>
+</launch4jConfig>
+"""
+    }
+}
+
+tasks.register("windowsExe", JavaExec) {
+    group = "distribution"
+    description = "Builds Windows executable wrapper (Cosmonaut.exe)."
+    dependsOn("writeLaunch4jConfig", "prepareLaunch4jTool")
+    mainClass = "net.sf.launch4j.Main"
+    systemProperty("launch4j.bindir", new File(launch4jHomeDir, "bin").absolutePath)
+    args(launch4jConfigFile.absolutePath)
+
+    doFirst {
+        def coreJar = new File(launch4jHomeDir, "launch4j-3.50.jar")
+        def deps = configurations.launch4j.files.findAll { it.name != "launch4j-3.50.jar" }
+        classpath = files([coreJar] + deps)
+    }
+}
+
+tasks.register("windowsBundle", Zip) {
+    group = "distribution"
+    description = "Creates a Windows desktop bundle with executable and JAR."
+    dependsOn("windowsExe")
+
+    archiveBaseName.set("cosmonaut-windows")
+    archiveVersion.set("2.0.0")
+
+    from(windowsDistDir) {
+        into("Cosmonaut")
+    }
 }

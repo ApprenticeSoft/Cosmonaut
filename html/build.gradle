@@ -1,70 +1,113 @@
 apply plugin: "java"
-apply plugin: "jetty"
 
-gwt {
-    gwtVersion='2.6.0' // Should match the gwt version used for building the gwt backend
-    maxHeapSize="1G" // Default 256m is not enough for gwt compiler. GWT is HUNGRY
-    minHeapSize="1G"
-
-    src = files(file("src/")) // Needs to be in front of "modules" below.
-    modules 'com.libgdx.jam.GdxDefinition'
-    devModules 'com.libgdx.jam.GdxDefinitionSuperdev'
-    project.webAppDirName = 'webapp'
-
-    compiler {
-        strict = true;
-        enableClosureCompiler = true;
-        disableCastChecking = true;
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
-task draftRun(type: JettyRunWar) {
-    dependsOn draftWar
-    dependsOn.remove('war')
-    webApp=draftWar.archivePath
-    daemon=true
+sourceSets.main.java.srcDirs = ["src/"]
+
+configurations {
+    gwtCompiler
 }
 
-task superDev(type: de.richsource.gradle.plugins.gwt.GwtSuperDev) {
-    dependsOn draftRun
-    doFirst {
-    	gwt.modules = gwt.devModules
-    }
+dependencies {
+    implementation project(":core")
+
+    implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+    implementation "org.gwtproject:gwt-user:$gwtVersion"
+
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+    implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+    implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
+    implementation "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
+    implementation "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion"
+    implementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion:sources"
+    implementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion:sources"
+    implementation "net.dermetfan.libgdx-utils:libgdx-utils:$libgdxUtilsVersion:sources"
+    implementation "net.dermetfan.libgdx-utils:libgdx-utils-box2d:$libgdxUtilsVersion:sources"
+
+    gwtCompiler "org.gwtproject:gwt-dev:$gwtVersion"
 }
 
-task dist(dependsOn: [clean, compileGwt]) {
+tasks.register("prepareWebAssets") {
+    group = "build"
+    description = "Copies Android assets to html/war and generates assets.txt for the web preloader"
+
     doLast {
-        file("build/dist").mkdirs()
+        def warAssetsDir = file("$projectDir/war/assets")
+        delete warAssetsDir
+        warAssetsDir.mkdirs()
+
         copy {
-            from "build/gwt/out"
-            into "build/dist"
+            from "$projectDir/../android/assets"
+            into warAssetsDir
         }
+
+        def assetFiles = fileTree(warAssetsDir)
+                .matching { exclude "**/*.psd", "**/*.kra", "**/*.xcf" }
+                .files
+                .findAll { it.isFile() }
+                .collect { warAssetsDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
+                .sort()
+
+        file("$warAssetsDir/assets.txt").text = assetFiles.join("\n") + (assetFiles.isEmpty() ? "" : "\n")
+    }
+}
+
+tasks.register("compileGwt", JavaExec) {
+    group = "build"
+    description = "Compile GWT application"
+
+    dependsOn(":core:classes", classes)
+
+    mainClass = "com.google.gwt.dev.Compiler"
+    jvmArgs = ["-Xmx3G"]
+
+    classpath = files(
+            configurations.gwtCompiler,
+            sourceSets.main.runtimeClasspath,
+            file("src"),
+            file("../core/src")
+    )
+
+    args = [
+            "-war", "$buildDir/gwt/out",
+            "-style", "OBF",
+            "-logLevel", "INFO",
+            "-localWorkers", "1",
+            "com.cosmonaut.GdxDefinition"
+    ]
+}
+
+tasks.register("dist") {
+    group = "build"
+    description = "Build distributable HTML package"
+    dependsOn("compileGwt", "prepareWebAssets")
+
+    doLast {
+        def distDir = file("$buildDir/dist")
+        delete distDir
+        distDir.mkdirs()
+
+        copy {
+            from "$buildDir/gwt/out"
+            into distDir
+        }
+
         copy {
             from "webapp"
-            into "build/dist"
-            }
+            into distDir
+            exclude "WEB-INF/**"
+        }
+
         copy {
-            from "war"
-            into "build/dist"
+            from "war/assets"
+            into "$distDir/assets"
         }
     }
-}
-
-draftWar {
-   from "war"
-}
-
-task addSource << {
-	sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
-}
-
-tasks.compileGwt.dependsOn(addSource)
-tasks.draftCompileGwt.dependsOn(addSource)
-
-sourceCompatibility = 1.6
-sourceSets.main.java.srcDirs = [ "src/" ]
-
-
-eclipse.project {
-    name = appName + "-html"
 }

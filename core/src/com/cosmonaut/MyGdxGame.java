@@ -6,10 +6,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -27,7 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 import com.cosmonaut.Bodies.CheckPoint;
 import com.cosmonaut.Bodies.Dialogue;
@@ -73,6 +73,7 @@ public class MyGdxGame extends Game implements ApplicationListener{
 	public float fullVersionButtonDelay = 0;
 	public Array<Music> musics;
 	public MyPools pools;
+	private ObjectMap<String, BitmapFont> runtimeFonts;
 	
 	/*
 	 * TEST TABLEAUX
@@ -124,7 +125,7 @@ public class MyGdxGame extends Game implements ApplicationListener{
         checkpoints = new Array<CheckPoint>(false, 16);
 		
 		/*
-		 * Controls du jeu et qualité des lumière en fonction du système utilisé
+		 * Controls du jeu et qualitÃ© des lumiÃ¨re en fonction du systÃ¨me utilisÃ©
 		 */   
 		if(Gdx.app.getType() == ApplicationType.Desktop){
 			if(Data.getGameControls() != 1 && Data.getGameControls() != 5){
@@ -155,11 +156,32 @@ public class MyGdxGame extends Game implements ApplicationListener{
 			GameConstants.LIGHT_RAY_MULTIPLICATOR = 1;
 			GameConstants.GAME_VERSION = "android";
 		}
+		else if(Gdx.app.getType() == ApplicationType.WebGL){
+			boolean mobileWebClient = isMobileWebClient();
+
+			if(mobileWebClient){
+				Data.setGameControls(GameConstants.ANDROID_BUTTONS_CONTROLS);
+				GameConstants.GAME_VERSION = "web-mobile";
+				GameConstants.LIGHT_RAY_MULTIPLICATOR = 1;
+			}
+			else{
+				if(java.util.Locale.getDefault().getCountry().equals("FR"))
+					Data.setGameControls(GameConstants.DESKTOP_KEYBOARD_CONTROLS_AZERTY);
+				else
+					Data.setGameControls(GameConstants.DESKTOP_KEYBOARD_CONTROLS_QWERTY);
+				GameConstants.GAME_VERSION = "web-desktop";
+				GameConstants.LIGHT_RAY_MULTIPLICATOR = 2;
+			}
+
+			// Ads/billing are disabled on web builds.
+			Data.setFullVersion(true);
+			GameConstants.SOUND_DISTANCE_LIMITE *= 2.0f;
+		}
 		
 		GameConstants.GAME_CONTROLS = Data.getGameControls();	
 
 		/*
-		 * Résolution de l'écran
+		 * RÃ©solution de l'Ã©cran
 		 */
 		if(Gdx.graphics.getHeight() < 720)
 			GameConstants.SCREEN_RESOLUTION = "SD";
@@ -167,7 +189,7 @@ public class MyGdxGame extends Game implements ApplicationListener{
 			GameConstants.SCREEN_RESOLUTION = "HD";
 				
 		/*
-		 * Détermination de la langue de jeu
+		 * DÃ©termination de la langue de jeu
 		 */
 		if(!Data.getManualLanguage()){
 			if(java.util.Locale.getDefault().toString().startsWith("en"))
@@ -189,6 +211,7 @@ public class MyGdxGame extends Game implements ApplicationListener{
 		
 		batch = new SpriteBatch();
 		assets = new AssetManager();
+		runtimeFonts = new ObjectMap<String, BitmapFont>();
 		
 		levelHandler = new LevelHandler("game");
 		levelHandler.setState(GameConstants.NUMBER_OF_LEVEL);
@@ -215,21 +238,11 @@ public class MyGdxGame extends Game implements ApplicationListener{
 			Data.setRateCount(Data.getRateCount() - 1);
 		
 		/*
-		 * Publicités
+		 * PublicitÃ©s
 		 */
 		if(!Data.getFullVersion())
 			actionResolver.LoadInterstital();
-			
-		//Taille max des textures
-		IntBuffer intBuffer = BufferUtils.newIntBuffer(16);
-		Gdx.gl20.glGetIntegerv(GL20.GL_MAX_TEXTURE_SIZE, intBuffer);
-		/*
-		System.out.println("------------------------------------------MAX TEXTURE SIZE = " + intBuffer.get());
-		System.out.println("------------------------------------------FPS = " + Gdx.app.getGraphics().getFramesPerSecond());
-		System.out.println("------------------------------------------OpenGl 3.0 = " + Gdx.app.getGraphics().isGL30Available());
-		System.out.println("------------------------------------------Buffer Format = " + Gdx.app.getGraphics().getBufferFormat());
-		System.out.println("------------------------------------------Display modes = " + Gdx.app.getGraphics().getDisplayModes());
-		*/
+
 		this.setScreen(new LoadingScreen(this));
 		
 		//Compte des points upgrade par niveau
@@ -261,16 +274,16 @@ public class MyGdxGame extends Game implements ApplicationListener{
 		//pools.write();
 		
 		/*
-		 * Utilisation de la mémoire
+		 * Utilisation de la mÃ©moire
 		 */
-		//System.out.println("***************Utilisation de la mémoire***************");
+		//System.out.println("***************Utilisation de la mÃ©moire***************");
 		//System.out.println("Gdx.app.getJavaHeap() = " + ((float)Gdx.app.getJavaHeap()/1000000));
 		//System.out.println("Gdx.app.getNativeHeap() = " + Gdx.app.getNativeHeap());
 		//System.out.println("Pools.get(Vector2.class).peak = " + Pools.get(Vector2.class).peak);
 		//System.out.println("Pools.get(Vector2.class).getFree() = " + Pools.get(Vector2.class).getFree());
 		
 		/*
-		 * Publicité interstitielle
+		 * PublicitÃ© interstitielle
 		 */	
 		if(!Data.getFullVersion()){
 			if(GameConstants.INTERSTITIAL_TRIGGER < 1){
@@ -284,20 +297,20 @@ public class MyGdxGame extends Game implements ApplicationListener{
 	    		loadingFinished = true;
 
 	    		/*
-	    		 * Fenêtre achat version complète
+	    		 * FenÃªtre achat version complÃ¨te
 	    		 */
 	    		skin = new Skin();
 	    		
 	    		textureAtlas = assets.get("Images/" + GameConstants.SCREEN_RESOLUTION + "/Images.pack", TextureAtlas.class);
 	    		skin.addRegions(textureAtlas);
 	    		
-	    		textLabelStyle = new LabelStyle(assets.get("fontOption.ttf", BitmapFont.class),Color.WHITE);
-	    		titleLabelStyle = new LabelStyle(assets.get("fontUpgrade.ttf", BitmapFont.class),new Color(2/256f, 165/256f, 200/256f, 1));
+	    		textLabelStyle = new LabelStyle(getFont("fontOption.ttf"),Color.WHITE);
+	    		titleLabelStyle = new LabelStyle(getFont("fontUpgrade.ttf"),new Color(2/256f, 165/256f, 200/256f, 1));
 	    		
 	    		textButtonStyle = new TextButtonStyle();
 	    		textButtonStyle.up = skin.getDrawable("LinearButton");
 	    		textButtonStyle.down = skin.getDrawable("LinearButtonCheck");
-	    		textButtonStyle.font = assets.get("fontHUD.ttf", BitmapFont.class);
+	    		textButtonStyle.font = getFont("fontHUD.ttf");
 	    		textButtonStyle.fontColor = new Color(1, 1, 1, 1);
 	    		textButtonStyle.downFontColor = new Color(0, 0, 0, 1);
 	    		
@@ -352,9 +365,7 @@ public class MyGdxGame extends Game implements ApplicationListener{
 		
 		if(isFullScreen){
 			// set resolution to default and set full-screen to true
-			Gdx.graphics.setDisplayMode(  Gdx.graphics.getDesktopDisplayMode().width,
-							              Gdx.graphics.getDesktopDisplayMode().height, 
-							              true);
+			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		}
 	}
 	
@@ -375,5 +386,30 @@ public class MyGdxGame extends Game implements ApplicationListener{
         lightnings.clear();
         dialogues.clear();
         checkpoints.clear();
+	}
+
+	public BitmapFont getFont(String fontKey){
+		if(assets != null && assets.isLoaded(fontKey, BitmapFont.class)){
+			return assets.get(fontKey, BitmapFont.class);
+		}
+
+		BitmapFont runtimeFont = runtimeFonts.get(fontKey);
+		if(runtimeFont == null){
+			runtimeFont = new BitmapFont();
+			runtimeFonts.put(fontKey, runtimeFont);
+		}
+		return runtimeFont;
+	}
+
+	public void registerRuntimeFont(String fontKey, BitmapFont bitmapFont){
+		BitmapFont previous = runtimeFonts.get(fontKey);
+		if(previous != null && previous != bitmapFont){
+			previous.dispose();
+		}
+		runtimeFonts.put(fontKey, bitmapFont);
+	}
+
+	private boolean isMobileWebClient(){
+		return Gdx.input.isPeripheralAvailable(Peripheral.MultitouchScreen);
 	}
 }

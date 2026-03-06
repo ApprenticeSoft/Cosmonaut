@@ -83,7 +83,7 @@ public class IntroScreen implements Screen{
 		stage = new Stage();
 		
 		//Label
-		labelStyle = new LabelStyle(game.assets.get("fontDialogue.ttf", BitmapFont.class), Color.WHITE);
+		labelStyle = new LabelStyle(game.getFont("fontDialogue.ttf"), Color.WHITE);
 		labelIntro = new Label(game.text.get("Somewhere"), labelStyle);
 		labelIntro.setX(0.08f * Gdx.graphics.getWidth());
 		labelIntro.setY(Gdx.graphics.getHeight() - labelIntro.getPrefHeight() - labelIntro.getX());
@@ -191,7 +191,7 @@ public class IntroScreen implements Screen{
 				game.setScreen(new GameScreen(game));
 		}	
 		*/
-		//À enlever avant publication du jeu
+		//Ã€ enlever avant publication du jeu
 		//game.getScreen().dispose();
 		//game.setScreen(new TutorialScreen(game));
 		
@@ -290,7 +290,7 @@ public class IntroScreen implements Screen{
 		    					Gdx.graphics.getHeight()/2 - 0.5f*Gdx.graphics.getWidth() * skin.getRegion("Intro_Mur").getRegionHeight()/skin.getRegion("Intro_Mur").getRegionWidth(), 
 		    					Gdx.graphics.getWidth(), 
 		    					Gdx.graphics.getWidth() * skin.getRegion("Intro_Mur").getRegionHeight()/skin.getRegion("Intro_Mur").getRegionWidth());
-		    	//Fumée
+		    	//FumÃ©e
 		  		game.batch.setShader(alphaShaderProgram);
 			    game.batch.draw(textureTest, 
 	    						0.3968f*Gdx.graphics.getWidth(),  
@@ -360,7 +360,7 @@ public class IntroScreen implements Screen{
 		    	textBox.writeDialogue();
 		    }
 			
-			//Atténuation de l'alarm/Transition
+			//AttÃ©nuation de l'alarm/Transition
 		    if(textBox.dialogueFinished){
 		    	transitionAlpha += Gdx.graphics.getDeltaTime();
 		    	alarmSound.setVolume(soundId, 1/transitionAlpha);

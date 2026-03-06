@@ -2,6 +2,7 @@ package com.cosmonaut.Screens;
 
 import box2dLight.RayHandler;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -12,12 +13,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -27,7 +26,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Pools;
 import com.cosmonaut.Data;
 import com.cosmonaut.MyGdxGame;
@@ -45,20 +43,17 @@ public class GameScreen implements Screen{
 
 	final MyGdxGame game;
 	protected MyCamera camera;
-	TiledMap tiledMap;
-	TiledMapRenderer tiledMapRenderer;
-	//TEST
-	OrthoCachedTiledMapRenderer orthoCachedTiledMapRenderer;
+	protected TiledMap tiledMap;
+	private OrthoCachedTiledMapRenderer orthoCachedTiledMapRenderer;
 	protected TiledMapReader mapReader;
 	protected World world;
 	Fixture fixtureA, fixtureB;
-    private Box2DDebugRenderer debugRenderer;
     
     //Graphics
     protected HUD hud;
     protected Stage stage;
-    private int[] background = {0,1};
-    private int[] walls = {2};
+    private static final int[] BACKGROUND_LAYERS = {0, 1};
+    private static final int[] WALL_LAYERS = {2};
     
     //Background
     private Texture backgroundTexture;
@@ -74,11 +69,14 @@ public class GameScreen implements Screen{
 	//Gesture Listener
 	protected MyGestureListener gestureListener;
 	protected InputMultiplexer inputMultiplexer;
+
+	private boolean levelTransitionHandled;
+	private boolean cursorCaptured;
 	
 	public GameScreen(final MyGdxGame game){
 		this.game= game;
 		game.blackImage.setTouchable(Touchable.disabled);
-		game.blackImage.addAction(Actions.alpha(0));
+		game.blackImage.setColor(game.blackImage.getColor().r, game.blackImage.getColor().g, game.blackImage.getColor().b, 0f);
 		game.setFullVersionWindow(	game.text.get("ThankYou"),
 									game.text.get("Features") + "\n- " + game.text.get("MoreLevels") + "\n- " + game.text.get("LongerLevels") + "\n- " + game.text.get("RemoveAds") + "\n\n" + game.text.get("GetFullVersion"), 
 									game.fullVersionWindow.getWidth(), 
@@ -95,22 +93,19 @@ public class GameScreen implements Screen{
 		GameConstants.ANIM_TIME = 0;
 		GameConstants.UPGRADE_POINT = 0;
 		GameConstants.LEVEL_TIME = 0;
+		levelTransitionHandled = false;
+		cursorCaptured = false;
 		checkUpgrades();
 		
 		backgroundSound = game.assets.get("Sounds/Background.ogg", Music.class);
 		backgroundSound.setLooping(true);
-		try{
-			backgroundSound.play();
-		}catch(Exception e){
-			System.out.println("Exception: " + e.getMessage());
-		}
+		backgroundSound.play();
 		backgroundSound.setVolume(0.15f);
 
 		Vector2 gravity = Pools.obtain(Vector2.class).set(0, GameConstants.GRAVITY);
         world = new World(gravity, true);
         Pools.free(gravity);
         World.setVelocityThreshold(0.0f);
-        debugRenderer = new Box2DDebugRenderer();
         
         //Test Box2DLight
         RayHandler.useDiffuseLight(true); 
@@ -129,15 +124,9 @@ public class GameScreen implements Screen{
         params.textureMagFilter = Texture.TextureFilter.MipMapLinearNearest;
         params.textureMinFilter = Texture.TextureFilter.MipMapLinearNearest;
         
-        //tiledMap = new TmxMapLoader().load("Levels/HD/Level " + GameConstants.SELECTED_LEVEL + ".tmx", params);
-        //tiledMap = new TmxMapLoader().load("Levels/New Level.tmx", params);
+        tiledMap = new TmxMapLoader().load("Levels/Level " + GameConstants.SELECTED_LEVEL + ".tmx", params);
         
-        //Test asset manager
-        game.assets.load("Levels/Level " + GameConstants.SELECTED_LEVEL + ".tmx", TiledMap.class);
-        game.assets.finishLoading();
-        tiledMap = game.assets.get("Levels/Level " + GameConstants.SELECTED_LEVEL + ".tmx", TiledMap.class);
-        
-        //Test nouvelle caméra
+        //Test nouvelle camÃ©ra
         camera = new MyCamera();
 		camera.setToOrtho(false, GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT);
         camera.update(); 
@@ -197,14 +186,14 @@ public class GameScreen implements Screen{
  
         //Level finished
         if(GameConstants.LEVEL_FINISHED)
-        	finishLevel();
+        	finishLevel(delta);
         
 		if(!GameConstants.GAME_PAUSED){
-			Gdx.input.setCursorCatched(true);
+			updateCursorCapture(true);
 	        //Animation
-	        GameConstants.ANIM_TIME += Gdx.graphics.getDeltaTime();
-	        backgroundTime += Gdx.graphics.getDeltaTime();
-	        GameConstants.LEVEL_TIME += Gdx.graphics.getDeltaTime();
+	        GameConstants.ANIM_TIME += delta;
+	        backgroundTime += delta;
+	        GameConstants.LEVEL_TIME += delta;
 	        
 			world.step(GameConstants.BOX_STEP, GameConstants.BOX_VELOCITY_ITERATIONS, GameConstants.BOX_POSITION_ITERATIONS);
 			mapReader.active();
@@ -222,7 +211,7 @@ public class GameScreen implements Screen{
 			hud.update();
 		}
 		else{
-			Gdx.input.setCursorCatched(false);
+			updateCursorCapture(false);
 			mapReader.soundPause();
 			
 	        if(Gdx.input.isKeyJustPressed(Keys.ESCAPE))
@@ -230,7 +219,7 @@ public class GameScreen implements Screen{
 	        		hud.resume();
 		}
 		
-		stage.act();
+		stage.act(delta);
 		
 		//Drawing graphics
 		//Background	
@@ -250,7 +239,7 @@ public class GameScreen implements Screen{
 		
 		//Game map
         //tiledMapRenderer.render(background);
-        orthoCachedTiledMapRenderer.render(background);
+        orthoCachedTiledMapRenderer.render(BACKGROUND_LAYERS);
 		    
 		//HUD and hero
 		game.batch.begin();
@@ -258,7 +247,7 @@ public class GameScreen implements Screen{
 		game.batch.end();
   		
 		//tiledMapRenderer.render(walls);
-        orthoCachedTiledMapRenderer.render(walls);     	
+        orthoCachedTiledMapRenderer.render(WALL_LAYERS);     	
 		
 		//Test Box2DLight
 		rayHandler.setCombinedMatrix(camera);
@@ -460,43 +449,50 @@ public class GameScreen implements Screen{
 	public void hide() {
 	}
 	
-	public void finishLevel(){
-		if(Data.getFullVersion()){
-	    	if(GameConstants.SELECTED_LEVEL == GameConstants.NUMBER_OF_LEVEL){
-	    		hud.gameComplete();
-		    	game.fullVersionWindow.alfaZero(0);	
-				game.blackImage.setTouchable(Touchable.disabled);
-				game.blackImage.setColor(	game.blackImage.getColor().r,
-											game.blackImage.getColor().g,
-											game.blackImage.getColor().b,
-											game.blackImage.getColor().a += Gdx.graphics.getDeltaTime());
-	    	}
-	    	else{
-	    		hud.win();
-		    	game.fullVersionWindow.alfaZero(0);	
-				game.blackImage.setTouchable(Touchable.disabled);
-				game.blackImage.addAction(Actions.alpha(0));
-	    	}
-	    	
-		}
-		else{
-			if(GameConstants.SELECTED_LEVEL == GameConstants.FREE_LEVELS){
-				GameConstants.GAME_PAUSED = true;
-				game.fullVersionWindow.alfaOne(0.2f);	
-				game.blackImage.setTouchable(Touchable.enabled);
-				game.blackImage.addAction(Actions.alpha(0.7f, 0.2f));
+	public void finishLevel(float delta){
+		if(!levelTransitionHandled){
+			levelTransitionHandled = true;
+
+			if(Data.getFullVersion()){
+		    	if(GameConstants.SELECTED_LEVEL == GameConstants.NUMBER_OF_LEVEL){
+		    		hud.gameComplete();
+			    	game.fullVersionWindow.alfaZero(0);	
+					game.blackImage.setTouchable(Touchable.disabled);
+		    	}
+		    	else{
+		    		hud.win();
+			    	game.fullVersionWindow.alfaZero(0);	
+					game.blackImage.setTouchable(Touchable.disabled);
+					game.blackImage.setColor(game.blackImage.getColor().r, game.blackImage.getColor().g, game.blackImage.getColor().b, 0f);
+		    	}
 			}
-	    	else
-	    		hud.win();
+			else{
+				if(GameConstants.SELECTED_LEVEL == GameConstants.FREE_LEVELS){
+					GameConstants.GAME_PAUSED = true;
+					game.fullVersionWindow.alfaOne(0.2f);	
+					game.blackImage.setTouchable(Touchable.enabled);
+					game.blackImage.setColor(game.blackImage.getColor().r, game.blackImage.getColor().g, game.blackImage.getColor().b, 0.7f);
+				}
+		    	else
+		    		hud.win();
+			}
+	    	
+			if(!GameConstants.UPDATE_STATE){
+				GameConstants.UPDATE_STATE = true;
+	    		game.levelHandler.setLevelUnlocked(GameConstants.SELECTED_LEVEL + 1);
+	    		game.levelHandler.setUpgrades(GameConstants.SELECTED_LEVEL);
+	    		Data.setUpgradePoint(Data.getUpgradePoint() + GameConstants.UPGRADE_POINT);
+				GameConstants.INTERSTITIAL_TRIGGER--;
+			}
 		}
-    	
-		if(!GameConstants.UPDATE_STATE){
-			GameConstants.UPDATE_STATE = true;
-	    	game.levelHandler.setLevelUnlocked(GameConstants.SELECTED_LEVEL + 1);
-	    	game.levelHandler.setUpgrades(GameConstants.SELECTED_LEVEL);
-	    	Data.setUpgradePoint(Data.getUpgradePoint() + GameConstants.UPGRADE_POINT);
-			GameConstants.INTERSTITIAL_TRIGGER--;
-		}	
+
+		if(Data.getFullVersion() && GameConstants.SELECTED_LEVEL == GameConstants.NUMBER_OF_LEVEL){
+			float nextAlpha = Math.min(1f, game.blackImage.getColor().a + delta);
+			game.blackImage.setColor(game.blackImage.getColor().r,
+					game.blackImage.getColor().g,
+					game.blackImage.getColor().b,
+					nextAlpha);
+		}
 	}
 	
 	public void checkUpgrades(){
@@ -506,6 +502,16 @@ public class GameScreen implements Screen{
 	public void cameraActivity(){
 		camera.displacement(mapReader.hero, mapReader, tiledMap);
         camera.update();    
+	}
+
+	private void updateCursorCapture(boolean capture){
+		if(Gdx.app.getType() != ApplicationType.Desktop){
+			return;
+		}
+		if(cursorCaptured != capture){
+			cursorCaptured = capture;
+			Gdx.input.setCursorCatched(capture);
+		}
 	}
 
 	@Override
@@ -520,6 +526,7 @@ public class GameScreen implements Screen{
 		rayHandler.dispose();
 		mapReader.dispose();
 		world.dispose();
+		orthoCachedTiledMapRenderer.dispose();
 		tiledMap.dispose();
 		
 		//System.gc();

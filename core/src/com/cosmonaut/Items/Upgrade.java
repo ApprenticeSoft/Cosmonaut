@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.physics.box2d.World;
 import com.cosmonaut.MyGdxGame;
@@ -16,7 +17,7 @@ public class Upgrade extends Item{
 	
 	private int ID;
 	private float animTime = 0, spriteWidth, spriteHeight;
-	private Animation upgradeAnimation;
+	private Animation<TextureRegion> upgradeAnimation;
 	private TextureAtlas upgradeAtlas;
 	
 	public Upgrade(final MyGdxGame game, World world, MapObject mapObject, RayHandler rayHandler){
@@ -28,7 +29,7 @@ public class Upgrade extends Item{
 		lightColor.set(14/256f, 151/256f, 237/256f, 0.98f);
 
         upgradeAtlas = game.assets.get("Images/Animations/Upgrade_Animation.pack", TextureAtlas.class);
-		upgradeAnimation = new Animation(0.08f, upgradeAtlas.findRegions("Upgrade_Animation"), Animation.PlayMode.LOOP);
+		upgradeAnimation = new Animation<TextureRegion>(0.08f, upgradeAtlas.findRegions("Upgrade_Animation"), Animation.PlayMode.LOOP);
 		
 		if(mapObject.getProperties().get("ID") != null)
 			ID = Integer.parseInt((String) mapObject.getProperties().get("ID"));
@@ -47,7 +48,7 @@ public class Upgrade extends Item{
 		lightColor.set(14/256f, 151/256f, 237/256f, 0.98f);	
 		
         upgradeAtlas = game.assets.get("Images/Animations/Upgrade_Animation.pack", TextureAtlas.class);
-		upgradeAnimation = new Animation(0.08f, upgradeAtlas.findRegions("Upgrade_Animation"), Animation.PlayMode.LOOP);
+		upgradeAnimation = new Animation<TextureRegion>(0.08f, upgradeAtlas.findRegions("Upgrade_Animation"), Animation.PlayMode.LOOP);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -33,7 +34,7 @@ public class TutorialScreen extends GameScreen{
 	private int tutoStep = 1, previousTutoStep = 0;
 	private float tutoCountDown;
 	private Vector2 tutoCoordinate;
-	private Animation rotationControlAnimation, jetpackControlAnimation, directionAnimation;;
+	private Animation<TextureRegion> rotationControlAnimation, jetpackControlAnimation, directionAnimation;
 	private float animationTime = 0, arrowAnimationTime = 0, spriteDirectionWidth, spriteDirectionHeight;
 	
 	//Touch controls
@@ -67,11 +68,11 @@ public class TutorialScreen extends GameScreen{
         tutoCoordinate = Pools.obtain(Vector2.class).set(0,0);
         
         if(Gdx.app.getType() == ApplicationType.Android){
-    		rotationControlAnimation = new Animation(0.035f, game.assets.get("Images/Animations/Rotation_Control_Animation.pack", TextureAtlas.class).findRegions("Rotation_Control"), Animation.PlayMode.LOOP);
-    		jetpackControlAnimation = new Animation(0.04f, game.assets.get("Images/Animations/Jetpack_Control_Animation.pack", TextureAtlas.class).findRegions("Jetpack_Control"), Animation.PlayMode.LOOP);
+    		rotationControlAnimation = new Animation<TextureRegion>(0.035f, game.assets.get("Images/Animations/Rotation_Control_Animation.pack", TextureAtlas.class).findRegions("Rotation_Control"), Animation.PlayMode.LOOP);
+    		jetpackControlAnimation = new Animation<TextureRegion>(0.04f, game.assets.get("Images/Animations/Jetpack_Control_Animation.pack", TextureAtlas.class).findRegions("Jetpack_Control"), Animation.PlayMode.LOOP);
         }
         
-        directionAnimation = new Animation(0.04f, game.assets.get("Images/Animations/Fleche_Animation.pack", TextureAtlas.class).findRegions("Fleche_Animation"), Animation.PlayMode.NORMAL);
+        directionAnimation = new Animation<TextureRegion>(0.04f, game.assets.get("Images/Animations/Fleche_Animation.pack", TextureAtlas.class).findRegions("Fleche_Animation"), Animation.PlayMode.NORMAL);
 
         spriteDirectionWidth = mapReader.hero.spriteWidth/2;
         spriteDirectionHeight = spriteDirectionWidth * directionAnimation.getKeyFrame(0, true).getRegionHeight() / directionAnimation.getKeyFrame(0, true).getRegionWidth();
@@ -435,7 +436,7 @@ public class TutorialScreen extends GameScreen{
 			}
 		}
 		/*
-		 * Test de rotation réussi
+		 * Test de rotation rÃ©ussi
 		 */
 		else if (tutoStep == 4){
 			if(previousTutoStep != tutoStep){
@@ -547,7 +548,7 @@ public class TutorialScreen extends GameScreen{
 			mapReader.hero.setOxygenLevel(GameConstants.MAX_OXYGEN);
 		}
 		/*
-		 * Test du jetpack réussi
+		 * Test du jetpack rÃ©ussi
 		 */
 		else if (tutoStep == 6){
 			if(previousTutoStep != tutoStep){
@@ -722,7 +723,7 @@ public class TutorialScreen extends GameScreen{
 			}			
 		}
 		/*
-		 * Fin de l'oxygène et du fuel illimité
+		 * Fin de l'oxygÃ¨ne et du fuel illimitÃ©
 		 */
 		else if (tutoStep == 9){
 			if(previousTutoStep != tutoStep){
@@ -738,7 +739,7 @@ public class TutorialScreen extends GameScreen{
 			GameConstants.TUTORIAL = false;
 		}
 		/*
-		 * Annonce de la fin de l'oxygène et du fuel illimité
+		 * Annonce de la fin de l'oxygÃ¨ne et du fuel illimitÃ©
 		 */
 		else if (tutoStep == 10){
 			if(previousTutoStep != tutoStep){
@@ -809,13 +810,13 @@ public class TutorialScreen extends GameScreen{
 				GameConstants.BOX_STEP = 0;
 				previousTutoStep = tutoStep;
 				
-				for(Item item : game.items){
-					if(item.getClass().toString().equals("class com.cosmonaut.Items.Upgrade")){
-						Upgrade upgrade = (Upgrade) item;
-						if(upgrade.getID() == 1){
-							tutoCoordinate.set(upgrade.getX(), upgrade.getY());
+					for(Item item : game.items){
+						if(item instanceof Upgrade){
+							Upgrade upgrade = (Upgrade) item;
+							if(upgrade.getID() == 1){
+								tutoCoordinate.set(upgrade.getX(), upgrade.getY());
+							}
 						}
-					}
 				}
 				
 				if(Data.getGameControls() == 3){
@@ -867,7 +868,7 @@ public class TutorialScreen extends GameScreen{
 			}
 		}
 		/*
-		 * Conseil économie de fuel. Propulsion sur les paroies
+		 * Conseil Ã©conomie de fuel. Propulsion sur les paroies
 		 */
 		else if (tutoStep == 12){
 			if(previousTutoStep != tutoStep){
@@ -1019,7 +1020,7 @@ public class TutorialScreen extends GameScreen{
 			}
 		}
 		/*
-		 * Si le carburant est à moitié vide
+		 * Si le carburant est Ã  moitiÃ© vide
 		 */
 		else if (tutoStep == 14){
 			if(previousTutoStep != tutoStep){
@@ -1056,7 +1057,7 @@ public class TutorialScreen extends GameScreen{
 			}
 		}
 		/*
-		 * Si l'oxygène est à moitié vide
+		 * Si l'oxygÃ¨ne est Ã  moitiÃ© vide
 		 */
 		else if (tutoStep == 15){
 			if(previousTutoStep != tutoStep){

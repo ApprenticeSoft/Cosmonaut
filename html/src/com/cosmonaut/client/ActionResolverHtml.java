@@ -2,48 +2,55 @@ package com.cosmonaut.client;
 
 import com.cosmonaut.ActionResolver;
 
+public class ActionResolverHtml implements ActionResolver {
 
-public class ActionResolverHtml implements ActionResolver{
-	
-	//Google Billing
-	public void removeAds(){
-		System.out.println("Remove Ads");
-	}
-	
-	public void processPurchases(){
-		System.out.println("Process purchases");
-	}
-	
-	//Publicités
-	public void showOrLoadInterstital(){
-		System.out.println("Show Or Load Interstital");
-	}
-	
-	public void LoadInterstital(){
-		System.out.println("Load Interstital");
-	}
-	
-	public void showAdsBottom(){
-		System.out.println("Show Ads Bottom");
-	}
-	
-	public void showAdsTop(){
-		System.out.println("Show Ads Top");
-	}
-	
-	public void hideAds(){
-		System.out.println("Hide Ads");
-	}
-	
-	public int hauteurBanniere(){
-		return 0;
-	}
-	
-	public boolean adsListener(){
-		return false;
-	}
-	
-	public boolean isConnected(){
-		return false;
-	}	
+    @Override
+    public void removeAds() {
+        // No-op on web.
+    }
+
+    @Override
+    public void processPurchases() {
+        // No-op on web.
+    }
+
+    @Override
+    public void showOrLoadInterstital() {
+        // No-op on web.
+    }
+
+    @Override
+    public void LoadInterstital() {
+        // No-op on web.
+    }
+
+    @Override
+    public void showAdsBottom() {
+        // No-op on web.
+    }
+
+    @Override
+    public void showAdsTop() {
+        // No-op on web.
+    }
+
+    @Override
+    public void hideAds() {
+        // No-op on web.
+    }
+
+    @Override
+    public int hauteurBanniere() {
+        return 0;
+    }
+
+    @Override
+    public boolean adsListener() {
+        return false;
+    }
+
+    @Override
+    public boolean isConnected() {
+        return true;
+    }
 }

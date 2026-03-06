@@ -53,7 +53,7 @@ public class Dialogue extends Obstacle{
 	@Override
 	public void activate(){
 		active = true;
-		System.out.println("Le dialogue est activé !");
+		System.out.println("Le dialogue est activÃ© !");
 		
 		if(singleUse)
 			used = true;

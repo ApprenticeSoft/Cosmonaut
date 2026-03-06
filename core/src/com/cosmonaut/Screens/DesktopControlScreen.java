@@ -37,7 +37,7 @@ public class DesktopControlScreen implements Screen{
 	private LabelStyle labelStyle, screenTitleStyle;
 	private Button backButton;
 	private Image displacementImage, zoomImage, pauseImage;
-	private float écart;
+	private float Ã©cart;
 	private TextureAtlas textureAtlas;
 	private Skin skin;
 	private String displacementString;
@@ -69,10 +69,10 @@ public class DesktopControlScreen implements Screen{
 		backgroundImage.setX(Gdx.graphics.getWidth()/2 - backgroundImage.getWidth()/2);
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
 		
-		//Titre de l'écran
+		//Titre de l'Ã©cran
 		Color colorTitle = Pools.obtain(Color.class);
 		colorTitle.set(2/256f, 165/256f, 200/256f, 1);
-		screenTitleStyle = new LabelStyle(game.assets.get("fontMenu.ttf", BitmapFont.class), colorTitle);
+		screenTitleStyle = new LabelStyle(game.getFont("fontMenu.ttf"), colorTitle);
 		screenTitle = new Label(game.text.get("Controls"), screenTitleStyle);
 		screenTitle.setAlignment(Align.center);
 		
@@ -86,12 +86,12 @@ public class DesktopControlScreen implements Screen{
 											Gdx.graphics.getHeight() - screenTitleWindowDimension * game.skin.getRegion("ScreenTitle").getRegionHeight()/game.skin.getRegion("ScreenTitle").getRegionWidth());
 		screenTitleWindow.addActorRelativeCentered(screenTitle, 0.525f, 0.59f);
 		
-		//Boutons de sélection du mode
+		//Boutons de sÃ©lection du mode
 		textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = game.skin.getDrawable("Button");
 		textButtonStyle.down = game.skin.getDrawable("ButtonCheck");
 		textButtonStyle.checked = game.skin.getDrawable("ButtonCheck");
-		textButtonStyle.font = game.assets.get("fontUpgrade.ttf", BitmapFont.class);
+		textButtonStyle.font = game.getFont("fontUpgrade.ttf");
 		textButtonStyle.fontColor = Color.WHITE;
 		textButtonStyle.downFontColor = Color.BLACK;
 		textButtonStyle.checkedFontColor = Color.BLACK;
@@ -130,19 +130,19 @@ public class DesktopControlScreen implements Screen{
 		backButton.setY(0.98f * Gdx.graphics.getHeight() - backButton.getHeight());
 
 		//Images clavier
-		écart = 0.09f * Gdx.graphics.getWidth();
+		Ã©cart = 0.09f * Gdx.graphics.getWidth();
 		
 		displacementImage = new Image(skin.getDrawable(displacementString));
 		displacementImage.setWidth(0.24f * Gdx.graphics.getWidth());
 		displacementImage.setHeight(displacementImage.getWidth() * skin.getRegion(displacementString).getRegionHeight() / skin.getRegion(displacementString).getRegionWidth());
-		displacementImage.setX(0.59f * Gdx.graphics.getWidth() - (5*displacementImage.getWidth()/3 + écart)/2);
+		displacementImage.setX(0.59f * Gdx.graphics.getWidth() - (5*displacementImage.getWidth()/3 + Ã©cart)/2);
 		displacementImage.setY(0.55f * Gdx.graphics.getHeight() - displacementImage.getHeight()/2);
 		
 		zoomImage = new Image(skin.getDrawable("Zoom"));
 		zoomImage.setWidth(2 * displacementImage.getWidth() / 3);
 		zoomImage.setHeight(zoomImage.getWidth() * skin.getRegion("Zoom").getRegionHeight() / skin.getRegion("Zoom").getRegionWidth());
 		zoomImage.setY(displacementImage.getY());
-		zoomImage.setX(0.59f * Gdx.graphics.getWidth() + (5*displacementImage.getWidth()/3 + écart)/2 - zoomImage.getWidth());
+		zoomImage.setX(0.59f * Gdx.graphics.getWidth() + (5*displacementImage.getWidth()/3 + Ã©cart)/2 - zoomImage.getWidth());
 		
 		pauseImage = new Image(skin.getDrawable("Esc"));
 		pauseImage.setWidth(displacementImage.getWidth() / 3);
@@ -151,7 +151,7 @@ public class DesktopControlScreen implements Screen{
 		pauseImage.setY(displacementImage.getY() - 2*pauseImage.getHeight());
 		
 		//Texte
-		labelStyle = new LabelStyle(game.assets.get("fontUpgrade.ttf", BitmapFont.class), Color.WHITE);
+		labelStyle = new LabelStyle(game.getFont("fontUpgrade.ttf"), Color.WHITE);
 		displacementLabel = new Label(game.text.get("Displacement"), labelStyle);
 		displacementLabel.setX(displacementImage.getX() + displacementImage.getWidth()/2 - displacementLabel.getWidth()/2);
 		displacementLabel.setY(displacementImage.getY() - 1.5f * displacementLabel.getHeight());

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -23,7 +24,7 @@ public class Leak extends Obstacle{
 	private Set<Fixture> fixtures;
 	private Vector2 leakForce, leakOrigin, soundDistance;
 	private float force, leakSize, leakAngle, leakScale, leakSpeed, fixtureDistanceX, fixtureDistanceY;
-	private Animation leakAnimation;
+	private Animation<TextureRegion> leakAnimation;
 	private long soundId;
 	
 	//Test
@@ -44,7 +45,7 @@ public class Leak extends Obstacle{
 		
 		fixtures = new HashSet<Fixture>();
 		
-		leakAnimation = new Animation(1, game.assets.get("Images/Animations/Leak_Animation.pack", TextureAtlas.class).findRegions("Leak_Animation"), Animation.PlayMode.LOOP);
+		leakAnimation = new Animation<TextureRegion>(1, game.assets.get("Images/Animations/Leak_Animation.pack", TextureAtlas.class).findRegions("Leak_Animation"), Animation.PlayMode.LOOP);
 		
 		create(world, camera, rectangleObject);
 					
@@ -107,7 +108,7 @@ public class Leak extends Obstacle{
 		soundId = sound.loop(0.1f, MathUtils.random(0.98f, 1.02f), 0);
 		
 		fixtures = new HashSet<Fixture>();
-		leakAnimation = new Animation(1, game.assets.get("Images/Animations/Leak_Animation.pack", TextureAtlas.class).findRegions("Leak_Animation"), Animation.PlayMode.LOOP);
+		leakAnimation = new Animation<TextureRegion>(1, game.assets.get("Images/Animations/Leak_Animation.pack", TextureAtlas.class).findRegions("Leak_Animation"), Animation.PlayMode.LOOP);
 	}
 	
 	public void init(World world, OrthographicCamera camera, MapObject rectangleObject){

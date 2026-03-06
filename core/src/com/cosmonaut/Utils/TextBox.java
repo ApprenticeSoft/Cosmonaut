@@ -65,7 +65,7 @@ public class TextBox {
 
 		fileContent = file.readString().split(splitStringParagraph);
 		
-		labelStyle = new LabelStyle(game.assets.get("fontDialogue.ttf", BitmapFont.class), Color.WHITE);
+		labelStyle = new LabelStyle(game.getFont("fontDialogue.ttf"), Color.WHITE);
 		label = new Label("", labelStyle);
 		label.setWidth(Gdx.graphics.getWidth()/4);
 		label.setWrap(true);
@@ -94,15 +94,15 @@ public class TextBox {
 					strings[i] = strings[i].replace("'W'", "'Z'");
 				}
 			
-			//Écrit tant qu'il y a des lignes dans le paragraphe		
+			//Ã‰crit tant qu'il y a des lignes dans le paragraphe		
 			if(posLine < strings.length){
 				imageBox.addAction(Actions.alpha(1));
-				//Écrit les characters un par un
+				//Ã‰crit les characters un par un
 				if(posChar < strings[posLine].length()){
 					buildString2();
 					labelPosition();						
 				}
-				//Si la ligne est complètement écrite
+				//Si la ligne est complÃ¨tement Ã©crite
 				else if(posChar == strings[posLine].length())
 					lineWritten();
 				
@@ -126,17 +126,17 @@ public class TextBox {
 					strings[i] = strings[i].replace("'W'", "'Z'");
 				}
 			
-			//Écrit tant qu'il y a des lignes dans le paragraphe		
+			//Ã‰crit tant qu'il y a des lignes dans le paragraphe		
 			if(posLine < strings.length){
 				imageBox.addAction(Actions.alpha(1));
-				//Durée d'affichage du text
+				//DurÃ©e d'affichage du text
 				timeLimit = baseTimeLimit + strings[posLine].length()*factorTimeLimit;
-				//Écrit les characters un par un
+				//Ã‰crit les characters un par un
 				if(posChar < strings[posLine].length()){
 					buildString2();
 					labelPosition();			
 				}
-				//Si la ligne est complètement écrite
+				//Si la ligne est complÃ¨tement Ã©crite
 				else if(posChar == strings[posLine].length()){		
 					lineWritten();	
 					timerNextLine();
@@ -163,17 +163,17 @@ public class TextBox {
 					strings[i] = strings[i].replace("'W'", "'Z'");
 				}
 			
-			//Écrit tant qu'il y a des lignes dans le paragraphe		
+			//Ã‰crit tant qu'il y a des lignes dans le paragraphe		
 			if(posLine < strings.length){
 				imageBox.addAction(Actions.alpha(1));
-				//Durée d'affichage du text
+				//DurÃ©e d'affichage du text
 				timeLimit = baseTimeLimit + strings[posLine].length()*factorTimeLimit;
-				//Écrit les characters un par un
+				//Ã‰crit les characters un par un
 				if(posChar < strings[posLine].length()){
 					buildString2();
 					labelPosition(interlocutors);		
 				}
-				//Si la ligne est complètement écrite
+				//Si la ligne est complÃ¨tement Ã©crite
 				else if(posChar == strings[posLine].length()){
 					lineWritten();
 					timerNextLine();
@@ -216,16 +216,16 @@ public class TextBox {
 				strings[i] = strings[i].replace("'W'", "'Z'");
 			}
 		
-		//Écrit tant qu'il y a des lignes dans le paragraphe		
+		//Ã‰crit tant qu'il y a des lignes dans le paragraphe		
 		if(posLine < strings.length){
 			imageBox.addAction(Actions.alpha(1));
 			timeLimit = baseTimeLimit + strings[posLine].length()*factorTimeLimit;
-			//Écrit les characters un par un
+			//Ã‰crit les characters un par un
 			if(posChar < strings[posLine].length()){
 				buildString2();
 				labelPosition();						
 			}
-			//Si la ligne est complètement écrite
+			//Si la ligne est complÃ¨tement Ã©crite
 			else if(posChar == strings[posLine].length())
 				lineWritten();
 			
@@ -254,15 +254,15 @@ public class TextBox {
 				strings[i] = strings[i].replace("'W'", "'Z'");
 			}
 		
-		//Écrit tant qu'il y a des lignes dans le paragraphe		
+		//Ã‰crit tant qu'il y a des lignes dans le paragraphe		
 		if(posLine == line){
 			imageBox.addAction(Actions.alpha(1));
-			//Écrit les characters un par un
+			//Ã‰crit les characters un par un
 			if(posChar < strings[posLine].length()){
 				buildString2();
 				labelPosition();						
 			}
-			//Si la ligne est complètement écrite
+			//Si la ligne est complÃ¨tement Ã©crite
 			else if(posChar == strings[posLine].length())
 				lineWritten();
 			

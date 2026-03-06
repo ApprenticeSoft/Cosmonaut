@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -48,7 +48,7 @@ public class AndroidControlScreen implements Screen{
 	
 	//Animation
 	private float animTime = 0;
-	private Animation controlsAnimation;
+	private Animation<TextureRegion> controlsAnimation;
 	private TextureAtlas controlsAtlas;
 	
 	//Sliders
@@ -74,10 +74,10 @@ public class AndroidControlScreen implements Screen{
 		backgroundImage.setX(Gdx.graphics.getWidth()/2 - backgroundImage.getWidth()/2);
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
 		
-		//Titre de l'écran
+		//Titre de l'Ã©cran
 		Color colorTitle = Pools.obtain(Color.class);
 		colorTitle.set(2/256f, 165/256f, 200/256f, 1);
-		screenTitleStyle = new LabelStyle(game.assets.get("fontMenu.ttf", BitmapFont.class), colorTitle);
+		screenTitleStyle = new LabelStyle(game.getFont("fontMenu.ttf"), colorTitle);
 		screenTitle = new Label(game.text.get("Controls"), screenTitleStyle);
 		screenTitle.setAlignment(Align.center);
 		Pools.free(colorTitle);
@@ -94,7 +94,7 @@ public class AndroidControlScreen implements Screen{
 		textButtonStyle.up = game.skin.getDrawable("Button");
 		textButtonStyle.down = game.skin.getDrawable("ButtonCheck");
 		textButtonStyle.checked = game.skin.getDrawable("ButtonCheck");
-		textButtonStyle.font = game.assets.get("fontUpgrade.ttf", BitmapFont.class);
+		textButtonStyle.font = game.getFont("fontUpgrade.ttf");
 		textButtonStyle.fontColor = Color.WHITE;
 		textButtonStyle.downFontColor = Color.BLACK;
 		textButtonStyle.checkedFontColor = Color.BLACK;
@@ -136,10 +136,10 @@ public class AndroidControlScreen implements Screen{
 		
 		//Animation des gesture control
         controlsAtlas = game.assets.get("Images/Animations/Controls_Animation.pack", TextureAtlas.class);
-		controlsAnimation = new Animation(0.03f, controlsAtlas.findRegions("Controls_Animation"), Animation.PlayMode.LOOP);
+		controlsAnimation = new Animation<TextureRegion>(0.03f, controlsAtlas.findRegions("Controls_Animation"), Animation.PlayMode.LOOP);
 		
-		//Réglages des controls avec boutons		
-		labelStyle = new LabelStyle(game.assets.get("fontUpgrade.ttf", BitmapFont.class), Color.WHITE);
+		//RÃ©glages des controls avec boutons		
+		labelStyle = new LabelStyle(game.getFont("fontUpgrade.ttf"), Color.WHITE);
 		sliderStyle = new SliderStyle(game.skin.getDrawable("SliderBackground"), game.skin.getDrawable("SliderKnob"));
 		
 		labelSize = new Label(game.text.get("Size"), labelStyle);
@@ -170,21 +170,21 @@ public class AndroidControlScreen implements Screen{
 		buttonLeft.setHeight(buttonLeft.getWidth() * game.skin.getRegion("LeftButton").getRegionHeight()/game.skin.getRegion("LeftButton").getRegionWidth());
 		buttonLeft.setX(Gdx.graphics.getWidth()/100);
 		buttonLeft.setY(Gdx.graphics.getWidth()/100);
-		buttonLeft.addAction(Actions.alpha(Data.getControlOpacity()));
+		buttonLeft.setColor(buttonLeft.getColor().r, buttonLeft.getColor().g, buttonLeft.getColor().b, Data.getControlOpacity());
 
 		buttonRight = new Button(game.skin.getDrawable("RightButton"));
 		buttonRight.setWidth(buttonLeft.getWidth());
 		buttonRight.setHeight(buttonLeft.getHeight());
 		buttonRight.setX(buttonLeft.getX() + buttonLeft.getWidth() + 0.01f * Gdx.graphics.getWidth());
 		buttonRight.setY(buttonLeft.getY());
-		buttonRight.addAction(Actions.alpha(Data.getControlOpacity()));
+		buttonRight.setColor(buttonRight.getColor().r, buttonRight.getColor().g, buttonRight.getColor().b, Data.getControlOpacity());
 
 		buttonJetPack = new Button(game.skin.getDrawable("JetPackButton"));
 		buttonJetPack.setWidth(buttonLeft.getWidth());
 		buttonJetPack.setHeight(buttonLeft.getWidth());
 		buttonJetPack.setX(Gdx.graphics.getWidth() - buttonJetPack.getWidth() - buttonLeft.getX());
 		buttonJetPack.setY(buttonLeft.getY());
-		buttonJetPack.addAction(Actions.alpha(Data.getControlOpacity()));
+		buttonJetPack.setColor(buttonJetPack.getColor().r, buttonJetPack.getColor().g, buttonJetPack.getColor().b, Data.getControlOpacity());
 		
 		if(Data.getGameControls() == GameConstants.ANDROID_BUTTONS_CONTROLS)
 			buttonsButton.setChecked(true);
@@ -300,9 +300,9 @@ public class AndroidControlScreen implements Screen{
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Data.setControlOpacity(sliderOpacity.getValue());
-				buttonLeft.addAction(Actions.alpha(Data.getControlOpacity()));
-				buttonRight.addAction(Actions.alpha(Data.getControlOpacity()));
-				buttonJetPack.addAction(Actions.alpha(Data.getControlOpacity()));
+				buttonLeft.setColor(buttonLeft.getColor().r, buttonLeft.getColor().g, buttonLeft.getColor().b, Data.getControlOpacity());
+				buttonRight.setColor(buttonRight.getColor().r, buttonRight.getColor().g, buttonRight.getColor().b, Data.getControlOpacity());
+				buttonJetPack.setColor(buttonJetPack.getColor().r, buttonJetPack.getColor().g, buttonJetPack.getColor().b, Data.getControlOpacity());
 			}
 		});	
 	}

@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -42,6 +41,7 @@ public class HUD {
 	//private Image imageOxygenLevel, imageOxygenLevelBackground, imageFuelLevel, imageFuelLevelBackground;
 	public String pressEscString;
 	private boolean triggerInterstitial = false;
+	private boolean listenersBound = false;
 	private Vector2 posOxygen, posFuel;
 	private Vector3 position, projectedPosition;
 	private MyTiledTexture oxygenTexture;
@@ -77,35 +77,35 @@ public class HUD {
 		outOfFuelAlpha = 0;
 		fuelAlpha = 0;
 		oxygenAlpha = 0;
-		posFuel = Pools.obtain(Vector2.class).set(posXOxygen, posYOxygen - 2 * heightOxygen);
-		posOxygen = Pools.obtain(Vector2.class).set(posXOxygen, posYOxygen);
 		if(Data.getLanguage().equals("EN"))
-			posXOxygen = new GlyphLayout(game.assets.get("fontHUD.ttf", BitmapFont.class), game.text.get("Oxygen").toUpperCase()).width + 2*Gdx.graphics.getWidth()/100;
+			posXOxygen = new GlyphLayout(game.getFont("fontHUD.ttf"), game.text.get("Oxygen").toUpperCase()).width + 2*Gdx.graphics.getWidth()/100;
 		else
-			posXOxygen = new GlyphLayout(game.assets.get("fontHUD.ttf", BitmapFont.class), game.text.get("Fuel").toUpperCase()).width + 2*Gdx.graphics.getWidth()/100;
+			posXOxygen = new GlyphLayout(game.getFont("fontHUD.ttf"), game.text.get("Fuel").toUpperCase()).width + 2*Gdx.graphics.getWidth()/100;
 		posYOxygen = 95 * Gdx.graphics.getHeight()/100;
 		widthOxygen = Gdx.graphics.getWidth()/3;
 		heightOxygen = Gdx.graphics.getHeight()/70;
+		posFuel = Pools.obtain(Vector2.class).set(posXOxygen, posYOxygen - 2 * heightOxygen);
+		posOxygen = Pools.obtain(Vector2.class).set(posXOxygen, posYOxygen);
 
 		if(Gdx.app.getType() == ApplicationType.Desktop)
 			pressEscString = game.text.get("PressEsc");
 		else if(Gdx.app.getType() == ApplicationType.Android)
 			pressEscString = game.text.get("PressPause");
 
-		hudLabelStyle = new LabelStyle(game.assets.get("fontHUD.ttf", BitmapFont.class), Color.WHITE);
+		hudLabelStyle = new LabelStyle(game.getFont("fontHUD.ttf"), Color.WHITE);
 		
 		outOfFuelLabel = new Label(pressEscString, hudLabelStyle);
-		outOfFuelLabel.setX(Gdx.graphics.getWidth()/2 - new GlyphLayout(game.assets.get("fontHUD.ttf", BitmapFont.class), outOfFuelLabel.getText()).width/2);
-		outOfFuelLabel.setY(Gdx.graphics.getHeight()/2 - new GlyphLayout(game.assets.get("fontHUD.ttf", BitmapFont.class), outOfFuelLabel.getText()).height/2);
-		outOfFuelLabel.addAction(Actions.alpha(0));
+		outOfFuelLabel.setX(Gdx.graphics.getWidth()/2 - new GlyphLayout(game.getFont("fontHUD.ttf"), outOfFuelLabel.getText()).width/2);
+		outOfFuelLabel.setY(Gdx.graphics.getHeight()/2 - new GlyphLayout(game.getFont("fontHUD.ttf"), outOfFuelLabel.getText()).height/2);
+		setActorAlpha(outOfFuelLabel, 0f);
 		
 		oxygenLabel = new Label(game.text.get("Oxygen").toUpperCase(), hudLabelStyle);
-		oxygenLabel.setX(posXOxygen - new GlyphLayout(game.assets.get("fontHUD.ttf", BitmapFont.class), game.text.get("Oxygen").toUpperCase()).width - Gdx.graphics.getWidth()/100);
-		oxygenLabel.setY(posYOxygen - new GlyphLayout(game.assets.get("fontHUD.ttf", BitmapFont.class), game.text.get("Oxygen").toUpperCase()).height/2);
+		oxygenLabel.setX(posXOxygen - new GlyphLayout(game.getFont("fontHUD.ttf"), game.text.get("Oxygen").toUpperCase()).width - Gdx.graphics.getWidth()/100);
+		oxygenLabel.setY(posYOxygen - new GlyphLayout(game.getFont("fontHUD.ttf"), game.text.get("Oxygen").toUpperCase()).height/2);
 		
 		fuelLabel = new Label(game.text.get("Fuel").toUpperCase(), hudLabelStyle);
-		fuelLabel.setX(posXOxygen - new GlyphLayout(game.assets.get("fontHUD.ttf", BitmapFont.class), game.text.get("Fuel").toUpperCase()).width - Gdx.graphics.getWidth()/100);
-		fuelLabel.setY(posYOxygen - new GlyphLayout(game.assets.get("fontHUD.ttf", BitmapFont.class), game.text.get("Fuel").toUpperCase()).height/2 - 2 * heightOxygen);
+		fuelLabel.setX(posXOxygen - new GlyphLayout(game.getFont("fontHUD.ttf"), game.text.get("Fuel").toUpperCase()).width - Gdx.graphics.getWidth()/100);
+		fuelLabel.setY(posYOxygen - new GlyphLayout(game.getFont("fontHUD.ttf"), game.text.get("Fuel").toUpperCase()).height/2 - 2 * heightOxygen);
 
 		/*
 		imageOxygenLevel = new Image(skin.getDrawable("WhiteSquare"));
@@ -161,7 +161,7 @@ public class HUD {
 								62*Gdx.graphics.getWidth()/100, 
 								(62*Gdx.graphics.getWidth()/100) * skin.getRegion("MenuWindow").getRegionHeight()/skin.getRegion("MenuWindow").getRegionWidth());
 
-		spaceLabelStyleMenu = new LabelStyle(game.assets.get("fontTable.ttf", BitmapFont.class), colorSpace);
+		spaceLabelStyleMenu = new LabelStyle(game.getFont("fontTable.ttf"), colorSpace);
 		
 		labelPause = new Label(game.text.get("Pause").toUpperCase(), spaceLabelStyleMenu);
 		labelPause.setWrap(true);
@@ -207,13 +207,13 @@ public class HUD {
 		textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = game.skin.getDrawable("GameFinishedWindow");
 		textButtonStyle.down = game.skin.getDrawable("GameFinishedWindow");
-		textButtonStyle.font = game.assets.get("fontMenu.ttf", BitmapFont.class);
+		textButtonStyle.font = game.getFont("fontMenu.ttf");
 		textButtonStyle.fontColor = colorSpace;
 		textButtonStyle.downFontColor = Color.BLACK;
 		
 		endGameButton = new TextButton(game.text.get("Continue"), textButtonStyle);
 		endGameButton.setVisible(false);
-		endGameButton.addAction(Actions.alpha(0));
+		setActorAlpha(endGameButton, 0f);
 		endGameButton.setWidth(0.5f*Gdx.graphics.getWidth());
 		endGameButton.setHeight(endGameButton.getWidth() * game.textureAtlas.findRegion("GameFinishedWindow").getRegionHeight() / game.textureAtlas.findRegion("GameFinishedWindow").getRegionWidth());
 		endGameButton.setPosition(	Gdx.graphics.getWidth()/2 - endGameButton.getWidth()/2, 
@@ -221,7 +221,6 @@ public class HUD {
 
 		
 		//Controles mobile
-		System.out.println("Gdx.app.getType() = " + Gdx.app.getType());
 		buttonLeft = new Button(skin.getDrawable("LeftButton"), skin.getDrawable("LeftButtonCheck"));
 		buttonLeft.setWidth(GameConstants.CONTROL_BUTTONS_SIZE * Data.getControlSize());
 		buttonLeft.setHeight(buttonLeft.getWidth() * skin.getRegion("LeftButton").getRegionHeight()/skin.getRegion("LeftButton").getRegionWidth());
@@ -251,11 +250,11 @@ public class HUD {
 		pauseButton2.setHeight(pauseButton.getWidth());
 		pauseButton2.setX(Gdx.graphics.getWidth() - pauseButton.getWidth() - 2*buttonLeft.getX());
 		pauseButton2.setY(Gdx.graphics.getHeight() - pauseButton.getWidth() - 2*buttonLeft.getX());
-		pauseButton2.addAction(Actions.alpha(0));
+		setActorAlpha(pauseButton2, 0f);
 		
-		buttonLeft.addAction(Actions.alpha(Data.getControlOpacity()));
-		buttonRight.addAction(Actions.alpha(Data.getControlOpacity()));
-		buttonJetPack.addAction(Actions.alpha(Data.getControlOpacity()));
+		setActorAlpha(buttonLeft, Data.getControlOpacity());
+		setActorAlpha(buttonRight, Data.getControlOpacity());
+		setActorAlpha(buttonJetPack, Data.getControlOpacity());
 		
 		Pools.free(colorSpace);
 	}
@@ -288,7 +287,7 @@ public class HUD {
 	public void draw(MyCamera camera){
 		testOxygenHeight = 0.011f * camera.viewportWidth;
 
-		//Oxygène
+		//OxygÃ¨ne
 		projectedPosition.set(posXOxygen, Gdx.graphics.getHeight() - posYOxygen, -widthOxygen * hero.getOxygenLevel()/GameConstants.MAX_OXYGEN);
 		position.set(camera.unproject(projectedPosition));
 		game.batch.setColor(0,0,0.35f,1);
@@ -329,8 +328,8 @@ public class HUD {
 			outOfFuel();
 		else{	
 			outOfFuelAlpha = 0;
-			outOfFuelLabel.addAction(Actions.alpha(outOfFuelAlpha));
-			pauseButton2.addAction(Actions.alpha(outOfFuelAlpha));
+			setActorAlpha(outOfFuelLabel, outOfFuelAlpha);
+			setActorAlpha(pauseButton2, outOfFuelAlpha);
 		}
 		
 		
@@ -369,13 +368,15 @@ public class HUD {
 	
 	public void leftRightButtonPulse(){
 		buttonAlpha += 4f * Gdx.graphics.getDeltaTime();
-		buttonLeft.addAction(Actions.alpha((float)(1 + MathUtils.cos(buttonAlpha))/2));
-		buttonRight.addAction(Actions.alpha((float)(1 + MathUtils.cos(buttonAlpha))/2));
+		float alpha = (float)(1 + MathUtils.cos(buttonAlpha))/2;
+		setActorAlpha(buttonLeft, alpha);
+		setActorAlpha(buttonRight, alpha);
 	}
 	
 	public void jetpackButtonPulse(){
 		buttonAlpha += 4f * Gdx.graphics.getDeltaTime();
-		buttonJetPack.addAction(Actions.alpha((float)(1 + MathUtils.cos(buttonAlpha))/2));
+		float alpha = (float)(1 + MathUtils.cos(buttonAlpha))/2;
+		setActorAlpha(buttonJetPack, alpha);
 	}
 	
 	public void resetAlpha(){
@@ -449,7 +450,6 @@ public class HUD {
 	}
 	
 	public void resume(){
-		System.out.println("RESUME");
 		GameConstants.GAME_PAUSED = false;
 		pauseWindow.setVisible(false);
 		pauseWindow.alfaZero(0.25f);
@@ -466,11 +466,17 @@ public class HUD {
 	
 	public void outOfFuel(){
 		outOfFuelAlpha += 4 * Gdx.graphics.getDeltaTime();		
-		outOfFuelLabel.addAction(Actions.alpha((float)(1 + MathUtils.cos(outOfFuelAlpha))/2));	
-		pauseButton2.addAction(Actions.alpha((float)(1 + MathUtils.cos(outOfFuelAlpha))/2));	
+		float alpha = (float)(1 + MathUtils.cos(outOfFuelAlpha))/2;
+		setActorAlpha(outOfFuelLabel, alpha);	
+		setActorAlpha(pauseButton2, alpha);	
 	}
 	
 	public void buttonListener(){
+		if(listenersBound){
+			return;
+		}
+		listenersBound = true;
+
 		resumeButtonSpace.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -508,7 +514,6 @@ public class HUD {
 				GameConstants.SELECTED_LEVEL++;
 				try{
 					if(GameConstants.SELECTED_LEVEL == 24){
-			        	System.out.println("Dernier niveau");
 						game.assets.load("Images/Fin/Images_Fin.pack", TextureAtlas.class);
 						game.assets.finishLoading();
 			        }
@@ -554,10 +559,14 @@ public class HUD {
 	}
 	
 	public void stopMusic(){		
-		for(int i = 0; i < game.musics.size; i++){
+		for(int i = game.musics.size - 1; i >= 0; i--){
 			game.musics.get(i).stop();
 			game.musics.removeIndex(i);
 		}
+	}
+
+	private void setActorAlpha(com.badlogic.gdx.scenes.scene2d.Actor actor, float alpha){
+		actor.setColor(actor.getColor().r, actor.getColor().g, actor.getColor().b, alpha);
 	}
 	
 	public void dispose(){

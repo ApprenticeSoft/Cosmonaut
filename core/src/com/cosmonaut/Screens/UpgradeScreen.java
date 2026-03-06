@@ -52,7 +52,7 @@ public class UpgradeScreen implements Screen{
 
 	//Animation
 	private float animTime = 0, imagePrixPosX, imageUpgradePointX, imageUpgradePointY, imageUpgradePointWidth, imageUpgradePointHeight, prixAlpha;
-	private Animation upgradeAnimation;
+	private Animation<TextureRegion> upgradeAnimation;
 	private TextureAtlas upgradeAtlas;
 	
 	public UpgradeScreen(final MyGdxGame game){
@@ -68,11 +68,11 @@ public class UpgradeScreen implements Screen{
 		if(Data.getLanguage().equals("EN"))
 			itemWindowWidth = 30*Gdx.graphics.getWidth()/100;
 		else
-			itemWindowWidth = new GlyphLayout(game.assets.get("fontTable.ttf", BitmapFont.class), game.text.get("Fuel").toUpperCase()).width + 0.2f*Gdx.graphics.getWidth();
+			itemWindowWidth = new GlyphLayout(game.getFont("fontTable.ttf"), game.text.get("Fuel").toUpperCase()).width + 0.2f*Gdx.graphics.getWidth();
 		
 		Color colorScreenTitle = Pools.obtain(Color.class).set(2/256f, 165/256f, 200/256f, 1);	
-		//Titre de l'écran
-		screenTitleStyle = new LabelStyle(game.assets.get("fontMenu.ttf", BitmapFont.class), colorScreenTitle);
+		//Titre de l'Ã©cran
+		screenTitleStyle = new LabelStyle(game.getFont("fontMenu.ttf"), colorScreenTitle);
 		screenTitle = new Label(game.text.get("Upgrades"), screenTitleStyle);
 		screenTitle.setAlignment(Align.center);
 		
@@ -84,11 +84,11 @@ public class UpgradeScreen implements Screen{
 											Gdx.graphics.getHeight() - screenTitleWindowDimension * game.skin.getRegion("ScreenTitle").getRegionHeight()/game.skin.getRegion("ScreenTitle").getRegionWidth());
 		screenTitleWindow.addActorRelativeCentered(screenTitle, 0.525f, 0.59f);
 
-		//Icone représentant le nombre de point d'upgrade
+		//Icone reprÃ©sentant le nombre de point d'upgrade
 			//Animation
-		imagePrixPosX = new GlyphLayout(game.assets.get("fontUpgrade.ttf", BitmapFont.class), game.text.get("Cost").toUpperCase() + " : " + oxygenCost + " ").width;
+		imagePrixPosX = new GlyphLayout(game.getFont("fontUpgrade.ttf"), game.text.get("Cost").toUpperCase() + " : " + oxygenCost + " ").width;
         upgradeAtlas = game.assets.get("Images/Animations/Upgrade_Animation.pack", TextureAtlas.class);
-		upgradeAnimation = new Animation(0.08f, upgradeAtlas.findRegions("Upgrade_Animation"), Animation.PlayMode.LOOP);
+		upgradeAnimation = new Animation<TextureRegion>(0.08f, upgradeAtlas.findRegions("Upgrade_Animation"), Animation.PlayMode.LOOP);
 			//Position et dimensions de l'icone
 		imageUpgradePointWidth = 0.05f * Gdx.graphics.getWidth();
 		imageUpgradePointHeight = imageUpgradePointWidth * upgradeAnimation.getKeyFrame(0, true).getRegionHeight() / upgradeAnimation.getKeyFrame(0, true).getRegionWidth();
@@ -126,9 +126,9 @@ public class UpgradeScreen implements Screen{
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
 
 		//Texts	
-		quantityLabelStyle = new LabelStyle(game.assets.get("fontMenu.ttf", BitmapFont.class), Color.WHITE);
-		titleLabelStyle = new LabelStyle(game.assets.get("fontTable.ttf", BitmapFont.class), Color.WHITE);
-		labelStyle = new LabelStyle(game.assets.get("fontUpgrade.ttf", BitmapFont.class), Color.WHITE);
+		quantityLabelStyle = new LabelStyle(game.getFont("fontMenu.ttf"), Color.WHITE);
+		titleLabelStyle = new LabelStyle(game.getFont("fontTable.ttf"), Color.WHITE);
+		labelStyle = new LabelStyle(game.getFont("fontUpgrade.ttf"), Color.WHITE);
 		
 		upgradeQuantityLabel = new Label("X " + Data.getUpgradePoint(), quantityLabelStyle);
 		upgradeQuantityLabel.setX(imageUpgradePointX + imageUpgradePointWidth + 0.009f * Gdx.graphics.getWidth());
@@ -169,7 +169,7 @@ public class UpgradeScreen implements Screen{
 									fuelWindow.getX(),
 									fuelWindow.getY() - fuelWindow.getHeight());
 
-		//Fenêtre permettant d'acheter les upgrades
+		//FenÃªtre permettant d'acheter les upgrades
 		imageBuyWindow = new Image(game.skin.getDrawable("UIWindow"));
 		imageBuyWindow.setWidth(Gdx.graphics.getWidth() * 0.3f);
 		imageBuyWindow.setHeight(Gdx.graphics.getHeight() * 0.45f);
@@ -187,14 +187,14 @@ public class UpgradeScreen implements Screen{
 		textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = game.skin.getDrawable("Button");
 		textButtonStyle.down = game.skin.getDrawable("ButtonCheck");
-		textButtonStyle.font = game.assets.get("fontUpgrade.ttf", BitmapFont.class);
+		textButtonStyle.font = game.getFont("fontUpgrade.ttf");
 		textButtonStyle.fontColor = colorFont;
 		textButtonStyle.downFontColor = Color.BLACK;
 		
 		//Buy button
 		buyButton = new TextButton(game.text.get("Buy"), textButtonStyle);
 		buyButton.setHeight(0.065f*Gdx.graphics.getWidth());
-		buyButton.setWidth(new GlyphLayout(game.assets.get("fontTable.ttf", BitmapFont.class), game.text.get("Buy")).width + 0.03f*Gdx.graphics.getWidth());
+		buyButton.setWidth(new GlyphLayout(game.getFont("fontTable.ttf"), game.text.get("Buy")).width + 0.03f*Gdx.graphics.getWidth());
 		buyButton.setX(imageBuyWindow.getX() + imageBuyWindow.getWidth()/2 - buyButton.getWidth()/2);
 		buyButton.setY(imageBuyWindow.getY() + 0.5f * buyButton.getPrefHeight());
 		
@@ -272,7 +272,7 @@ public class UpgradeScreen implements Screen{
 			public void clicked(InputEvent event, float x, float y){
 		    	labelDescription.setText(stringOxygen);
 				labelDescription.addAction(Actions.alpha(1, 0.25f));
-				imagePrixPosX = new GlyphLayout(game.assets.get("fontUpgrade.ttf", BitmapFont.class), game.text.get("Cost").toUpperCase() + " : " + oxygenCost + " ").width;
+				imagePrixPosX = new GlyphLayout(game.getFont("fontUpgrade.ttf"), game.text.get("Cost").toUpperCase() + " : " + oxygenCost + " ").width;
 				if(Data.getOxygenLevel() < 5){
 					buyButton.addAction(Actions.alpha(1, 0.25f));
 					prixAlpha = 1;
@@ -289,7 +289,7 @@ public class UpgradeScreen implements Screen{
 			public void clicked(InputEvent event, float x, float y){
 		    	labelDescription.setText(stringFuel);
 				labelDescription.addAction(Actions.alpha(1, 0.25f));
-				imagePrixPosX = new GlyphLayout(game.assets.get("fontUpgrade.ttf", BitmapFont.class), game.text.get("Cost").toUpperCase() + " : " + fuelCost + " ").width;
+				imagePrixPosX = new GlyphLayout(game.getFont("fontUpgrade.ttf"), game.text.get("Cost").toUpperCase() + " : " + fuelCost + " ").width;
 				if(Data.getFuelLevel() < 5){
 					buyButton.addAction(Actions.alpha(1, 0.25f));
 					prixAlpha = 1;
@@ -306,7 +306,7 @@ public class UpgradeScreen implements Screen{
 			public void clicked(InputEvent event, float x, float y){
 		    	labelDescription.setText(stringPower);
 				labelDescription.addAction(Actions.alpha(1, 0.25f));
-				imagePrixPosX = new GlyphLayout(game.assets.get("fontUpgrade.ttf", BitmapFont.class), game.text.get("Cost").toUpperCase() + " : " + powerCost + " ").width;
+				imagePrixPosX = new GlyphLayout(game.getFont("fontUpgrade.ttf"), game.text.get("Cost").toUpperCase() + " : " + powerCost + " ").width;
 				if(Data.getPowerLevel() < 5){
 					buyButton.addAction(Actions.alpha(1, 0.25f));
 					prixAlpha = 1;
@@ -331,7 +331,7 @@ public class UpgradeScreen implements Screen{
 						updatePrices();
 						if(Data.getOxygenLevel() < 5){
 							stringOxygen = game.text.get("OxygenDescription") + "\n\n" +  game.text.get("Cost") + " : " + oxygenCost + " ";
-							imagePrixPosX = new GlyphLayout(game.assets.get("fontUpgrade.ttf", BitmapFont.class), game.text.get("Cost").toUpperCase() + " : " + oxygenCost + " ").width;
+							imagePrixPosX = new GlyphLayout(game.getFont("fontUpgrade.ttf"), game.text.get("Cost").toUpperCase() + " : " + oxygenCost + " ").width;
 						}
 						else{
 							stringOxygen = game.text.get("OxygenDescription") + "\n\n" +  game.text.get("Cost") + " : " + game.text.get("Maximum").toUpperCase() + " ";
@@ -357,7 +357,7 @@ public class UpgradeScreen implements Screen{
 						updatePrices();
 						if(Data.getFuelLevel() < 5){
 							stringFuel = game.text.get("FuelDescription") + "\n\n" +  game.text.get("Cost") + " : " + fuelCost + " ";
-							imagePrixPosX = new GlyphLayout(game.assets.get("fontUpgrade.ttf", BitmapFont.class), game.text.get("Cost").toUpperCase() + " : " + fuelCost + " ").width;
+							imagePrixPosX = new GlyphLayout(game.getFont("fontUpgrade.ttf"), game.text.get("Cost").toUpperCase() + " : " + fuelCost + " ").width;
 						}
 						else{
 							stringFuel = game.text.get("FuelDescription") + "\n\n" +  game.text.get("Cost") + " : " + game.text.get("Maximum").toUpperCase() + " ";
@@ -382,7 +382,7 @@ public class UpgradeScreen implements Screen{
 						updatePrices();
 						if(Data.getPowerLevel() < 5){
 							stringPower = game.text.get("PowerDescription") + "\n\n" +  game.text.get("Cost") + " : " + powerCost + " ";
-							imagePrixPosX = new GlyphLayout(game.assets.get("fontUpgrade.ttf", BitmapFont.class), game.text.get("Cost").toUpperCase() + " : " + powerCost + " ").width;
+							imagePrixPosX = new GlyphLayout(game.getFont("fontUpgrade.ttf"), game.text.get("Cost").toUpperCase() + " : " + powerCost + " ").width;
 						}
 						else{
 							stringPower = game.text.get("PowerDescription") + "\n\n" +  game.text.get("Cost") + " : " + game.text.get("Maximum").toUpperCase() + " ";
@@ -449,13 +449,13 @@ public class UpgradeScreen implements Screen{
 									49*uiWindow.getWidth()/50 - posX, 
 									uiWindow.getHeight()/2 - upgradeImages.get(i).getHeight()/2);
 		}
-		//Image upgrade achetée
+		//Image upgrade achetÃ©e
 		for(int i = 0; i < upgradeImages.size; i++){
 			if(i < upgradeLevel){
 				upgradeImages.get(i).setColor(activeUpgradeColor);
 			}
 		}
-		//Les éléments par dessus le bouton ne sont pas touchables pour ne pas géner les interactions avec le bouton
+		//Les Ã©lÃ©ments par dessus le bouton ne sont pas touchables pour ne pas gÃ©ner les interactions avec le bouton
 		for(int i = 1; i < uiWindow.actors.size; i++)
 			uiWindow.actors.get(i).setTouchable(Touchable.disabled);
 		

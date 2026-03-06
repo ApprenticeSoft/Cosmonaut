@@ -96,13 +96,13 @@ public class MainMenuScreen implements Screen{
 		textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = game.skin.getDrawable("Button");
 		textButtonStyle.down = game.skin.getDrawable("ButtonCheck");
-		textButtonStyle.font = game.assets.get("fontTable.ttf", BitmapFont.class);
+		textButtonStyle.font = game.getFont("fontTable.ttf");
 		textButtonStyle.fontColor = Color.WHITE;
 		textButtonStyle.downFontColor = Color.BLACK;
 		
 		playButton = new TextButton(game.text.get("Play"), textButtonStyle);
 		playButton.setHeight(Gdx.graphics.getHeight()/8);
-		playButton.setWidth(new GlyphLayout(game.assets.get("fontTable.ttf", BitmapFont.class), game.text.get("Upgrades")).width * 1.2f);
+		playButton.setWidth(new GlyphLayout(game.getFont("fontTable.ttf"), game.text.get("Upgrades")).width * 1.2f);
 		playButton.setX(Gdx.graphics.getWidth() - 0.17f * Gdx.graphics.getWidth() - playButton.getWidth()/2);
 		playButton.setY(0.6f * Gdx.graphics.getHeight());
 
@@ -118,7 +118,7 @@ public class MainMenuScreen implements Screen{
 		TextButtonStyle textButtonStyle2 = new TextButtonStyle();
 		textButtonStyle2.up = game.skin.getDrawable("ButtonCheck");
 		textButtonStyle2.down = game.skin.getDrawable("ButtonCheck");
-		textButtonStyle2.font = game.assets.get("fontTable.ttf", BitmapFont.class);
+		textButtonStyle2.font = game.getFont("fontTable.ttf");
 		textButtonStyle2.fontColor = Color.WHITE;
 		textButtonStyle2.downFontColor = Color.BLACK;
 		
@@ -146,7 +146,7 @@ public class MainMenuScreen implements Screen{
 		quitButton.setY(optionButton.getY() - quitButton.getHeight() - Gdx.graphics.getHeight()/100);
 		
 		/*
-		 * Réseaux sociaux
+		 * RÃ©seaux sociaux
 		 */
 		iconeTable = new Table();
 		iconeTable.defaults().width(0.085f*Gdx.graphics.getHeight()).height(0.085f*Gdx.graphics.getHeight()).space(0.04f*Gdx.graphics.getHeight());
@@ -170,9 +170,9 @@ public class MainMenuScreen implements Screen{
 		iconeTable.setY(iconeTable.getPrefHeight()/2 + Gdx.graphics.getWidth()/30);
 		
 		/*
-		 * Incitation à noter
+		 * Incitation Ã  noter
 		 */
-		rateLabelStyle = new LabelStyle(game.assets.get("fontOption.ttf", BitmapFont.class),Color.WHITE);
+		rateLabelStyle = new LabelStyle(game.getFont("fontOption.ttf"),Color.WHITE);
 		rateLabel = new Label(game.text.get("DoYouLike") + "\n\n" + game.text.get("DoYouRate"), rateLabelStyle);
 		rateLabel.setWrap(true);
 		rateLabel.setAlignment(Align.center);
@@ -180,7 +180,7 @@ public class MainMenuScreen implements Screen{
 		rateButtonStyle = new TextButtonStyle();
 		rateButtonStyle.up = game.skin.getDrawable("LinearButton");
 		rateButtonStyle.down = game.skin.getDrawable("LinearButtonCheck");
-		rateButtonStyle.font = game.assets.get("fontHUD.ttf", BitmapFont.class);
+		rateButtonStyle.font = game.getFont("fontHUD.ttf");
 		rateButtonStyle.fontColor = Color.WHITE;
 		rateButtonStyle.downFontColor = Color.BLACK;
 		
@@ -206,7 +206,7 @@ public class MainMenuScreen implements Screen{
 		}
 		
 		/*
-		 * Fenêtre achat version complète
+		 * FenÃªtre achat version complÃ¨te
 		 */
 		game.fullVersionWindow.alfaZero(0);	
 		
@@ -234,8 +234,9 @@ public class MainMenuScreen implements Screen{
 		//Upgrade button glow
 		if(Data.getUpgradePoint() > 0){
 			if((Data.getFuelLevel() + Data.getOxygenLevel() + Data.getPowerLevel()) == 0){
-				alpha += 4*Gdx.graphics.getDeltaTime();
-				upgradeButton2.addAction(Actions.alpha((float)(1 + Math.cos(alpha))/2));
+				alpha += 4 * delta;
+				float glowAlpha = (float)(1 + Math.cos(alpha)) / 2f;
+				upgradeButton2.setColor(upgradeButton2.getColor().r, upgradeButton2.getColor().g, upgradeButton2.getColor().b, glowAlpha);
 			}
 		}
 		
@@ -443,11 +444,11 @@ public class MainMenuScreen implements Screen{
 				game.blackImage.setTouchable(Touchable.disabled);
 				game.blackImage.addAction(Actions.alpha(0, 0.2f));
 				
-				if(game.getScreen().getClass().toString().equals("class com.cosmonaut.Screens.GameScreen")){
-					game.fullVersionWindow.alfaZero(0);	
-					game.getScreen().dispose();
-					game.setScreen(new MainMenuScreen(game));
-				}
+					if(game.getScreen() instanceof GameScreen){
+						game.fullVersionWindow.alfaZero(0);	
+						game.getScreen().dispose();
+						game.setScreen(new MainMenuScreen(game));
+					}
 			}
 		});
 		

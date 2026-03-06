@@ -1,7 +1,5 @@
 package com.cosmonaut.Utils;
 
-import java.io.IOException;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
@@ -12,11 +10,7 @@ public class TextFromXML {
 	Element root;
 	
 	public TextFromXML(String filePath){
-		try {
-			root = new XmlReader().parse(Gdx.files.internal(filePath));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+		root = new XmlReader().parse(Gdx.files.internal(filePath));
 	}
 	
 	public String get(String childName, String language){

@@ -161,7 +161,7 @@ public class EndScreen implements Screen{
       	regionMurBas.setRegionHeight(regionHeight);
       		
       	/*
-      	 * Transition écran noir
+      	 * Transition Ã©cran noir
       	 */
 		game.blackImage.addAction(Actions.alpha(1));
 		game.blackImage.addAction(Actions.alpha(0,1));
@@ -196,9 +196,9 @@ public class EndScreen implements Screen{
       	/*
       	 * Credits
       	 */
-      	creditLabelStyle = new LabelStyle(game.assets.get("fontCosmonaut.ttf", BitmapFont.class), Color.WHITE);
-      	creditLabelStyle2 = new LabelStyle(game.assets.get("fontOption.ttf", BitmapFont.class), Color.WHITE);
-      	nameLabelStyle = new LabelStyle(game.assets.get("fontCredit.ttf", BitmapFont.class), Color.WHITE);
+      	creditLabelStyle = new LabelStyle(game.getFont("fontCosmonaut.ttf"), Color.WHITE);
+      	creditLabelStyle2 = new LabelStyle(game.getFont("fontOption.ttf"), Color.WHITE);
+      	nameLabelStyle = new LabelStyle(game.getFont("fontCredit.ttf"), Color.WHITE);
       	creditLabel = new Label("COSMONAUT", creditLabelStyle);
       	creditLabel.setX(Gdx.graphics.getWidth()/2 - creditLabel.getPrefWidth()/2);
       	creditLabel.setY(Gdx.graphics.getHeight()/2 - creditLabel.getPrefHeight()/2);
@@ -232,7 +232,7 @@ public class EndScreen implements Screen{
 			if(timer >= 6){
 				stepTime = timer;
 				regionMurGauche.setRegionWidth((int)(regionMurGauche.getRegionWidth() * Gdx.graphics.getWidth()/murGaucheWidth));
-				System.out.println("Étape suivante !");
+				System.out.println("Ã‰tape suivante !");
 				System.out.println("stepTime = " + stepTime);
 			}
 		}
@@ -654,7 +654,7 @@ public class EndScreen implements Screen{
 					break;
 				case 4:
 					creditLabel.setText(game.text.get("ArtBy"));
-					nameLabel.setText("Geneviève Milette");
+					nameLabel.setText("GeneviÃ¨ve Milette");
 					break;
 				case 5:
 					creditLabel.setText(game.text.get("SoundsBy"));

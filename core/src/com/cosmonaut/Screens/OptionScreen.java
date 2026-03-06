@@ -58,10 +58,10 @@ public class OptionScreen implements Screen{
 		backgroundImage.setX(Gdx.graphics.getWidth()/2 - backgroundImage.getWidth()/2);
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
 		
-		//Titre de l'écran
+		//Titre de l'Ã©cran
 		Color colorTitle = Pools.obtain(Color.class);
 		colorTitle.set(2/256f, 165/256f, 200/256f, 1);
-		screenTitleStyle = new LabelStyle(game.assets.get("fontMenu.ttf", BitmapFont.class), colorTitle);
+		screenTitleStyle = new LabelStyle(game.getFont("fontMenu.ttf"), colorTitle);
 		screenTitle = new Label(game.text.get("Options"), screenTitleStyle);
 		screenTitle.setAlignment(Align.center);
 
@@ -88,7 +88,7 @@ public class OptionScreen implements Screen{
 		textButtonStyle.up = game.skin.getDrawable("Button");
 		textButtonStyle.down = game.skin.getDrawable("ButtonCheck");
 		textButtonStyle.checked = game.skin.getDrawable("ButtonCheck");
-		textButtonStyle.font = game.assets.get("fontUpgrade.ttf", BitmapFont.class);
+		textButtonStyle.font = game.getFont("fontUpgrade.ttf");
 		textButtonStyle.fontColor = Color.WHITE;
 		textButtonStyle.downFontColor = Color.BLACK;
 		textButtonStyle.checkedFontColor = Color.BLACK;
@@ -97,7 +97,7 @@ public class OptionScreen implements Screen{
 		resetTextButtonStyle.up = game.skin.getDrawable("LinearButton");
 		resetTextButtonStyle.down = game.skin.getDrawable("LinearButtonCheck");
 		resetTextButtonStyle.checked = game.skin.getDrawable("LinearButtonCheck");
-		resetTextButtonStyle.font = game.assets.get("fontHUD.ttf", BitmapFont.class);
+		resetTextButtonStyle.font = game.getFont("fontHUD.ttf");
 		resetTextButtonStyle.fontColor = Color.WHITE;
 		resetTextButtonStyle.downFontColor = Color.BLACK;
 		
@@ -105,7 +105,7 @@ public class OptionScreen implements Screen{
 		languageTextButtonStyle.up = game.skin.getDrawable("LinearButton");
 		languageTextButtonStyle.down = game.skin.getDrawable("LinearButtonCheck");
 		languageTextButtonStyle.checked = game.skin.getDrawable("LinearButtonCheck");
-		languageTextButtonStyle.font = game.assets.get("fontUpgrade.ttf", BitmapFont.class);
+		languageTextButtonStyle.font = game.getFont("fontUpgrade.ttf");
 		languageTextButtonStyle.fontColor = colorFont2;
 		languageTextButtonStyle.downFontColor = Color.WHITE;
 		languageTextButtonStyle.checkedFontColor = Color.WHITE;
@@ -131,7 +131,7 @@ public class OptionScreen implements Screen{
 		resetButton.setX(0.07f * Gdx.graphics.getWidth());
 		resetButton.setY(languageButton.getY() - languageButton.getHeight() - 0.02f * Gdx.graphics.getHeight());
 
-		labelStyle = new LabelStyle(game.assets.get("fontDialogue.ttf", BitmapFont.class),Color.WHITE);
+		labelStyle = new LabelStyle(game.getFont("fontDialogue.ttf"),Color.WHITE);
 		resetLabel = new Label(game.text.get("ResetWarning") + "\n\n" + game.text.get("DoYouWantToContinue"), labelStyle);
 		resetLabel.setWrap(true);
 		resetLabel.setAlignment(Align.center);
@@ -171,8 +171,8 @@ public class OptionScreen implements Screen{
 
 		//Languages
 		englishButton = new TextButton("English", languageTextButtonStyle);	
-		francaisButton = new TextButton("Français", languageTextButtonStyle);
-		espanolButton = new TextButton("Español", languageTextButtonStyle);
+		francaisButton = new TextButton("FranÃ§ais", languageTextButtonStyle);
+		espanolButton = new TextButton("EspaÃ±ol", languageTextButtonStyle);
 		deutschButton = new TextButton("Deutsch", languageTextButtonStyle);
 		
 		languageButtonGroup = new ButtonGroup<TextButton>();

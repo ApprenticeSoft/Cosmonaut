@@ -72,7 +72,7 @@ public class LevelSelectionScreen implements Screen{
 		colorTitle = new Color(); /*Pools.obtain(Color.class)*/;
 		colorTitle.set(2/256f, 165/256f, 200/256f, 1);
 		
-		screenTitleStyle = new LabelStyle(game.assets.get("fontMenu.ttf", BitmapFont.class), colorTitle /*new Color(2/256f, 165/256f, 200/256f, 1)*/);
+		screenTitleStyle = new LabelStyle(game.getFont("fontMenu.ttf"), colorTitle /*new Color(2/256f, 165/256f, 200/256f, 1)*/);
 		screenTitle = new Label(game.text.get("LevelSelection"), screenTitleStyle);
 		screenTitle.setAlignment(Align.center);
 		
@@ -87,14 +87,14 @@ public class LevelSelectionScreen implements Screen{
 		textButtonStyleActive = new TextButtonStyle();
 		textButtonStyleActive.up = game.skin.getDrawable("LevelButton");
 		textButtonStyleActive.down = game.skin.getDrawable("LevelButtonCheck");
-		textButtonStyleActive.font = game.assets.get("fontMenu.ttf", BitmapFont.class);
+		textButtonStyleActive.font = game.getFont("fontMenu.ttf");
 		textButtonStyleActive.fontColor = colorTitle;
 		
 		colorFont = Pools.obtain(Color.class);
 		colorFont.set(3/256f, 108/256f, 130/256f, 0.65f);
 		textButtonStyleInactive = new TextButtonStyle();
 		textButtonStyleInactive.up = game.skin.getDrawable("LevelButtonInactive");
-		textButtonStyleInactive.font = game.assets.get("fontMenu.ttf", BitmapFont.class);
+		textButtonStyleInactive.font = game.getFont("fontMenu.ttf");
 		textButtonStyleInactive.fontColor = colorFont;
 		
 		Pools.free(colorTitle);
@@ -138,7 +138,7 @@ public class LevelSelectionScreen implements Screen{
 		backButton.setX(0.015f*Gdx.graphics.getWidth());
 		backButton.setY(backButton.getX());
 		
-		//Création des icones upgrade sur les boutons
+		//CrÃ©ation des icones upgrade sur les boutons
 		Vector2 coordinateVector = Pools.obtain(Vector2.class);
 		coordinateVector.set(0,0);
 		
@@ -152,7 +152,7 @@ public class LevelSelectionScreen implements Screen{
 				image.setY(levels.get(niveau).localToStageCoordinates(coordinateVector.set(0, 0)).y + levels.get(niveau).getHeight() - image.getHeight()*(0.5f + 1.1f*upgrade));
 				image.setTouchable(Touchable.disabled);
 				stage.addActor(image);
-				//Couleur des upgrades non ramassées
+				//Couleur des upgrades non ramassÃ©es
 				if(!game.levelHandler.isUpgradePicked(niveau, upgrade)){
 					image.setColor(199/256f, 183/256f, 12/256f, 0.25f);
 				}

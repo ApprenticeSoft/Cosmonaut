@@ -70,7 +70,7 @@ public class Gyrophare {
 		if(mapObject.getProperties().get("Color") != null){
 			color = mapObject.getProperties().get("Color").toString().split(",");
 			if(color.length != 4)
-				System.out.println("Erreur dans la définition de la couleur de la lumière");
+				System.out.println("Erreur dans la dÃ©finition de la couleur de la lumiÃ¨re");
 			else{
 				r = Float.valueOf(color[0]);
 				g = Float.valueOf(color[1]); 

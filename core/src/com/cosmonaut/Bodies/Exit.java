@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Pools;
@@ -18,7 +19,7 @@ import com.cosmonaut.Utils.GameConstants;
 
 public class Exit extends Obstacle{
 	
-	private Animation exitAnimation;
+	private Animation<TextureRegion> exitAnimation;
 	public boolean open;
 	public boolean heroContact;
 	private boolean soundPlayed;
@@ -34,7 +35,7 @@ public class Exit extends Obstacle{
 		soundPlayed = false;
 		categoryBits = 0010;
 		sound = game.assets.get("Sounds/Exit.ogg", Sound.class);
-		exitAnimation = new Animation(0.04f, game.assets.get("Images/Animations/Exit_Animation.pack", TextureAtlas.class).findRegions("Exit_Animation"), Animation.PlayMode.NORMAL);
+		exitAnimation = new Animation<TextureRegion>(0.04f, game.assets.get("Images/Animations/Exit_Animation.pack", TextureAtlas.class).findRegions("Exit_Animation"), Animation.PlayMode.NORMAL);
 		
 		create(world, camera, rectangleObject);
 		
@@ -45,7 +46,7 @@ public class Exit extends Obstacle{
 		//Type
 		if(rectangleObject.getProperties().get("Type") != null){
 			if(rectangleObject.getProperties().get("Type").equals("End"))
-				exitAnimation = new Animation(0.045f, game.assets.get("Images/Animations/Exit_End_Animation.pack", TextureAtlas.class).findRegions("Exit_End_Animation"), Animation.PlayMode.NORMAL);
+				exitAnimation = new Animation<TextureRegion>(0.045f, game.assets.get("Images/Animations/Exit_End_Animation.pack", TextureAtlas.class).findRegions("Exit_End_Animation"), Animation.PlayMode.NORMAL);
 		}
 	}
 	
@@ -57,7 +58,7 @@ public class Exit extends Obstacle{
 		soundPlayed = false;
 		categoryBits = 0010;
 		sound = game.assets.get("Sounds/Exit.ogg", Sound.class);
-		exitAnimation = new Animation(0.04f, game.assets.get("Images/Animations/Exit_Animation.pack", TextureAtlas.class).findRegions("Exit_Animation"), Animation.PlayMode.NORMAL);
+		exitAnimation = new Animation<TextureRegion>(0.04f, game.assets.get("Images/Animations/Exit_Animation.pack", TextureAtlas.class).findRegions("Exit_Animation"), Animation.PlayMode.NORMAL);
 		//pointLight = new PointLight(rayHandler, 40, new Color(0.8f, 0.8f, 0.8f, 1f), 2*width, 0, 0);
 		
 		create(world, camera, rectangleObject);
@@ -70,7 +71,7 @@ public class Exit extends Obstacle{
 		//Type
 		if(rectangleObject.getProperties().get("Type") != null){
 			if(rectangleObject.getProperties().get("Type").equals("End")){
-				exitAnimation = new Animation(0.045f, game.assets.get("Images/Animations/Exit_End_Animation.pack", TextureAtlas.class).findRegions("Exit_End_Animation"), Animation.PlayMode.NORMAL);
+				exitAnimation = new Animation<TextureRegion>(0.045f, game.assets.get("Images/Animations/Exit_End_Animation.pack", TextureAtlas.class).findRegions("Exit_End_Animation"), Animation.PlayMode.NORMAL);
 				color.set(0.95f, 0.95f, 0.95f, 1f);
 				pointLight = new PointLight(rayHandler, 40, color, 2.2f*width, 0, 0);
 			}
@@ -94,7 +95,7 @@ public class Exit extends Obstacle{
 		soundPlayed = false;
 		categoryBits = 0010;
 		sound = game.assets.get("Sounds/Exit.ogg", Sound.class);
-		exitAnimation = new Animation(0.04f, game.assets.get("Images/Animations/Exit_Animation.pack", TextureAtlas.class).findRegions("Exit_Animation"), Animation.PlayMode.NORMAL);
+		exitAnimation = new Animation<TextureRegion>(0.04f, game.assets.get("Images/Animations/Exit_Animation.pack", TextureAtlas.class).findRegions("Exit_Animation"), Animation.PlayMode.NORMAL);
 		//pointLight = new PointLight(rayHandler, 40, new Color(0.8f, 0.8f, 0.8f, 1f), 2*width, 0, 0);
 	}
 	
@@ -114,7 +115,7 @@ public class Exit extends Obstacle{
 		//Type
 		if(rectangleObject.getProperties().get("Type") != null){
 			if(rectangleObject.getProperties().get("Type").equals("End")){
-				exitAnimation = new Animation(0.045f, game.assets.get("Images/Animations/Exit_End_Animation.pack", TextureAtlas.class).findRegions("Exit_End_Animation"), Animation.PlayMode.NORMAL);
+				exitAnimation = new Animation<TextureRegion>(0.045f, game.assets.get("Images/Animations/Exit_End_Animation.pack", TextureAtlas.class).findRegions("Exit_End_Animation"), Animation.PlayMode.NORMAL);
 				color.set(0.95f, 0.95f, 0.95f, 1f);
 				pointLight = new PointLight(rayHandler, 40, color, 2.2f*width, 0, 0);
 			}

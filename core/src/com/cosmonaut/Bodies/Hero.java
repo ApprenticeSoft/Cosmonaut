@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -44,8 +45,8 @@ public class Hero {
 					oxygenLevel, fuelLevel,
 					gameOverDelay = 0;
 	private TextureAtlas tomAtlas;
-    private Animation /*tomIdle,*/ tomFly, tomElectrocuted, tomSuffocate;
-    private Animation idleAnimations[];
+    private Animation<TextureRegion> tomFly, tomElectrocuted, tomSuffocate;
+    private Animation<TextureRegion>[] idleAnimations;
 	private int idleAnimation = 0, animationStep = 0;
     private Vector2 jetpackImpulse, suffocationImpulseDirection, suffocationImpulseCenter, origin;
 	public boolean isJetPackActive;
@@ -81,7 +82,7 @@ public class Hero {
         coneLight.setContactFilter((short) 0010, (short)-1000, (short)0001);
         
         /*
-         * Éclairage du héro en cas de lumière ambiante trop faible
+         * Ã‰clairage du hÃ©ro en cas de lumiÃ¨re ambiante trop faible
          */
         if(tiledMap.getProperties().get("Ambiant Light Min") != null){
         	if(Float.parseFloat(tiledMap.getProperties().get("Ambiant Light Min").toString()) < 0.2f){
@@ -151,26 +152,26 @@ public class Hero {
         if(Gdx.app.getType() == ApplicationType.Desktop){
         	tomAtlas = game.assets.get("Images/Animations/Tom_Animation_HD.pack", TextureAtlas.class);
 
-            tomFly = new Animation(1/30f, tomAtlas.findRegions("Tom_Fly"), Animation.PlayMode.NORMAL);
-            tomElectrocuted = new Animation(1/30f, tomAtlas.findRegions("Tom_Electrocuted"), Animation.PlayMode.LOOP);
-            tomSuffocate = new Animation(1/30f, tomAtlas.findRegions("Tom_Suffocate"), Animation.PlayMode.NORMAL);
+            tomFly = new Animation<TextureRegion>(1/30f, tomAtlas.findRegions("Tom_Fly"), Animation.PlayMode.NORMAL);
+            tomElectrocuted = new Animation<TextureRegion>(1/30f, tomAtlas.findRegions("Tom_Electrocuted"), Animation.PlayMode.LOOP);
+            tomSuffocate = new Animation<TextureRegion>(1/30f, tomAtlas.findRegions("Tom_Suffocate"), Animation.PlayMode.NORMAL);
             
             idleAnimations = new Animation[3];
-            idleAnimations[0] = new Animation(1/30f, tomAtlas.findRegions("Tom_Idle-1"), Animation.PlayMode.LOOP);
-            idleAnimations[1] = new Animation(1/30f, tomAtlas.findRegions("Tom_Idle-2"), Animation.PlayMode.LOOP);
-            idleAnimations[2] = new Animation(1/30f, tomAtlas.findRegions("Tom_Idle-3"), Animation.PlayMode.LOOP);
+            idleAnimations[0] = new Animation<TextureRegion>(1/30f, tomAtlas.findRegions("Tom_Idle-1"), Animation.PlayMode.LOOP);
+            idleAnimations[1] = new Animation<TextureRegion>(1/30f, tomAtlas.findRegions("Tom_Idle-2"), Animation.PlayMode.LOOP);
+            idleAnimations[2] = new Animation<TextureRegion>(1/30f, tomAtlas.findRegions("Tom_Idle-3"), Animation.PlayMode.LOOP);
         }
         else{
         	tomAtlas = game.assets.get("Images/Animations/Tom_Animation.pack", TextureAtlas.class);
         	
-            tomFly = new Animation(0.025f, tomAtlas.findRegions("Tom_Fly"), Animation.PlayMode.NORMAL);
-            tomElectrocuted = new Animation(0.05f, tomAtlas.findRegions("Tom_Electrocuted"), Animation.PlayMode.LOOP);
-            tomSuffocate = new Animation(0.06f, tomAtlas.findRegions("Tom_Suffocate"), Animation.PlayMode.NORMAL);
+            tomFly = new Animation<TextureRegion>(0.025f, tomAtlas.findRegions("Tom_Fly"), Animation.PlayMode.NORMAL);
+            tomElectrocuted = new Animation<TextureRegion>(0.05f, tomAtlas.findRegions("Tom_Electrocuted"), Animation.PlayMode.LOOP);
+            tomSuffocate = new Animation<TextureRegion>(0.06f, tomAtlas.findRegions("Tom_Suffocate"), Animation.PlayMode.NORMAL);
             
             idleAnimations = new Animation[3];
-            idleAnimations[0] = new Animation(0.1f, tomAtlas.findRegions("Tom_Idle-1"), Animation.PlayMode.LOOP);
-            idleAnimations[1] = new Animation(0.1f, tomAtlas.findRegions("Tom_Idle-2"), Animation.PlayMode.LOOP);
-            idleAnimations[2] = new Animation(0.1f, tomAtlas.findRegions("Tom_Idle-3"), Animation.PlayMode.LOOP);
+            idleAnimations[0] = new Animation<TextureRegion>(0.1f, tomAtlas.findRegions("Tom_Idle-1"), Animation.PlayMode.LOOP);
+            idleAnimations[1] = new Animation<TextureRegion>(0.1f, tomAtlas.findRegions("Tom_Idle-2"), Animation.PlayMode.LOOP);
+            idleAnimations[2] = new Animation<TextureRegion>(0.1f, tomAtlas.findRegions("Tom_Idle-3"), Animation.PlayMode.LOOP);
         }
             
         spriteHeight = 2 * bodyHeight;
@@ -306,7 +307,7 @@ public class Hero {
 		}
 		else if(GameConstants.LOSE_MESSAGE.equals(game.text.get("Electrocuted").toUpperCase())){
 			/*
-			 * Contour bleuté
+			 * Contour bleutÃ©
 			 */
 			game.batch.setShader(contourShader);
 			batch.draw(	tomElectrocuted.getKeyFrame(animTime, true), 
@@ -442,14 +443,12 @@ public class Hero {
 			}
 		}
 		
-		if((Gdx.input.isTouched(0) && Gdx.input.getX(0) < Gdx.graphics.getWidth()/2) ||(Gdx.input.isTouched(1) && Gdx.input.getX(1) < Gdx.graphics.getWidth()/2)){
-			System.out.println("Rotate");
-		}
-		else{
-			System.out.println("Don't rotate");
-			stopRotating();
-			isRotating = false;
-		}
+			if((Gdx.input.isTouched(0) && Gdx.input.getX(0) < Gdx.graphics.getWidth()/2) ||(Gdx.input.isTouched(1) && Gdx.input.getX(1) < Gdx.graphics.getWidth()/2)){
+			}
+			else{
+				stopRotating();
+				isRotating = false;
+			}
 		
 		if((Gdx.input.isTouched(0) && Gdx.input.getX(0) > Gdx.graphics.getWidth()/2) ||(Gdx.input.isTouched(1) && Gdx.input.getX(1) > Gdx.graphics.getWidth()/2))
 			jetpackOn();

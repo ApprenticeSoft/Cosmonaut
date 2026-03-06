@@ -63,7 +63,7 @@ public class HomeScreen implements Screen{
 		transitionImage.addAction(Actions.alpha(0));
 		transitionImage.setVisible(false);
 		
-		labelStyle = new LabelStyle(game.assets.get("fontUpgrade.ttf", BitmapFont.class), Color.WHITE);
+		labelStyle = new LabelStyle(game.getFont("fontUpgrade.ttf"), Color.WHITE);
 		label = new Label(pressAnyKeyString, labelStyle);
 		label.setX(Gdx.graphics.getWidth()/2 - label.getWidth()/2);
 		label.setY(0.25f * Gdx.graphics.getHeight() - label.getHeight()/2);
@@ -143,7 +143,6 @@ public class HomeScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		System.out.println("Main Menu Screen disposed");
 		stage.dispose();
 		backgroundTexture.dispose(); 
 		transitionTexture.dispose();

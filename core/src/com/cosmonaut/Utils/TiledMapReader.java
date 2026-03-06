@@ -183,7 +183,7 @@ public class TiledMapReader {
         	}
         }
 
-        //Création de polygones
+        //CrÃ©ation de polygones
         for(PolygonMapObject polygonObject : objects.getByType(PolygonMapObject.class)){
         	//Polygone polygone = new Polygone(game, world, camera, polygonObject);
         	Polygone polygone = game.pools.polygonePool.obtain();
@@ -321,7 +321,7 @@ public class TiledMapReader {
         
         //Obstacle organization
 	    for(int i = game.obstacles.size - 1; i > -1; i--){
-	    	if(game.obstacles.get(i).getClass().toString().equals("class com.libgdx.jam.Bodies.ObstaclePiston")){
+	    	if(game.obstacles.get(i) instanceof ObstaclePiston){
 	    		game.obstaclesWithNinePatch.add(game.obstacles.get(i));
 	    		game.obstacles.removeIndex(game.obstacles.indexOf(game.obstacles.get(i), true));
 	    	}
