@@ -74,6 +74,10 @@ Generated key artifacts:
 - HTML dist: `html/build/dist/`
 - Windows package zip: `desktop/build/distributions/cosmonaut-windows-2.0.0.zip`
 
+Latest branch commit:
+
+- `552b285` (`feature/full-upgrade-optimization-html-pi`)
+
 ## Raspberry Pi Deployment Tracking
 
 Planned deploy model:
