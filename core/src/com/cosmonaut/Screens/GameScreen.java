@@ -48,40 +48,40 @@ public class GameScreen implements Screen{
 	protected TiledMapReader mapReader;
 	protected World world;
 	Fixture fixtureA, fixtureB;
-    
+
     //Graphics
     protected HUD hud;
     protected Stage stage;
     private static final int[] BACKGROUND_LAYERS = {0, 1};
     private static final int[] WALL_LAYERS = {2};
-    
+
     //Background
     private Texture backgroundTexture;
     protected float backgroundTime;
-    
+
     //Background sound
     private Music backgroundSound;
-    
+
     //Box2dLights
 	private RayHandler rayHandler;
 	private int lightAlpha;
-	
+
 	//Gesture Listener
 	protected MyGestureListener gestureListener;
 	protected InputMultiplexer inputMultiplexer;
 
 	private boolean levelTransitionHandled;
 	private boolean cursorCaptured;
-	
+
 	public GameScreen(final MyGdxGame game){
 		this.game= game;
 		game.blackImage.setTouchable(Touchable.disabled);
 		game.blackImage.setColor(game.blackImage.getColor().r, game.blackImage.getColor().g, game.blackImage.getColor().b, 0f);
 		game.setFullVersionWindow(	game.text.get("ThankYou"),
-									game.text.get("Features") + "\n- " + game.text.get("MoreLevels") + "\n- " + game.text.get("LongerLevels") + "\n- " + game.text.get("RemoveAds") + "\n\n" + game.text.get("GetFullVersion"), 
-									game.fullVersionWindow.getWidth(), 
-									0.67f*Gdx.graphics.getHeight(), 
-									0.5f, 
+									game.text.get("Features") + "\n- " + game.text.get("MoreLevels") + "\n- " + game.text.get("LongerLevels") + "\n- " + game.text.get("RemoveAds") + "\n\n" + game.text.get("GetFullVersion"),
+									game.fullVersionWindow.getWidth(),
+									0.67f*Gdx.graphics.getHeight(),
+									0.5f,
 									0.5f);
 
 		GameConstants.BOX_STEP = 1/60f;
@@ -96,7 +96,7 @@ public class GameScreen implements Screen{
 		levelTransitionHandled = false;
 		cursorCaptured = false;
 		checkUpgrades();
-		
+
 		backgroundSound = game.assets.get("Sounds/Background.ogg", Music.class);
 		backgroundSound.setLooping(true);
 		backgroundSound.play();
@@ -106,16 +106,16 @@ public class GameScreen implements Screen{
         world = new World(gravity, true);
         Pools.free(gravity);
         World.setVelocityThreshold(0.0f);
-        
-        //Test Box2DLight
-        RayHandler.useDiffuseLight(true); 
 
-        rayHandler = new RayHandler(world); 
-        rayHandler.resizeFBO(Gdx.graphics.getWidth()/5, Gdx.graphics.getHeight()/5);   
+        //Test Box2DLight
+        RayHandler.useDiffuseLight(true);
+
+        rayHandler = new RayHandler(world);
+        rayHandler.resizeFBO(Gdx.graphics.getWidth()/5, Gdx.graphics.getHeight()/5);
         rayHandler.setBlur(true);
         //rayHandler.setBlurNum(1);
         //rayHandler.setShadows(true);
-            
+
 		//Gdx.gl.glEnable(GL20.GL_DITHER);
 
         //TEST filter for Tiled Map
@@ -123,14 +123,14 @@ public class GameScreen implements Screen{
         params.generateMipMaps = true;
         params.textureMagFilter = Texture.TextureFilter.MipMapLinearNearest;
         params.textureMinFilter = Texture.TextureFilter.MipMapLinearNearest;
-        
+
         tiledMap = new TmxMapLoader().load("Levels/Level " + GameConstants.SELECTED_LEVEL + ".tmx", params);
-        
+
         //Test nouvelle caméra
         camera = new MyCamera();
 		camera.setToOrtho(false, GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT);
-        camera.update(); 
-        
+        camera.update();
+
         /*****************Tiled Map Renderer*******************/
         //tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap, GameConstants.MPP, game.batch);
         orthoCachedTiledMapRenderer = new OrthoCachedTiledMapRenderer(tiledMap, GameConstants.MPP);
@@ -138,30 +138,33 @@ public class GameScreen implements Screen{
         //orthoCachedTiledMapRenderer.setOverCache(GameConstants.OVER_CACHE);
         /********************************************************/
 
-        //mapReader = new TiledMapReader(game, tiledMap, world, polygonShape, fixtureDef, bodyDef, camera, rayHandler); 
-        mapReader = new TiledMapReader(game, tiledMap, world, camera, rayHandler); 
+        //mapReader = new TiledMapReader(game, tiledMap, world, polygonShape, fixtureDef, bodyDef, camera, rayHandler);
+        mapReader = new TiledMapReader(game, tiledMap, world, camera, rayHandler);
         //rayHandler.setAmbientLight(new Color(0, 0, 0, mapReader.ambiantLightMin));
-        //rayHandler.setAmbientLight(new Color(0.3f, 0.3f, 0.3f, mapReader.ambiantLightMin)); 
+        //rayHandler.setAmbientLight(new Color(0.3f, 0.3f, 0.3f, mapReader.ambiantLightMin));
         Color colorAmbiantLight = Pools.obtain(Color.class);
         colorAmbiantLight.set(mapReader.ambiantLightMin, mapReader.ambiantLightMin, mapReader.ambiantLightMin, 0.1f);
-        rayHandler.setAmbientLight(colorAmbiantLight); 
+        rayHandler.setAmbientLight(colorAmbiantLight);
         Pools.free(colorAmbiantLight);
-             
+
         //Graphics
-        stage = new Stage(); 
-		hud = new HUD(game, stage, game.skin, mapReader.hero); 
-		stage.addActor(game.blackImage);	
-		
+        if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+        	stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+        else
+        	stage = new Stage();
+		hud = new HUD(game, stage, game.skin, mapReader.hero);
+		stage.addActor(game.blackImage);
+
 		if(!Data.getFullVersion())
 			game.fullVersionWindow.addToStage(stage);
 
-        //Background 
+        //Background
 		backgroundTexture = game.assets.get("Images/Stars.jpg", Texture.class);
 		backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-		
+
 		//Gesture Listener
         gestureListener = new MyGestureListener(game, world, camera, mapReader.hero);
-      	inputMultiplexer = new InputMultiplexer();     
+      	inputMultiplexer = new InputMultiplexer();
         /*
     	//Dernier niveau
         if(GameConstants.SELECTED_LEVEL == 24){
@@ -172,38 +175,38 @@ public class GameScreen implements Screen{
 	}
 
 	@Override
-	public void render(float delta) {  
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glEnable(GL20.GL_BLEND); 
+		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		cameraActivity();     
-        //tiledMapRenderer.setView(camera); 
+		cameraActivity();
+        //tiledMapRenderer.setView(camera);
         /****************TEST Tiled Map Renderer with cache**************/
         orthoCachedTiledMapRenderer.setView(camera);
         game.batch.setProjectionMatrix(camera.combined);
-        /****************************************************************/      
- 
+        /****************************************************************/
+
         //Level finished
         if(GameConstants.LEVEL_FINISHED)
         	finishLevel(delta);
-        
+
 		if(!GameConstants.GAME_PAUSED){
 			updateCursorCapture(true);
 	        //Animation
 	        GameConstants.ANIM_TIME += delta;
 	        backgroundTime += delta;
 	        GameConstants.LEVEL_TIME += delta;
-	        
+
 			world.step(GameConstants.BOX_STEP, GameConstants.BOX_VELOCITY_ITERATIONS, GameConstants.BOX_POSITION_ITERATIONS);
 			mapReader.active();
-	        
+
 	        if(Gdx.input.isKeyJustPressed(Keys.ESCAPE))
 	        	hud.pause();
-	        
+
 	        //Out of fuel
 	        //if (mapReader.hero.getFuelLevel() <= 0)
-	        //	hud.outOfFuel();	
+	        //	hud.outOfFuel();
 
 	        if(GameConstants.GAME_LOST)
 	        	hud.lose();
@@ -213,42 +216,42 @@ public class GameScreen implements Screen{
 		else{
 			updateCursorCapture(false);
 			mapReader.soundPause();
-			
+
 	        if(Gdx.input.isKeyJustPressed(Keys.ESCAPE))
 	        	if(!GameConstants.GAME_LOST && !GameConstants.LEVEL_FINISHED)
 	        		hud.resume();
 		}
-		
+
 		stage.act(delta);
-		
+
 		//Drawing graphics
-		//Background	
+		//Background
 		game.batch.begin();
-		game.batch.draw(backgroundTexture, 
-						0, 
-						0, 
-						GameConstants.LEVEL_PIXEL_WIDTH, 
-						GameConstants.LEVEL_PIXEL_HEIGHT,  
-						(int)(backgroundTime * 8), 
-						0, 
-						(int)(GameConstants.LEVEL_PIXEL_WIDTH * 30), 
-						(int)(GameConstants.LEVEL_PIXEL_HEIGHT * 30), 
-						false, 
+		game.batch.draw(backgroundTexture,
+						0,
+						0,
+						GameConstants.LEVEL_PIXEL_WIDTH,
+						GameConstants.LEVEL_PIXEL_HEIGHT,
+						(int)(backgroundTime * 8),
+						0,
+						(int)(GameConstants.LEVEL_PIXEL_WIDTH * 30),
+						(int)(GameConstants.LEVEL_PIXEL_HEIGHT * 30),
+						false,
 						false);
 		game.batch.end();
-		
+
 		//Game map
         //tiledMapRenderer.render(background);
         orthoCachedTiledMapRenderer.render(BACKGROUND_LAYERS);
-		    
+
 		//HUD and hero
 		game.batch.begin();
 		mapReader.draw(game.batch, game.textureAtlas, backgroundTime);
 		game.batch.end();
-  		
+
 		//tiledMapRenderer.render(walls);
-        orthoCachedTiledMapRenderer.render(WALL_LAYERS);     	
-		
+        orthoCachedTiledMapRenderer.render(WALL_LAYERS);
+
 		//Test Box2DLight
 		rayHandler.setCombinedMatrix(camera);
 		rayHandler.updateAndRender();
@@ -258,10 +261,10 @@ public class GameScreen implements Screen{
 		mapReader.drawLightnings(game.batch, game.textureAtlas);
 		hud.draw(camera);
 		game.batch.end();
-		
+
 		//Light flickering
 		if(mapReader.lightFlicker){
-			lightAlpha = MathUtils.random(1,100);		
+			lightAlpha = MathUtils.random(1,100);
 			if(lightAlpha < mapReader.flickerFactor)
 				rayHandler.setAmbientLight(mapReader.ambiantLightMax, mapReader.ambiantLightMax, mapReader.ambiantLightMax, 0.1f);
 			else
@@ -269,8 +272,8 @@ public class GameScreen implements Screen{
 		}
 
 		stage.draw();
-		
-		//Dernier niveau	
+
+		//Dernier niveau
 		if(GameConstants.SELECTED_LEVEL == 24){
 			//game.assets.update();
 
@@ -280,36 +283,38 @@ public class GameScreen implements Screen{
 					game.setScreen(new EndScreen(game));
 				}
 			}
-        }     
+        }
 		//if(Gdx.input.isKeyPressed(Input.Keys.L))
-			//debugRenderer.render(world, camera.combined);	
-		//System.out.println("FPS : " + Gdx.graphics.getFramesPerSecond());		
+			//debugRenderer.render(world, camera.combined);
+		//System.out.println("FPS : " + Gdx.graphics.getFramesPerSecond());
 	}
 
 	@Override
 	public void show() {
-		inputMultiplexer.addProcessor(new GestureDetector(gestureListener));
+		if(Gdx.app.getType() != ApplicationType.WebGL){
+			inputMultiplexer.addProcessor(new GestureDetector(gestureListener));
+		}
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		hud.buttonListener();
-		
+
 		world.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
 				fixtureA = contact.getFixtureA();
 				fixtureB = contact.getFixtureB();
-			    
+
 			    if(fixtureA.getUserData() != null && fixtureB.getUserData() != null) {
 			    	//Finish the level
 			    	if(fixtureA.getUserData().equals("Tom") && fixtureB.getUserData().equals("Exit")){
 			    		mapReader.exit.open = true;
 			    		mapReader.exit.heroContact = true;
-			    	}    		
+			    	}
 			    	else if(fixtureB.getUserData().equals("Tom") && fixtureA.getUserData().equals("Exit")){
 			    		mapReader.exit.open = true;
 			    		mapReader.exit.heroContact = true;
-			    	}    
-			    	
+			    	}
+
 			    	//Leak
 				    if (fixtureA.getUserData().equals("Leak") && fixtureB.getBody().getType() == BodyType.DynamicBody) {
 				    	for(Obstacle obstacle : game.leaks){
@@ -318,7 +323,7 @@ public class GameScreen implements Screen{
 				    			leak.addBody(fixtureB);
 				    		}
 				    	}
-					} 
+					}
 				    else if (fixtureB.getUserData().equals("Leak") && fixtureA.getBody().getType() == BodyType.DynamicBody) {
 				    	for(Obstacle obstacle : game.leaks){
 				    		if(obstacle.body.getFixtureList().get(0) == fixtureB){
@@ -327,7 +332,7 @@ public class GameScreen implements Screen{
 				    		}
 				    	}
 					}
-				    
+
 				    //Lightning
 				    if(fixtureA.getUserData().equals("Tom") && fixtureB.getUserData().equals("Lightning")){
 				    	mapReader.hero.death(game.text.get("Electrocuted").toUpperCase());
@@ -335,7 +340,7 @@ public class GameScreen implements Screen{
 			    	else if(fixtureB.getUserData().equals("Tom") && fixtureA.getUserData().equals("Lightning")){
 				    	mapReader.hero.death(game.text.get("Electrocuted").toUpperCase());
 			    	}
-				    
+
 				    //Switch
 			    	if(fixtureA.getUserData().equals("Tom") && fixtureB.getUserData().equals("Switch")){
 			    		for(ItemSwitch itemSwitch : game.switchs){
@@ -349,7 +354,7 @@ public class GameScreen implements Screen{
 			    				itemSwitch.active(game.activableObstacles);
 			    		}
 			    	}
-				    
+
 			    	//Items
 			    	if(fixtureA.getUserData().equals("Tom") && fixtureB.getUserData().equals("Item")){
 			    		for(Item item : game.items){
@@ -363,14 +368,14 @@ public class GameScreen implements Screen{
 			    				item.activate();
 			    		}
 			    	}
-				}  
+				}
 			}
 
 			@Override
 			public void endContact(Contact contact) {
 				fixtureA = contact.getFixtureA();
 				fixtureB = contact.getFixtureB();
-				
+
 				if(fixtureA.getUserData() != null && fixtureB.getUserData() != null) {
 			    	//Leak
 				    if (fixtureA.getUserData().equals("Leak") && fixtureB.getBody().getType() == BodyType.DynamicBody) {
@@ -380,7 +385,7 @@ public class GameScreen implements Screen{
 				    			leak.removeBody(fixtureB);
 				    		}
 				    	}
-					} 
+					}
 				    else if (fixtureB.getUserData().equals("Leak") && fixtureA.getBody().getType() == BodyType.DynamicBody) {
 				    	for(Obstacle obstacle : game.leaks){
 				    		if(obstacle.body.getFixtureList().get(0) == fixtureB){
@@ -392,10 +397,10 @@ public class GameScreen implements Screen{
 			    	//Finish the level
 			    	if(fixtureA.getUserData().equals("Tom") && fixtureB.getUserData().equals("Exit")){
 			    		mapReader.exit.heroContact = false;
-			    	}    		
+			    	}
 			    	else if(fixtureB.getUserData().equals("Tom") && fixtureA.getUserData().equals("Exit")){
 			    		mapReader.exit.heroContact = false;
-			    	}  
+			    	}
 				}
 			}
 
@@ -403,20 +408,20 @@ public class GameScreen implements Screen{
 			public void preSolve(Contact contact, Manifold oldManifold) {
 				fixtureA = contact.getFixtureA();
 				fixtureB = contact.getFixtureB();
-				
+
 				if((fixtureA.getUserData() != null && fixtureA.getUserData().equals("Obstacle")) && (fixtureB.getUserData() != null && fixtureB.getUserData().equals("Obstacle"))) {
 			    	contact.setEnabled(false);
 				}
-				
+
 			}
 
 			@Override
 			public void postSolve(Contact contact, ContactImpulse impulse) {
 				fixtureA = contact.getFixtureA();
 				fixtureB = contact.getFixtureB();
-			    
+
 				//Hero death by crushing
-			    if(fixtureA.getBody().getUserData().equals("Tom") || fixtureB.getBody().getUserData().equals("Tom")){ 
+			    if(fixtureA.getBody().getUserData().equals("Tom") || fixtureB.getBody().getUserData().equals("Tom")){
 			    	for(int i = 0; i < impulse.getNormalImpulses().length; i++){
 				    	if(impulse.getNormalImpulses()[i] > GameConstants.CRUSH_IMPULSE){
 				    		mapReader.hero.death(game.text.get("Crushed").toUpperCase());
@@ -434,7 +439,7 @@ public class GameScreen implements Screen{
 		GameConstants.SCREEN_HEIGHT = GameConstants.SCREEN_WIDTH * GameConstants.SCREEN_RATIO;
 
 		camera.setToOrtho(false, GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT);
-        camera.update();  
+        camera.update();
 	}
 
 	@Override
@@ -448,7 +453,7 @@ public class GameScreen implements Screen{
 	@Override
 	public void hide() {
 	}
-	
+
 	public void finishLevel(float delta){
 		if(!levelTransitionHandled){
 			levelTransitionHandled = true;
@@ -456,12 +461,12 @@ public class GameScreen implements Screen{
 			if(Data.getFullVersion()){
 		    	if(GameConstants.SELECTED_LEVEL == GameConstants.NUMBER_OF_LEVEL){
 		    		hud.gameComplete();
-			    	game.fullVersionWindow.alfaZero(0);	
+			    	game.fullVersionWindow.alfaZero(0);
 					game.blackImage.setTouchable(Touchable.disabled);
 		    	}
 		    	else{
 		    		hud.win();
-			    	game.fullVersionWindow.alfaZero(0);	
+			    	game.fullVersionWindow.alfaZero(0);
 					game.blackImage.setTouchable(Touchable.disabled);
 					game.blackImage.setColor(game.blackImage.getColor().r, game.blackImage.getColor().g, game.blackImage.getColor().b, 0f);
 		    	}
@@ -469,14 +474,14 @@ public class GameScreen implements Screen{
 			else{
 				if(GameConstants.SELECTED_LEVEL == GameConstants.FREE_LEVELS){
 					GameConstants.GAME_PAUSED = true;
-					game.fullVersionWindow.alfaOne(0.2f);	
+					game.fullVersionWindow.alfaOne(0.2f);
 					game.blackImage.setTouchable(Touchable.enabled);
 					game.blackImage.setColor(game.blackImage.getColor().r, game.blackImage.getColor().g, game.blackImage.getColor().b, 0.7f);
 				}
 		    	else
 		    		hud.win();
 			}
-	    	
+
 			if(!GameConstants.UPDATE_STATE){
 				GameConstants.UPDATE_STATE = true;
 	    		game.levelHandler.setLevelUnlocked(GameConstants.SELECTED_LEVEL + 1);
@@ -494,14 +499,14 @@ public class GameScreen implements Screen{
 					nextAlpha);
 		}
 	}
-	
+
 	public void checkUpgrades(){
 		game.levelHandler.checkUpgrades(GameConstants.SELECTED_LEVEL);
 	}
-	
+
 	public void cameraActivity(){
 		camera.displacement(mapReader.hero, mapReader, tiledMap);
-        camera.update();    
+        camera.update();
 	}
 
 	private void updateCursorCapture(boolean capture){
@@ -520,7 +525,7 @@ public class GameScreen implements Screen{
 		//Stop sounds
 		backgroundSound.stop();
 		mapReader.stopSound();
-		
+
 		stage.dispose();
 		backgroundSound.dispose();
 		rayHandler.dispose();
@@ -528,11 +533,11 @@ public class GameScreen implements Screen{
 		world.dispose();
 		orthoCachedTiledMapRenderer.dispose();
 		tiledMap.dispose();
-		
+
 		//System.gc();
-		
+
 		hud.dispose();
 		camera.dispose();
 	}
-	
+
 }

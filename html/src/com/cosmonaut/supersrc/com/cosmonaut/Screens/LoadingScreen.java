@@ -49,7 +49,10 @@ public class LoadingScreen implements Screen {
         imageLogo.setHeight(textureLogo.getHeight() * imageLogo.getWidth() / textureLogo.getWidth());
         imageLogo.setX(Gdx.graphics.getWidth() / 2f - imageLogo.getWidth() / 2f);
         imageLogo.setY(Gdx.graphics.getHeight() / 2f - imageLogo.getHeight() / 2f);
-        stage = new Stage();
+        if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+            stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+        else
+            stage = new Stage();
 
         ninePatchBar = new NinePatchDrawable(new NinePatch(new Texture(Gdx.files.internal("Images/Bar.png"), true), 7, 7, 7, 7));
         ninePatchKnob = new NinePatchDrawable(new NinePatch(new Texture(Gdx.files.internal("Images/Knob.png"), true), 1, 7, 9, 9));

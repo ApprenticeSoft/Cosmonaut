@@ -67,7 +67,10 @@ public class LevelSelectionScreen implements Screen{
 		backgroundImage.setX(Gdx.graphics.getWidth()/2 - backgroundImage.getWidth()/2);
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
 		
-		stage = new Stage();
+		if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+			stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+		else
+			stage = new Stage();
 		
 		colorTitle = new Color(); /*Pools.obtain(Color.class)*/;
 		colorTitle.set(2/256f, 165/256f, 200/256f, 1);

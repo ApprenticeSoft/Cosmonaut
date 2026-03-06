@@ -1,5 +1,6 @@
 package com.cosmonaut.Screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -154,7 +155,9 @@ public class TutorialScreen extends GameScreen{
 	
 	@Override
 	public void show() {
-		inputMultiplexer.addProcessor(new GestureDetector(gestureListener));
+		if(Gdx.app.getType() != ApplicationType.WebGL){
+			inputMultiplexer.addProcessor(new GestureDetector(gestureListener));
+		}
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		hud.buttonListener();

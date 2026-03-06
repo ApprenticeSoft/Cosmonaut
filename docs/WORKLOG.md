@@ -203,6 +203,69 @@ Deployment and verification:
   - rpi desktop PASS
   - rpi mobile PASS
 
+## 2026-03-06 Mobile Startup Regression + Local Windows Self-Contained Request
+
+New user-reported issues:
+
+- Mobile web stayed on black startup screen with `Touchez l'Écran` after tapping.
+- User needs a Windows package that is self-contained and shareable from Google Drive, without requiring GitHub artifacts.
+- User requested "YouTube-like" immersive mobile behavior (hide browser UI when possible).
+
+Findings:
+
+- Startup input transition in `HomeScreen` used `Gdx.input.isTouched()`, which can miss short taps on some mobile browsers.
+- Existing smoke script passed false positives because it checked non-black pixels, not real screen transitions.
+- Existing local `windows-dist/Cosmonaut.exe` is Launch4j wrapper requiring external Java.
+
+Fixes implemented:
+
+- `HomeScreen` startup transition now uses `Gdx.input.justTouched()` for reliable tap detection.
+- Web shell (`index.html`) now requests immersive fullscreen and landscape lock on first user interaction (best-effort, browser-permission dependent).
+- Added local no-GitHub Windows self-contained packaging path in desktop Gradle:
+  - `:desktop:windowsPortableBundle`
+  - downloads Windows JRE 17 runtime zip (Adoptium API by default),
+  - embeds runtime in bundle (`runtime/`),
+  - builds `Cosmonaut.exe` configured to use bundled runtime path.
+
+Verification follow-up:
+
+- `:desktop:windowsPortableBundle` completed and validated in subsequent pass.
+- Web smoke was tightened with screenshot-region checks and rerun after redeploy (all scenarios pass).
+
+## 2026-03-06 Mobile HTML Stabilization + 1080p Desktop Base Resolution
+
+User request in this pass:
+
+- finish mobile HTML fixes,
+- keep deployed Pi web build aligned with latest fixes,
+- set desktop portable/base desktop resolution to 1080p.
+
+Implemented and verified:
+
+- Confirmed desktop launcher base resolution is now `1920x1080`:
+  - `desktop/src/com/cosmonaut/desktop/DesktopLauncher.java`
+- Rebuilt and redeployed HTML bundle to Pi:
+  - build: `./gradlew :core:compileJava :html:dist`
+  - deploy target: `/var/www/cosmonaut`
+  - backend restart: `cosmonaut-static.service` -> `active`
+- Hardened WebGL/mobile stability path already in branch was validated:
+  - shared-batch `Stage` usage on WebGL screens,
+  - startup transition via `justTouched()`,
+  - immersive request retained as best-effort user-activation flow.
+- Tightened web smoke QA script to avoid false positives:
+  - handles first interaction consumed by immersive request,
+  - validates menu/options/play transitions using region-brightness checks (not only coarse non-black checks),
+  - updated flow to match current web menu layout (no Upgrades button in WebGL fallback).
+
+Final validation results (after deploy):
+
+- `node qa/web_smoke.js`
+  - `local-desktop` PASS
+  - `local-mobile` PASS
+  - `rpi-desktop` PASS
+  - `rpi-mobile` PASS
+- `./gradlew :core:compileJava :desktop:build :android:assembleDebug :html:dist` -> **SUCCESS**
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

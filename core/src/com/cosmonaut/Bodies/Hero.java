@@ -425,35 +425,62 @@ public class Hero {
 	}
 	
 	public void gestureControl(){
+		float halfScreenWidth = Gdx.graphics.getWidth() * 0.5f;
+		boolean leftTouched = false;
+		boolean rightTouched = false;
+
 		for(int i = 0; i<2; i++){
-			if(Gdx.input.isTouched(i) && Gdx.input.getX(i) < Gdx.graphics.getWidth()/2){
-				if(!isRotating){
-					previousPosX = Gdx.input.getX(i);
-					posX = Gdx.input.getX(i);
-					isRotating = true;
+			if(isPointerTouched(i)){
+				int pointerX = getPointerX(i);
+				if(pointerX < halfScreenWidth){
+					leftTouched = true;
+					if(!isRotating){
+						previousPosX = pointerX;
+						posX = pointerX;
+						isRotating = true;
+					}
+					else{
+						posX = pointerX;
+						if(posX < previousPosX)
+							rotateClockwise();
+						else if(posX > previousPosX)
+							rotateCounterClockwise();
+						previousPosX = posX;
+					}
 				}
 				else{
-					posX = Gdx.input.getX(i);
-					if(posX < previousPosX)
-						rotateClockwise();
-					else if(posX > previousPosX)
-						rotateCounterClockwise();
-					previousPosX = posX;
+					rightTouched = true;
 				}
 			}
 		}
 		
-			if((Gdx.input.isTouched(0) && Gdx.input.getX(0) < Gdx.graphics.getWidth()/2) ||(Gdx.input.isTouched(1) && Gdx.input.getX(1) < Gdx.graphics.getWidth()/2)){
-			}
-			else{
-				stopRotating();
-				isRotating = false;
-			}
+		if(!leftTouched){
+			stopRotating();
+			isRotating = false;
+		}
 		
-		if((Gdx.input.isTouched(0) && Gdx.input.getX(0) > Gdx.graphics.getWidth()/2) ||(Gdx.input.isTouched(1) && Gdx.input.getX(1) > Gdx.graphics.getWidth()/2))
+		if(rightTouched)
 			jetpackOn();
 		else{
 			jetpackOff();
+		}
+	}
+
+	private boolean isPointerTouched(int pointer){
+		try{
+			return Gdx.input.isTouched(pointer);
+		}
+		catch(RuntimeException runtimeException){
+			return false;
+		}
+	}
+
+	private int getPointerX(int pointer){
+		try{
+			return Gdx.input.getX(pointer);
+		}
+		catch(RuntimeException runtimeException){
+			return Integer.MAX_VALUE;
 		}
 	}
 	

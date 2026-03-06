@@ -44,21 +44,24 @@ public class DesktopControlScreen implements Screen{
 	private TextButtonStyle textButtonStyle;
 	private TextButton QWERTYButton, AZERTYButton;
 	private ButtonGroup<TextButton> buttonGroup;
-	
+
 	public DesktopControlScreen(final MyGdxGame game){
 		this.game = game;
 
-		stage = new Stage();	
-		
+		if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+			stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+		else
+			stage = new Stage();
+
 		textureAtlas = game.assets.get("Images/Desktop_Controls.pack", TextureAtlas.class);
 		skin = new Skin();
 		skin.addRegions(textureAtlas);
-		
+
 		if(GameConstants.GAME_CONTROLS == GameConstants.DESKTOP_KEYBOARD_CONTROLS_AZERTY)
 			displacementString = "AZERTY";
 		else
 			displacementString = "QWERTY";
-		
+
 		//Background
 		backgroundTexture = new Texture(Gdx.files.internal("Images/LevelScreenBackground.jpg"), true);
 		backgroundTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
@@ -68,24 +71,24 @@ public class DesktopControlScreen implements Screen{
 		backgroundImage.setHeight(backgroundTexture.getHeight() * backgroundImage.getWidth()/backgroundTexture.getWidth());
 		backgroundImage.setX(Gdx.graphics.getWidth()/2 - backgroundImage.getWidth()/2);
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
-		
+
 		//Titre de l'écran
 		Color colorTitle = Pools.obtain(Color.class);
 		colorTitle.set(2/256f, 165/256f, 200/256f, 1);
 		screenTitleStyle = new LabelStyle(game.getFont("fontMenu.ttf"), colorTitle);
 		screenTitle = new Label(game.text.get("Controls"), screenTitleStyle);
 		screenTitle.setAlignment(Align.center);
-		
+
 		Pools.free(colorTitle);
-		
+
 		float screenTitleWindowDimension = 0.465f*Gdx.graphics.getWidth();
-		screenTitleWindow = new UIWindow(	game.skin.getDrawable("ScreenTitle"), 
-											screenTitleWindowDimension, 
+		screenTitleWindow = new UIWindow(	game.skin.getDrawable("ScreenTitle"),
+											screenTitleWindowDimension,
 											screenTitleWindowDimension * game.skin.getRegion("ScreenTitle").getRegionHeight()/game.skin.getRegion("ScreenTitle").getRegionWidth(),
 											Gdx.graphics.getWidth() - screenTitleWindowDimension,
 											Gdx.graphics.getHeight() - screenTitleWindowDimension * game.skin.getRegion("ScreenTitle").getRegionHeight()/game.skin.getRegion("ScreenTitle").getRegionWidth());
 		screenTitleWindow.addActorRelativeCentered(screenTitle, 0.525f, 0.59f);
-		
+
 		//Boutons de sélection du mode
 		textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = game.skin.getDrawable("Button");
@@ -95,33 +98,33 @@ public class DesktopControlScreen implements Screen{
 		textButtonStyle.fontColor = Color.WHITE;
 		textButtonStyle.downFontColor = Color.BLACK;
 		textButtonStyle.checkedFontColor = Color.BLACK;
-		
+
 		//Gesture button
 		QWERTYButton = new TextButton("QWERTY", textButtonStyle);
 		QWERTYButton.setHeight(0.11f*Gdx.graphics.getHeight());
 		QWERTYButton.setWidth(0.17f*Gdx.graphics.getWidth());
 		QWERTYButton.setX(0.07f * Gdx.graphics.getWidth());
 		QWERTYButton.setY(0.5f * Gdx.graphics.getHeight());
-		
+
 		//Buttons button
 		AZERTYButton = new TextButton("AZERTY", textButtonStyle);
 		AZERTYButton.setHeight(QWERTYButton.getHeight());
 		AZERTYButton.setWidth(QWERTYButton.getWidth());
 		AZERTYButton.setX(QWERTYButton.getX());
 		AZERTYButton.setY(QWERTYButton.getY() - QWERTYButton.getHeight() - 0.02f * Gdx.graphics.getHeight());
-		
+
 		//Button group
 		buttonGroup = new ButtonGroup<TextButton>();
 		buttonGroup.setMaxCheckCount(1);
 		buttonGroup.setMinCheckCount(1);
 		buttonGroup.add(QWERTYButton);
 		buttonGroup.add(AZERTYButton);
-		
+
 		if(Data.getGameControls() == GameConstants.DESKTOP_KEYBOARD_CONTROLS_QWERTY)
 			QWERTYButton.setChecked(true);
 		else if(Data.getGameControls() == GameConstants.DESKTOP_KEYBOARD_CONTROLS_AZERTY)
 			AZERTYButton.setChecked(true);
-		
+
 		//Back button
 		backButton = new Button(game.skin.getDrawable("BackButtonIcon"), game.skin.getDrawable("BackButtonIconCheck"));
 		backButton.setWidth(Gdx.graphics.getWidth()/10);
@@ -131,25 +134,25 @@ public class DesktopControlScreen implements Screen{
 
 		//Images clavier
 		écart = 0.09f * Gdx.graphics.getWidth();
-		
+
 		displacementImage = new Image(skin.getDrawable(displacementString));
 		displacementImage.setWidth(0.24f * Gdx.graphics.getWidth());
 		displacementImage.setHeight(displacementImage.getWidth() * skin.getRegion(displacementString).getRegionHeight() / skin.getRegion(displacementString).getRegionWidth());
 		displacementImage.setX(0.59f * Gdx.graphics.getWidth() - (5*displacementImage.getWidth()/3 + écart)/2);
 		displacementImage.setY(0.55f * Gdx.graphics.getHeight() - displacementImage.getHeight()/2);
-		
+
 		zoomImage = new Image(skin.getDrawable("Zoom"));
 		zoomImage.setWidth(2 * displacementImage.getWidth() / 3);
 		zoomImage.setHeight(zoomImage.getWidth() * skin.getRegion("Zoom").getRegionHeight() / skin.getRegion("Zoom").getRegionWidth());
 		zoomImage.setY(displacementImage.getY());
 		zoomImage.setX(0.59f * Gdx.graphics.getWidth() + (5*displacementImage.getWidth()/3 + écart)/2 - zoomImage.getWidth());
-		
+
 		pauseImage = new Image(skin.getDrawable("Esc"));
 		pauseImage.setWidth(displacementImage.getWidth() / 3);
 		pauseImage.setHeight(pauseImage.getWidth() * skin.getRegion("Esc").getRegionHeight() / skin.getRegion("Esc").getRegionWidth());
 		pauseImage.setX(displacementImage.getX() + displacementImage.getWidth()/2 - pauseImage.getWidth()/2);
 		pauseImage.setY(displacementImage.getY() - 2*pauseImage.getHeight());
-		
+
 		//Texte
 		labelStyle = new LabelStyle(game.getFont("fontUpgrade.ttf"), Color.WHITE);
 		displacementLabel = new Label(game.text.get("Displacement"), labelStyle);
@@ -163,7 +166,7 @@ public class DesktopControlScreen implements Screen{
 		pauseLabel = new Label(game.text.get("Pause"), labelStyle);
 		pauseLabel.setX(pauseImage.getX() + pauseImage.getWidth()/2 - pauseLabel.getWidth()/2);
 		pauseLabel.setY(pauseImage.getY() - 1.5f * pauseLabel.getHeight());
-		
+
 		stage.addActor(backgroundImage);
 		screenTitleWindow.addToStage(stage);
 		stage.addActor(QWERTYButton);
@@ -181,7 +184,7 @@ public class DesktopControlScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	
+
 	    stage.act();
 	    stage.draw();
 	}
@@ -189,7 +192,7 @@ public class DesktopControlScreen implements Screen{
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		
+
 		QWERTYButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -199,7 +202,7 @@ public class DesktopControlScreen implements Screen{
 				displacementImage.setDrawable(skin.getDrawable(displacementString));
 			}
 		});
-		
+
 		AZERTYButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -208,8 +211,8 @@ public class DesktopControlScreen implements Screen{
 				displacementString = "AZERTY";
 				displacementImage.setDrawable(skin.getDrawable(displacementString));
 			}
-		});	
-		
+		});
+
 		backButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -222,30 +225,30 @@ public class DesktopControlScreen implements Screen{
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

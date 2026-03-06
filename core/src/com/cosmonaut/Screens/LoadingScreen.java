@@ -56,7 +56,10 @@ public class LoadingScreen implements Screen{
 		imageLogo.setHeight(textureLogo.getHeight() * imageLogo.getWidth()/textureLogo.getWidth());
 		imageLogo.setX(Gdx.graphics.getWidth()/2 - imageLogo.getWidth()/2);
 		imageLogo.setY(Gdx.graphics.getHeight()/2 - imageLogo.getHeight()/2);
-		stage = new Stage();
+		if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+			stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+		else
+			stage = new Stage();
 		
 
 		//Progress Bar

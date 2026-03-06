@@ -161,7 +161,7 @@ public class MyGdxGame extends Game implements ApplicationListener{
 
 			if(mobileWebClient){
 				Data.setGameControls(GameConstants.ANDROID_BUTTONS_CONTROLS);
-				GameConstants.GAME_VERSION = "web-mobile";
+				GameConstants.GAME_VERSION = "android";
 				GameConstants.LIGHT_RAY_MULTIPLICATOR = 1;
 			}
 			else{
@@ -169,7 +169,7 @@ public class MyGdxGame extends Game implements ApplicationListener{
 					Data.setGameControls(GameConstants.DESKTOP_KEYBOARD_CONTROLS_AZERTY);
 				else
 					Data.setGameControls(GameConstants.DESKTOP_KEYBOARD_CONTROLS_QWERTY);
-				GameConstants.GAME_VERSION = "web-desktop";
+				GameConstants.GAME_VERSION = "desktop";
 				GameConstants.LIGHT_RAY_MULTIPLICATOR = 2;
 			}
 
@@ -270,7 +270,14 @@ public class MyGdxGame extends Game implements ApplicationListener{
 
 	@Override
 	public void render () {
-		super.render();
+		try{
+			super.render();
+		}
+		catch(RuntimeException runtimeException){
+			String screenName = getScreen() == null ? "null" : getScreen().getClass().getName();
+			Gdx.app.error("Cosmonaut", "Render crash on screen: " + screenName, runtimeException);
+			throw runtimeException;
+		}
 		//pools.write();
 		
 		/*

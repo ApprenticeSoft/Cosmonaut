@@ -28,13 +28,13 @@ public class HomeScreen implements Screen{
 	private String pressAnyKeyString;
 	private Label label;
 	private boolean nextScreen = false;
-	
+
 	public HomeScreen(final MyGdxGame game){
 		this.game = game;
-		
+
 		if(!game.music.isPlaying())
 			game.music.play();
-		
+
 		boolean touchControls = GameConstants.GAME_CONTROLS == GameConstants.ANDROID_BUTTONS_CONTROLS
 				|| GameConstants.GAME_CONTROLS == GameConstants.ANDROID_GESTURE_CONTROLS
 				|| GameConstants.GAME_CONTROLS == 12;
@@ -42,10 +42,10 @@ public class HomeScreen implements Screen{
 			pressAnyKeyString = game.text.get("TouchScreen");
 		else
 			pressAnyKeyString = game.text.get("PressAnyKey");
-		
+
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
+
 		//Background
 		backgroundTexture = new Texture(Gdx.files.internal("Images/Logo.jpg"), true);
 		backgroundTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
@@ -54,7 +54,7 @@ public class HomeScreen implements Screen{
 		backgroundImage.setHeight(backgroundTexture.getHeight() * backgroundImage.getWidth()/backgroundTexture.getWidth());
 		backgroundImage.setX(Gdx.graphics.getWidth()/2 - backgroundImage.getWidth()/2);
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
-		
+
 		//Transition image
 		transitionTexture = new Texture(Gdx.files.internal("Images/LevelScreenBackground.jpg"), true);
 		transitionTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
@@ -65,41 +65,49 @@ public class HomeScreen implements Screen{
 		transitionImage.setY(Gdx.graphics.getHeight()/2 - transitionImage.getHeight()/2);
 		transitionImage.addAction(Actions.alpha(0));
 		transitionImage.setVisible(false);
-		
+
 		labelStyle = new LabelStyle(game.getFont("fontUpgrade.ttf"), Color.WHITE);
 		label = new Label(pressAnyKeyString, labelStyle);
 		label.setX(Gdx.graphics.getWidth()/2 - label.getWidth()/2);
 		label.setY(0.25f * Gdx.graphics.getHeight() - label.getHeight()/2);
 
-		stage = new Stage();			
+		if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+			stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+		else
+			stage = new Stage();
 		stage.addActor(backgroundImage);
 		stage.addActor(label);
 		stage.addActor(transitionImage);
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			
+
 		game.batch.setProjectionMatrix(camera.combined);
-		
+
 		stage.act();
-		stage.draw();	
-		
-		if((Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) && !nextScreen){
+		stage.draw();
+
+		if((Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) && !nextScreen){
 			nextScreen = true;
-			
+
 			transitionImage.setVisible(true);
-			transitionImage.addAction(Actions.sequence(Actions.alpha(1, 0.2f),	 
+			transitionImage.addAction(Actions.sequence(Actions.alpha(1, 0.2f),
 														Actions.run(new Runnable() {
 												            @Override
 												            public void run() {
-												            	dispose();
-																game.setScreen(new MainMenuScreen(game));
+												            	Gdx.app.postRunnable(new Runnable() {
+												            		@Override
+												            		public void run() {
+												            			dispose();
+												            			game.setScreen(new MainMenuScreen(game));
+												            		}
+												            	});
 												            }})));
 		}
-		
+
 		 /*
 	     * TEST FIREBASE
 	     */
@@ -123,31 +131,31 @@ public class HomeScreen implements Screen{
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		stage.dispose();
-		backgroundTexture.dispose(); 
+		backgroundTexture.dispose();
 		transitionTexture.dispose();
 	}
 }

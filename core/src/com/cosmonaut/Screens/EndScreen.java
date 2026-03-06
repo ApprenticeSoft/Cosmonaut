@@ -80,7 +80,10 @@ public class EndScreen implements Screen{
 		
 		atlas = game.assets.get("Images/Fin/Images_Fin.pack", TextureAtlas.class);
 		skin = new Skin(atlas);
-		stage = new Stage();
+		if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+			stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+		else
+			stage = new Stage();
 		stage.addActor(game.blackImage);
 		
         //Background  

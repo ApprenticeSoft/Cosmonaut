@@ -8,6 +8,7 @@ Modernized multi-platform libGDX game build of **Cosmonaut** with optimized runt
 - Desktop JVM (`:desktop:run`, `:desktop:build`)
 - HTML5/WebGL (`:html:dist`)
 - Windows bundle with native launcher (`:desktop:windowsBundle` -> `Cosmonaut.exe`)
+- Windows self-contained bundle (`:desktop:windowsPortableBundle` -> `Cosmonaut.exe` + embedded runtime)
 
 ## What Was Upgraded
 
@@ -15,11 +16,14 @@ Modernized multi-platform libGDX game build of **Cosmonaut** with optimized runt
 - libGDX stack updated to current major line (1.14.x).
 - Android launcher modernized and legacy in-app billing helper code removed.
 - Desktop launcher migrated to LWJGL3 backend.
+- Desktop default window/base resolution set to `1920x1080`.
 - HTML launcher rebuilt with responsive centered landscape layout.
 - Web controls split by client type:
   - Web mobile -> Android-style touch controls.
   - Web desktop -> desktop keyboard controls.
 - Web startup input on mobile hardened by removing aggressive DOM-level touch/mouse preventDefault handlers that could swallow game input on some browsers.
+- Web shell requests immersive fullscreen + landscape lock on first user interaction when browser permissions allow it.
+- WebGL fallback currently hides the Upgrades button to avoid a known unstable rendering path on browser runtime.
 
 ## Performance and Stability Improvements
 
@@ -85,6 +89,38 @@ Notes:
 
 ## Self-Contained Windows Build (No Java Install Required)
 
+### Local build (independent from GitHub)
+
+Build a self-contained Windows package directly from this repo:
+
+```bash
+./gradlew :desktop:windowsPortableBundle
+```
+
+Output archive:
+
+- `desktop/build/distributions/cosmonaut-windows-self-contained-local-2.0.0.zip`
+
+Archive contents:
+
+- `Cosmonaut/Cosmonaut.exe`
+- `Cosmonaut/cosmonaut-desktop-2.0.0.jar`
+- `Cosmonaut/runtime/*` (embedded Windows Java runtime)
+
+This package is intended for direct sharing (for example Google Drive) with no Java installation required on the player machine.
+
+By default, runtime download uses:
+
+- `https://api.adoptium.net/v3/binary/latest/17/ga/windows/x64/jre/hotspot/normal/eclipse`
+
+Override if needed:
+
+```bash
+./gradlew :desktop:windowsPortableBundle -PwindowsRuntimeUrl=<custom-jre-zip-url>
+```
+
+### GitHub Actions build
+
 A GitHub Actions workflow now builds a self-contained Windows package using `jpackage`:
 
 - Workflow: `.github/workflows/windows-jpackage.yml`
@@ -122,7 +158,7 @@ Suggested deployment pattern:
 ## Verification Commands
 
 ```bash
-./gradlew :core:compileJava :android:assembleDebug :desktop:build :desktop:windowsBundle :html:dist
+./gradlew :core:compileJava :android:assembleDebug :desktop:build :desktop:windowsBundle :desktop:windowsPortableBundle :html:dist
 ```
 
 ## Web Smoke Testing (Desktop + Mobile + Pi)
@@ -142,9 +178,8 @@ The script validates local and deployed flows (desktop/mobile emulation) includi
 
 - load -> home -> main menu
 - options open/back
-- upgrades open/back
-- level selection
-- level start + input action
+- play-flow open (intro or level path depending on save state)
+- gameplay input action + runtime error checks
 
 Output summary:
 

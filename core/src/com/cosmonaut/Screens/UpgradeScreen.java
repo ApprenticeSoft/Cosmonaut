@@ -1,5 +1,6 @@
 package com.cosmonaut.Screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -25,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.cosmonaut.Data;
 import com.cosmonaut.MyGdxGame;
 import com.cosmonaut.Utils.GameConstants;
@@ -54,31 +55,31 @@ public class UpgradeScreen implements Screen{
 	private float animTime = 0, imagePrixPosX, imageUpgradePointX, imageUpgradePointY, imageUpgradePointWidth, imageUpgradePointHeight, prixAlpha;
 	private Animation<TextureRegion> upgradeAnimation;
 	private TextureAtlas upgradeAtlas;
-	
+
 	public UpgradeScreen(final MyGdxGame game){
 		this.game = game;
 
-		stage = new Stage();	
-		
+		stage = new Stage(new ScreenViewport(), game.batch);
+
 		if(Data.getOxygenLevel() < 5)
 			prixAlpha = 1;
 		else
 			prixAlpha = 0;
-		
+
 		if(Data.getLanguage().equals("EN"))
 			itemWindowWidth = 30*Gdx.graphics.getWidth()/100;
 		else
 			itemWindowWidth = new GlyphLayout(game.getFont("fontTable.ttf"), game.text.get("Fuel").toUpperCase()).width + 0.2f*Gdx.graphics.getWidth();
-		
-		Color colorScreenTitle = Pools.obtain(Color.class).set(2/256f, 165/256f, 200/256f, 1);	
+
+		Color colorScreenTitle = new Color(2/256f, 165/256f, 200/256f, 1);
 		//Titre de l'écran
 		screenTitleStyle = new LabelStyle(game.getFont("fontMenu.ttf"), colorScreenTitle);
 		screenTitle = new Label(game.text.get("Upgrades"), screenTitleStyle);
 		screenTitle.setAlignment(Align.center);
-		
+
 		float screenTitleWindowDimension = 0.465f*Gdx.graphics.getWidth();
-		screenTitleWindow = new UIWindow(	game.skin.getDrawable("ScreenTitle"), 
-											screenTitleWindowDimension, 
+		screenTitleWindow = new UIWindow(	game.skin.getDrawable("ScreenTitle"),
+											screenTitleWindowDimension,
 											screenTitleWindowDimension * game.skin.getRegion("ScreenTitle").getRegionHeight()/game.skin.getRegion("ScreenTitle").getRegionWidth(),
 											Gdx.graphics.getWidth() - screenTitleWindowDimension,
 											Gdx.graphics.getHeight() - screenTitleWindowDimension * game.skin.getRegion("ScreenTitle").getRegionHeight()/game.skin.getRegion("ScreenTitle").getRegionWidth());
@@ -94,14 +95,14 @@ public class UpgradeScreen implements Screen{
 		imageUpgradePointHeight = imageUpgradePointWidth * upgradeAnimation.getKeyFrame(0, true).getRegionHeight() / upgradeAnimation.getKeyFrame(0, true).getRegionWidth();
 		imageUpgradePointX = 0.02f * Gdx.graphics.getWidth();
 		imageUpgradePointY = Gdx.graphics.getHeight() - imageUpgradePointX - imageUpgradePointHeight;
-		
+
 		//Gestion des upgrades
-		inactiveUpgradeColor = Pools.obtain(Color.class).set(1/256f, 40/256f, 48/256f, 0.75f);
-		activeUpgradeColor = Pools.obtain(Color.class).set(224/256f, 208/256f, 25/256f, 1);
-		
+		inactiveUpgradeColor = new Color(1/256f, 40/256f, 48/256f, 0.75f);
+		activeUpgradeColor = new Color(224/256f, 208/256f, 25/256f, 1);
+
 		//Prix des upgrades
 		updatePrices();
-		
+
 		if(Data.getOxygenLevel() >= 5)
 			stringOxygen = game.text.get("OxygenDescription") + "\n\n" +  game.text.get("Cost") + " : " + game.text.get("Maximum").toUpperCase() + " ";
 		else
@@ -114,10 +115,16 @@ public class UpgradeScreen implements Screen{
 			stringPower = game.text.get("PowerDescription") + "\n\n" +  game.text.get("Cost") + " : " + game.text.get("Maximum").toUpperCase() + " ";
 		else
 			stringPower = game.text.get("PowerDescription") + "\n\n" +  game.text.get("Cost") + " : " + powerCost + " ";
-		
+
 		//Background
-		backgroundTexture = new Texture(Gdx.files.internal("Images/LevelScreenBackground.jpg"), true);
-		backgroundTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+		boolean webGlRuntime = Gdx.app.getType() == ApplicationType.WebGL;
+		backgroundTexture = new Texture(Gdx.files.internal("Images/LevelScreenBackground.jpg"), !webGlRuntime);
+		if(webGlRuntime){
+			backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		else{
+			backgroundTexture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.MipMapLinearNearest);
+		}
 		backgroundImage = new Image(backgroundTexture);
 		backgroundImage.setColor(1, 1, 1, 0.7f);
 		backgroundImage.setWidth(Gdx.graphics.getWidth());
@@ -125,20 +132,20 @@ public class UpgradeScreen implements Screen{
 		backgroundImage.setX(Gdx.graphics.getWidth()/2 - backgroundImage.getWidth()/2);
 		backgroundImage.setY(Gdx.graphics.getHeight()/2 - backgroundImage.getHeight()/2);
 
-		//Texts	
+		//Texts
 		quantityLabelStyle = new LabelStyle(game.getFont("fontMenu.ttf"), Color.WHITE);
 		titleLabelStyle = new LabelStyle(game.getFont("fontTable.ttf"), Color.WHITE);
 		labelStyle = new LabelStyle(game.getFont("fontUpgrade.ttf"), Color.WHITE);
-		
+
 		upgradeQuantityLabel = new Label("X " + Data.getUpgradePoint(), quantityLabelStyle);
 		upgradeQuantityLabel.setX(imageUpgradePointX + imageUpgradePointWidth + 0.009f * Gdx.graphics.getWidth());
-		upgradeQuantityLabel.setY(imageUpgradePointY + imageUpgradePointHeight/2 - upgradeQuantityLabel.getHeight()/2);	
-		
+		upgradeQuantityLabel.setY(imageUpgradePointY + imageUpgradePointHeight/2 - upgradeQuantityLabel.getHeight()/2);
+
 		//Nouvelle UI
 		//Oxygen upgrade
 		oxygenLabel = new Label(game.text.get("Oxygen").toUpperCase(), titleLabelStyle);
 		upgradesOxygen = new Array<Image>();
-		oxygenWindow = createButton(upgradesOxygen, 
+		oxygenWindow = createButton(upgradesOxygen,
 									oxygenLabel,
 									Data.getOxygenLevel(),
 									new Button(game.skin.getDrawable("MenuButton"), game.skin.getDrawable("MenuButtonCheck"), game.skin.getDrawable("MenuButtonCheck")),
@@ -149,8 +156,8 @@ public class UpgradeScreen implements Screen{
 
 		fuelLabel = new Label(game.text.get("Fuel").toUpperCase(), titleLabelStyle);
 		upgradesFuel = new Array<Image>();
-		fuelWindow = createButton(	upgradesFuel, 
-									fuelLabel, 
+		fuelWindow = createButton(	upgradesFuel,
+									fuelLabel,
 									Data.getFuelLevel(),
 									new Button(game.skin.getDrawable("MenuButton"), game.skin.getDrawable("MenuButtonCheck"), game.skin.getDrawable("MenuButtonCheck")),
 									itemWindowWidth,
@@ -160,8 +167,8 @@ public class UpgradeScreen implements Screen{
 
 		powerLabel = new Label(game.text.get("Power").toUpperCase(), titleLabelStyle);
 		upgradesPower = new Array<Image>();
-		powerWindow = createButton(	upgradesPower, 
-									powerLabel, 
+		powerWindow = createButton(	upgradesPower,
+									powerLabel,
 									Data.getPowerLevel(),
 									new Button(game.skin.getDrawable("MenuButton"), game.skin.getDrawable("MenuButtonCheck"), game.skin.getDrawable("MenuButtonCheck")),
 									itemWindowWidth,
@@ -175,7 +182,7 @@ public class UpgradeScreen implements Screen{
 		imageBuyWindow.setHeight(Gdx.graphics.getHeight() * 0.45f);
 		imageBuyWindow.setX(0.94f * Gdx.graphics.getWidth() - imageBuyWindow.getWidth());
 		imageBuyWindow.setY(oxygenWindow.getY() + oxygenWindow.getHeight() - imageBuyWindow.getHeight());
-		
+
 		labelDescription = new Label(stringOxygen, labelStyle);
 		labelDescription.setWidth(0.85f * imageBuyWindow.getWidth());
 		labelDescription.setX(imageBuyWindow.getX() + imageBuyWindow.getWidth()/2 - labelDescription.getWidth()/2);
@@ -183,34 +190,34 @@ public class UpgradeScreen implements Screen{
 		labelDescription.setWrap(true);
 		labelDescription.setAlignment(Align.topLeft);
 
-		Color colorFont = Pools.obtain(Color.class).set(2/256f, 165/256f, 200/256f, 1);	
+		Color colorFont = new Color(2/256f, 165/256f, 200/256f, 1);
 		textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = game.skin.getDrawable("Button");
 		textButtonStyle.down = game.skin.getDrawable("ButtonCheck");
 		textButtonStyle.font = game.getFont("fontUpgrade.ttf");
 		textButtonStyle.fontColor = colorFont;
 		textButtonStyle.downFontColor = Color.BLACK;
-		
+
 		//Buy button
 		buyButton = new TextButton(game.text.get("Buy"), textButtonStyle);
 		buyButton.setHeight(0.065f*Gdx.graphics.getWidth());
 		buyButton.setWidth(new GlyphLayout(game.getFont("fontTable.ttf"), game.text.get("Buy")).width + 0.03f*Gdx.graphics.getWidth());
 		buyButton.setX(imageBuyWindow.getX() + imageBuyWindow.getWidth()/2 - buyButton.getWidth()/2);
 		buyButton.setY(imageBuyWindow.getY() + 0.5f * buyButton.getPrefHeight());
-		
+
 		//Back button
 		backButton = new Button(game.skin.getDrawable("BackButtonIcon"), game.skin.getDrawable("BackButtonIconCheck"));
 		backButton.setWidth(Gdx.graphics.getWidth()/10);
 		backButton.setHeight(Gdx.graphics.getWidth()/10);
 		backButton.setX(Gdx.graphics.getWidth()/50);
 		backButton.setY(Gdx.graphics.getWidth()/50);
-		
+
 		stage.addActor(backgroundImage);
 		stage.addActor(imageBuyWindow);
 		stage.addActor(upgradeQuantityLabel);
 		stage.addActor(oxygenLabel);
 		stage.addActor(fuelLabel);
-		stage.addActor(powerLabel);	
+		stage.addActor(powerLabel);
 		oxygenWindow.addToStage(stage);
 		fuelWindow.addToStage(stage);
 		powerWindow.addToStage(stage);
@@ -218,55 +225,57 @@ public class UpgradeScreen implements Screen{
 		stage.addActor(buyButton);
 		screenTitleWindow.addToStage(stage);
 		stage.addActor(backButton);
-			
+
 		buttonGroup = new ButtonGroup<Button>();
 		buttonGroup.add(oxygenWindow.button);
 		buttonGroup.add(fuelWindow.button);
 		buttonGroup.add(powerWindow.button);
 		buttonGroup.setMinCheckCount(1);
-		buttonGroup.setMaxCheckCount(1);	
+		buttonGroup.setMaxCheckCount(1);
 
-		Pools.free(colorFont);
-		Pools.free(colorScreenTitle);
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	
+
 	    stage.act();
 	    stage.draw();
-	    
+
+	    if(Gdx.app.getType() == ApplicationType.WebGL){
+	    	return;
+	    }
+
 	    //Animation
 		animTime += Gdx.graphics.getDeltaTime();
 		game.batch.begin();
 		//Nombre de points upgrade
 	    game.batch.setColor(1, 1, 1, 1);
-	    game.batch.draw(upgradeAnimation.getKeyFrame(animTime), 
-			    		imageUpgradePointX, 
+	    game.batch.draw(upgradeAnimation.getKeyFrame(animTime),
+			    		imageUpgradePointX,
 			    		imageUpgradePointY,
-			    		imageUpgradePointWidth, 
-			    		imageUpgradePointHeight);	    
+			    		imageUpgradePointWidth,
+			    		imageUpgradePointHeight);
 	    //Prix
 	    game.batch.setColor(1, 1, 1, prixAlpha);
-	    game.batch.draw(upgradeAnimation.getKeyFrame(animTime), 
-			    		labelDescription.getX() + imagePrixPosX, 
+	    game.batch.draw(upgradeAnimation.getKeyFrame(animTime),
+			    		labelDescription.getX() + imagePrixPosX,
 			    		labelDescription.getY() + labelDescription.getHeight() - labelDescription.getPrefHeight() - 0.004f * Gdx.graphics.getWidth(),
-			    		0.025f * Gdx.graphics.getWidth(), 
+			    		0.025f * Gdx.graphics.getWidth(),
 			    		0.025f * Gdx.graphics.getWidth() * upgradeAnimation.getKeyFrame(0, true).getRegionHeight() / upgradeAnimation.getKeyFrame(0, true).getRegionWidth());
 	    game.batch.end();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		
+
 	}
 
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		
+
 		oxygenWindow.actors.get(0).addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -283,7 +292,7 @@ public class UpgradeScreen implements Screen{
 				}
 			}
 		});
-		
+
 		fuelWindow.actors.get(0).addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -300,7 +309,7 @@ public class UpgradeScreen implements Screen{
 				}
 			}
 		});
-		
+
 		powerWindow.actors.get(0).addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -317,7 +326,7 @@ public class UpgradeScreen implements Screen{
 				}
 			}
 		});
-		
+
 		buyButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -326,7 +335,7 @@ public class UpgradeScreen implements Screen{
 						Data.setUpgradePoint(Data.getUpgradePoint() - oxygenCost);
 						Data.setOxygenLevel(Data.getOxygenLevel() + 1);
 						GameConstants.MAX_OXYGEN = 150 + Data.getOxygenLevel()*(10 + Data.getOxygenLevel());
-						
+
 						upgradeQuantityLabel.setText("X " + Data.getUpgradePoint());
 						updatePrices();
 						if(Data.getOxygenLevel() < 5){
@@ -337,13 +346,13 @@ public class UpgradeScreen implements Screen{
 							stringOxygen = game.text.get("OxygenDescription") + "\n\n" +  game.text.get("Cost") + " : " + game.text.get("Maximum").toUpperCase() + " ";
 							prixAlpha = 0;
 						}
-										
+
 						for(int i = 0; i < upgradesOxygen.size; i++){
 							if(i < Data.getOxygenLevel()){
 								upgradesOxygen.get(i).setColor(activeUpgradeColor);
 							}
 						}
-						
+
 						labelDescription.setText(stringOxygen);
 					}
 		    	}
@@ -352,7 +361,7 @@ public class UpgradeScreen implements Screen{
 						Data.setUpgradePoint(Data.getUpgradePoint() - fuelCost);
 						Data.setFuelLevel(Data.getFuelLevel() + 1);
 						GameConstants.MAX_FUEL = 100 + Data.getFuelLevel()*(7 + Data.getFuelLevel());
-						
+
 						upgradeQuantityLabel.setText("X " + Data.getUpgradePoint());
 						updatePrices();
 						if(Data.getFuelLevel() < 5){
@@ -363,21 +372,21 @@ public class UpgradeScreen implements Screen{
 							stringFuel = game.text.get("FuelDescription") + "\n\n" +  game.text.get("Cost") + " : " + game.text.get("Maximum").toUpperCase() + " ";
 							prixAlpha = 0;
 						}
-										
+
 						for(int i = 0; i < upgradesFuel.size; i++){
 							if(i < Data.getFuelLevel()){
 								upgradesFuel.get(i).setColor(activeUpgradeColor);
 							}
 						}
-						
+
 						labelDescription.setText(stringFuel);
-					}	
+					}
 		    	}
 		    	else if(powerWindow.button.isChecked()){
 		    		if(Data.getPowerLevel() < 5 && Data.getUpgradePoint() >= powerCost){
 						Data.setUpgradePoint(Data.getUpgradePoint() - powerCost);
 						Data.setPowerLevel(Data.getPowerLevel() + 1);
-						
+
 						upgradeQuantityLabel.setText("X " + Data.getUpgradePoint());
 						updatePrices();
 						if(Data.getPowerLevel() < 5){
@@ -388,19 +397,19 @@ public class UpgradeScreen implements Screen{
 							stringPower = game.text.get("PowerDescription") + "\n\n" +  game.text.get("Cost") + " : " + game.text.get("Maximum").toUpperCase() + " ";
 							prixAlpha = 0;
 						}
-										
+
 						for(int i = 0; i < upgradesPower.size; i++){
 							if(i < Data.getPowerLevel()){
 								upgradesPower.get(i).setColor(activeUpgradeColor);
 							}
 						}
 					}
-		    		
+
 					labelDescription.setText(stringPower);
 		    	}
 			}
 		});
-		
+
 		backButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -413,22 +422,22 @@ public class UpgradeScreen implements Screen{
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	private UIWindow createButton(Array<Image> upgradeImages, Label label, int upgradeLevel, Button button, float width, float height, float X, float Y){	
+
+	private UIWindow createButton(Array<Image> upgradeImages, Label label, int upgradeLevel, Button button, float width, float height, float X, float Y){
 		for(int i = 0; i < 5; i++){
 			Image image = new Image(new TextureRegion(game.skin.getRegion("WhiteSquare")));
 			image.setHeight(Gdx.graphics.getWidth()/30);
@@ -436,17 +445,17 @@ public class UpgradeScreen implements Screen{
 			image.setColor(inactiveUpgradeColor);
 			upgradeImages.add(image);
 		}
-		
+
 		UIWindow uiWindow = new UIWindow(button, width, height, X, Y);
 		uiWindow.addActor(label, uiWindow.getWidth()/50, uiWindow.getHeight()/2 - label.getPrefHeight()/2);
-		
+
 		for(int i =0; i < upgradeImages.size; i++){
 			float posX = 0;
 			for(int j = i; j < upgradeImages.size; j++)
 				posX += upgradeImages.get(j).getWidth() + uiWindow.getWidth()/50;
-			
-			uiWindow.addActor(	upgradeImages.get(i), 
-									49*uiWindow.getWidth()/50 - posX, 
+
+			uiWindow.addActor(	upgradeImages.get(i),
+									49*uiWindow.getWidth()/50 - posX,
 									uiWindow.getHeight()/2 - upgradeImages.get(i).getHeight()/2);
 		}
 		//Image upgrade achetée
@@ -458,10 +467,10 @@ public class UpgradeScreen implements Screen{
 		//Les éléments par dessus le bouton ne sont pas touchables pour ne pas géner les interactions avec le bouton
 		for(int i = 1; i < uiWindow.actors.size; i++)
 			uiWindow.actors.get(i).setTouchable(Touchable.disabled);
-		
+
 		return uiWindow;
 	}
-	
+
 	public void updatePrices(){
 		oxygenCost = (int)(GameConstants.OXYGEN_UPGRADE_COST*(1 + .2f*Data.getOxygenLevel()*Data.getOxygenLevel()));
 		fuelCost = (int)(GameConstants.FUEL_UPGRADE_COST*(1 + .22f*Data.getFuelLevel()*Data.getFuelLevel()));
@@ -470,11 +479,7 @@ public class UpgradeScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		System.out.println("Upgrade Screen disposed");
 		backgroundTexture.dispose();
 		stage.dispose();
-		game.skin.dispose();
-		Pools.free(inactiveUpgradeColor);
-		Pools.free(activeUpgradeColor);
 	}
 }

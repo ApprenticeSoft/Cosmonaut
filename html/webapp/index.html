@@ -18,6 +18,52 @@
     embed.addEventListener('contextmenu', function(evt) {
         evt.preventDefault();
     }, false);
+
+    let immersiveRequested = false;
+
+    async function requestImmersiveLandscape() {
+        if (immersiveRequested) {
+            return;
+        }
+        immersiveRequested = true;
+
+        const root = document.documentElement;
+        try {
+            if (!document.fullscreenElement) {
+                if (root.requestFullscreen) {
+                    await root.requestFullscreen({ navigationUI: 'hide' });
+                } else if (root.webkitRequestFullscreen) {
+                    root.webkitRequestFullscreen();
+                } else {
+                    immersiveRequested = false;
+                }
+            }
+        } catch (err) {
+            // Allow retry after a blocked fullscreen request.
+            immersiveRequested = false;
+        }
+
+        try {
+            if (screen.orientation && screen.orientation.lock) {
+                await screen.orientation.lock('landscape');
+            }
+        } catch (err) {
+            // Ignore unsupported orientation locking.
+        }
+    }
+
+    function triggerImmersiveRequest() {
+        requestImmersiveLandscape();
+    }
+
+    window.addEventListener('click', triggerImmersiveRequest, { once: true });
+    window.addEventListener('keydown', triggerImmersiveRequest, { once: true });
+
+    document.addEventListener('fullscreenchange', function () {
+        if (!document.fullscreenElement) {
+            immersiveRequested = false;
+        }
+    });
 </script>
 </body>
 </html>

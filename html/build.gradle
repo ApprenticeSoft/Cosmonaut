@@ -75,9 +75,11 @@ tasks.register("compileGwt", JavaExec) {
             file("../core/src")
     )
 
+    def gwtStyle = (findProperty("gwtStyle") ?: "OBF").toString()
+
     args = [
             "-war", "$buildDir/gwt/out",
-            "-style", "OBF",
+            "-style", gwtStyle,
             "-logLevel", "INFO",
             "-localWorkers", "1",
             "com.cosmonaut.GdxDefinition"

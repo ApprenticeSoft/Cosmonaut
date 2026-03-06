@@ -68,9 +68,16 @@ tasks.register("fatJar", Jar) {
 
 def desktopVersion = "2.0.0"
 def windowsDistDir = file("$buildDir/windows-dist")
+def windowsPortableDistDir = file("$buildDir/windows-portable-dist")
 def launch4jDir = file("$buildDir/launch4j")
 def launch4jHomeDir = file("$launch4jDir/launch4j-3.50-workdir-linux64")
 def launch4jConfigFile = file("$buildDir/tmp/launch4j/cosmonaut.xml")
+def launch4jPortableConfigFile = file("$buildDir/tmp/launch4j/cosmonaut-portable.xml")
+def windowsRuntimeZip = file("$buildDir/tmp/windows-runtime/windows-jre17.zip")
+def windowsRuntimeExtractDir = file("$buildDir/tmp/windows-runtime/extracted")
+def windowsPortableRuntimeDir = file("$windowsPortableDistDir/runtime")
+def windowsRuntimeUrl = (findProperty("windowsRuntimeUrl")
+        ?: "https://api.adoptium.net/v3/binary/latest/17/ga/windows/x64/jre/hotspot/normal/eclipse").toString()
 
 tasks.register("prepareLaunch4jTool") {
     group = "distribution"
@@ -115,6 +122,31 @@ tasks.register("prepareWindowsDist") {
     }
 }
 
+tasks.register("prepareWindowsPortableDist") {
+    group = "distribution"
+    description = "Prepares portable Windows packaging directory."
+    dependsOn("fatJar")
+
+    doLast {
+        delete windowsPortableDistDir
+        windowsPortableDistDir.mkdirs()
+        copy {
+            from(tasks.named("fatJar"))
+            into(windowsPortableDistDir)
+        }
+
+        new File(windowsPortableDistDir, "README.txt").text = """Cosmonaut Windows (Self-Contained)
+
+Launch:
+- Double-click Cosmonaut.exe
+
+Notes:
+- This package includes a bundled Java runtime in ./runtime.
+- No Java installation is required on the target Windows machine.
+"""
+    }
+}
+
 tasks.register("writeLaunch4jConfig") {
     group = "distribution"
     description = "Writes Launch4j configuration for Windows EXE packaging."
@@ -142,6 +174,80 @@ tasks.register("writeLaunch4jConfig") {
     }
 }
 
+tasks.register("downloadWindowsRuntime") {
+    group = "distribution"
+    description = "Downloads a Windows Java 17 runtime ZIP for portable packaging."
+    outputs.file(windowsRuntimeZip)
+
+    doLast {
+        windowsRuntimeZip.parentFile.mkdirs()
+        if (!windowsRuntimeZip.exists()) {
+            ant.get(src: windowsRuntimeUrl, dest: windowsRuntimeZip, verbose: true, usetimestamp: true)
+        }
+    }
+}
+
+tasks.register("prepareWindowsPortableRuntime") {
+    group = "distribution"
+    description = "Expands the downloaded Windows runtime into portable dist folder."
+    dependsOn("prepareWindowsPortableDist", "downloadWindowsRuntime")
+
+    doLast {
+        delete windowsRuntimeExtractDir
+        windowsRuntimeExtractDir.mkdirs()
+        delete windowsPortableRuntimeDir
+        windowsPortableRuntimeDir.mkdirs()
+
+        copy {
+            from(zipTree(windowsRuntimeZip))
+            into(windowsRuntimeExtractDir)
+        }
+
+        def extractedDirs = windowsRuntimeExtractDir.listFiles().findAll { it.isDirectory() }
+        if (extractedDirs.isEmpty()) {
+            throw new GradleException("Windows runtime archive extraction produced no directory.")
+        }
+
+        def runtimeRoot = extractedDirs.size() == 1 ? extractedDirs[0] : windowsRuntimeExtractDir
+        copy {
+            from(runtimeRoot)
+            into(windowsPortableRuntimeDir)
+        }
+
+        if (!new File(windowsPortableRuntimeDir, "bin/javaw.exe").exists()) {
+            throw new GradleException("Portable runtime is missing bin/javaw.exe in ${windowsPortableRuntimeDir}")
+        }
+    }
+}
+
+tasks.register("writeLaunch4jPortableConfig") {
+    group = "distribution"
+    description = "Writes Launch4j configuration for self-contained Windows EXE packaging."
+    dependsOn("prepareWindowsPortableRuntime")
+    outputs.file(launch4jPortableConfigFile)
+
+    doLast {
+        launch4jPortableConfigFile.parentFile.mkdirs()
+        def jarPath = new File(windowsPortableDistDir, "cosmonaut-desktop-${desktopVersion}.jar").absolutePath.replace("\\", "/")
+        def exePath = new File(windowsPortableDistDir, "Cosmonaut.exe").absolutePath.replace("\\", "/")
+
+        launch4jPortableConfigFile.text = """<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>${jarPath}</jar>
+  <outfile>${exePath}</outfile>
+  <errTitle>Cosmonaut</errTitle>
+  <chdir>.</chdir>
+  <jre>
+    <path>runtime</path>
+    <minVersion>17</minVersion>
+  </jre>
+</launch4jConfig>
+"""
+    }
+}
+
 tasks.register("windowsExe", JavaExec) {
     group = "distribution"
     description = "Builds Windows executable wrapper (Cosmonaut.exe)."
@@ -149,6 +255,21 @@ tasks.register("windowsExe", JavaExec) {
     mainClass = "net.sf.launch4j.Main"
     systemProperty("launch4j.bindir", new File(launch4jHomeDir, "bin").absolutePath)
     args(launch4jConfigFile.absolutePath)
+
+    doFirst {
+        def coreJar = new File(launch4jHomeDir, "launch4j-3.50.jar")
+        def deps = configurations.launch4j.files.findAll { it.name != "launch4j-3.50.jar" }
+        classpath = files([coreJar] + deps)
+    }
+}
+
+tasks.register("windowsPortableExe", JavaExec) {
+    group = "distribution"
+    description = "Builds a self-contained Windows executable wrapper (Cosmonaut.exe + bundled runtime)."
+    dependsOn("writeLaunch4jPortableConfig", "prepareLaunch4jTool")
+    mainClass = "net.sf.launch4j.Main"
+    systemProperty("launch4j.bindir", new File(launch4jHomeDir, "bin").absolutePath)
+    args(launch4jPortableConfigFile.absolutePath)
 
     doFirst {
         def coreJar = new File(launch4jHomeDir, "launch4j-3.50.jar")
@@ -166,6 +287,19 @@ tasks.register("windowsBundle", Zip) {
     archiveVersion.set("2.0.0")
 
     from(windowsDistDir) {
+        into("Cosmonaut")
+    }
+}
+
+tasks.register("windowsPortableBundle", Zip) {
+    group = "distribution"
+    description = "Creates a self-contained Windows bundle (EXE + embedded Java runtime)."
+    dependsOn("windowsPortableExe")
+
+    archiveBaseName.set("cosmonaut-windows-self-contained-local")
+    archiveVersion.set("2.0.0")
+
+    from(windowsPortableDistDir) {
         into("Cosmonaut")
     }
 }

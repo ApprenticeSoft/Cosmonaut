@@ -79,7 +79,10 @@ public class IntroScreen implements Screen{
 		
 		atlas = game.assets.get("Images/Intro/Images_Intro.pack", TextureAtlas.class);
 		skin = new Skin(atlas);
-		stage = new Stage();
+		if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+			stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+		else
+			stage = new Stage();
 		
 		//Label
 		labelStyle = new LabelStyle(game.getFont("fontDialogue.ttf"), Color.WHITE);

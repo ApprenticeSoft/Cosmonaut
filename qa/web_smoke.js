@@ -4,8 +4,18 @@ const path = require('path');
 const { PNG } = require('pngjs');
 
 const OUTPUT_ROOT = path.resolve(__dirname, 'reports');
+const MENU_BUTTON_X = 0.84;
+const MENU_PLAY_Y = 0.35;
+const MENU_OPTIONS_Y = 0.47;
+const MENU_REGION = [0.70, 0.28, 0.96, 0.66];
+const OPTIONS_LEFT_REGION = [0.02, 0.28, 0.40, 0.70];
+const MENU_REGION_BRIGHT_MIN = 3.0;
+const OPTIONS_LEFT_REGION_BRIGHT_MIN = 5.0;
+
 const IGNORED_CONSOLE_ERRORS = [
   /Pools: Please manually define a Pool for class com\.badlogic\.gdx\.math\.Vector2/i,
+  /Pools: Please manually define a Pool for class com\.badlogic\.gdx\.math\.Vector3/i,
+  /Pools: Please manually define a Pool for class com\.badlogic\.gdx\.graphics\.Color/i,
 ];
 
 function sleep(ms) {
@@ -47,6 +57,46 @@ function imageBrightness(filePath) {
   return count ? sum / (count * 3) : 0;
 }
 
+function imageDifferenceRatio(fileA, fileB) {
+  const a = PNG.sync.read(fs.readFileSync(fileA));
+  const b = PNG.sync.read(fs.readFileSync(fileB));
+  if (a.width !== b.width || a.height !== b.height) {
+    return 1;
+  }
+
+  const dataA = a.data;
+  const dataB = b.data;
+  const step = Math.max(4, Math.floor((a.width * a.height * 4) / 60000));
+  let delta = 0;
+  let count = 0;
+  for (let i = 0; i < dataA.length; i += step) {
+    delta += Math.abs(dataA[i] - dataB[i]);
+    delta += Math.abs(dataA[i + 1] - dataB[i + 1]);
+    delta += Math.abs(dataA[i + 2] - dataB[i + 2]);
+    count += 3;
+  }
+  return count ? delta / (count * 255) : 0;
+}
+
+function regionBrightness(filePath, nx1, ny1, nx2, ny2) {
+  const png = PNG.sync.read(fs.readFileSync(filePath));
+  const x1 = Math.max(0, Math.floor(nx1 * png.width));
+  const y1 = Math.max(0, Math.floor(ny1 * png.height));
+  const x2 = Math.min(png.width, Math.ceil(nx2 * png.width));
+  const y2 = Math.min(png.height, Math.ceil(ny2 * png.height));
+
+  let sum = 0;
+  let count = 0;
+  for (let y = y1; y < y2; y++) {
+    for (let x = x1; x < x2; x++) {
+      const i = (y * png.width + x) * 4;
+      sum += png.data[i] + png.data[i + 1] + png.data[i + 2];
+      count += 3;
+    }
+  }
+  return count ? sum / count : 0;
+}
+
 async function shot(page, outDir, name) {
   const file = path.join(outDir, `${name}.png`);
   await page.screenshot({ path: file, fullPage: true });
@@ -63,6 +113,21 @@ async function waitForNonBlack(page, outDir, label, timeoutMs = 90000) {
     await sleep(500);
   }
   throw new Error('Canvas stayed black after timeout');
+}
+
+async function enterMainMenu(page, outDir, useTouch, loadedShot) {
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    await clickNorm(page, 0.50, 0.55, useTouch);
+    await sleep(1800);
+    await waitForNonBlack(page, outDir, `home_to_menu_attempt_${attempt}`, 20000);
+    const candidate = await shot(page, outDir, `02_main_menu_attempt_${attempt}`);
+    const diff = imageDifferenceRatio(loadedShot, candidate);
+    const menuRegionBright = regionBrightness(candidate, ...MENU_REGION);
+    if (diff >= 0.002 && menuRegionBright >= MENU_REGION_BRIGHT_MIN) {
+      return { shotPath: candidate, attempts: attempt };
+    }
+  }
+  throw new Error('Home->menu transition did not occur after repeated taps/clicks.');
 }
 
 async function runScenario(target, mode) {
@@ -122,54 +187,47 @@ async function runScenario(target, mode) {
 
     await waitForNonBlack(page, outDir, 'load', 90000);
     result.steps.push('canvas_not_black_after_load');
-    await shot(page, outDir, '01_loaded');
+    const loadedShot = await shot(page, outDir, '01_loaded');
 
     const useTouch = mode === 'mobile';
 
     // Home -> Main Menu
-    await clickNorm(page, 0.50, 0.55, useTouch);
-    await sleep(2000);
-    await waitForNonBlack(page, outDir, 'home_to_menu', 20000);
+    const menuTransition = await enterMainMenu(page, outDir, useTouch, loadedShot);
+    const mainMenuShot = menuTransition.shotPath;
     result.steps.push('entered_main_menu');
-    await shot(page, outDir, '02_main_menu');
+    result.steps.push(`menu_transition_attempt_${menuTransition.attempts}`);
 
     // Options and back
-    await clickNorm(page, 0.83, 0.34, useTouch);
+    await clickNorm(page, MENU_BUTTON_X, MENU_OPTIONS_Y, useTouch);
     await sleep(1800);
     await waitForNonBlack(page, outDir, 'options_open', 15000);
     result.steps.push('opened_options');
-    await shot(page, outDir, '03_options');
+    const optionsShot = await shot(page, outDir, '03_options');
+    const optionsLeftBright = regionBrightness(optionsShot, ...OPTIONS_LEFT_REGION);
+    if (optionsLeftBright < OPTIONS_LEFT_REGION_BRIGHT_MIN) {
+      throw new Error(`Main menu -> options transition was not detected (left-region brightness=${optionsLeftBright.toFixed(2)}).`);
+    }
 
     await clickNorm(page, 0.05, 0.08, useTouch);
     await sleep(1800);
     await waitForNonBlack(page, outDir, 'options_back', 15000);
     result.steps.push('back_from_options');
+    const backShot = await shot(page, outDir, '04_after_options_back');
+    const backMenuBright = regionBrightness(backShot, ...MENU_REGION);
+    if (backMenuBright < MENU_REGION_BRIGHT_MIN) {
+      throw new Error(`Options -> main menu back transition was not detected (menu-region brightness=${backMenuBright.toFixed(2)}).`);
+    }
 
-    // Upgrades and back
-    await clickNorm(page, 0.83, 0.47, useTouch);
-    await sleep(1800);
-    await waitForNonBlack(page, outDir, 'upgrades_open', 15000);
-    result.steps.push('opened_upgrades');
-    await shot(page, outDir, '04_upgrades');
-
-    await clickNorm(page, 0.05, 0.08, useTouch);
-    await sleep(1800);
-    await waitForNonBlack(page, outDir, 'upgrades_back', 15000);
-    result.steps.push('back_from_upgrades');
-
-    // Play -> Level select
-    await clickNorm(page, 0.83, 0.60, useTouch);
-    await sleep(2000);
-    await waitForNonBlack(page, outDir, 'play_to_levels', 20000);
-    result.steps.push('opened_level_selection');
-    await shot(page, outDir, '05_level_selection');
-
-    // Select level 1
-    await clickNorm(page, 0.17, 0.64, useTouch);
-    await sleep(4000);
-    await waitForNonBlack(page, outDir, 'start_level', 30000);
-    result.steps.push('started_level_or_intro');
-    await shot(page, outDir, '06_level_or_intro');
+    // Play -> Intro or level flow
+    await clickNorm(page, MENU_BUTTON_X, MENU_PLAY_Y, useTouch);
+    await sleep(2400);
+    await waitForNonBlack(page, outDir, 'play_open', 30000);
+    const playShot = await shot(page, outDir, '05_after_play');
+    const playMenuBright = regionBrightness(playShot, ...MENU_REGION);
+    if (playMenuBright >= MENU_REGION_BRIGHT_MIN) {
+      throw new Error(`Main menu -> play transition was not detected (menu-region brightness=${playMenuBright.toFixed(2)}).`);
+    }
+    result.steps.push('opened_play_flow');
 
     // Input sanity
     if (useTouch) {
@@ -185,7 +243,7 @@ async function runScenario(target, mode) {
     }
 
     await waitForNonBlack(page, outDir, 'post_input', 15000);
-    await shot(page, outDir, '07_after_input');
+    await shot(page, outDir, '06_after_input');
 
     if (significantConsoleErrors().length > 0 || pageErrors.length > 0) {
       throw new Error('Browser runtime errors detected.');

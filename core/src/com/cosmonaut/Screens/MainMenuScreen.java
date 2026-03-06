@@ -91,7 +91,10 @@ public class MainMenuScreen implements Screen{
 		transitionImage.addAction(Actions.alpha(0));
 		transitionImage.setVisible(false);
 		
-		stage = new Stage();
+		if(Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.WebGL)
+			stage = new Stage(new com.badlogic.gdx.utils.viewport.ScreenViewport(), game.batch);
+		else
+			stage = new Stage();
 			
 		textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = game.skin.getDrawable("Button");
@@ -105,12 +108,13 @@ public class MainMenuScreen implements Screen{
 		playButton.setWidth(new GlyphLayout(game.getFont("fontTable.ttf"), game.text.get("Upgrades")).width * 1.2f);
 		playButton.setX(Gdx.graphics.getWidth() - 0.17f * Gdx.graphics.getWidth() - playButton.getWidth()/2);
 		playButton.setY(0.6f * Gdx.graphics.getHeight());
+		float menuSpacing = Gdx.graphics.getHeight()/100f;
 
 		upgradeButton = new TextButton(game.text.get("Upgrades"), textButtonStyle);
 		upgradeButton.setWidth(playButton.getWidth());
 		upgradeButton.setHeight(playButton.getHeight());
 		upgradeButton.setX(playButton.getX());
-		upgradeButton.setY(playButton.getY() - upgradeButton.getHeight() - Gdx.graphics.getHeight()/100);
+		upgradeButton.setY(playButton.getY() - upgradeButton.getHeight() - menuSpacing);
 
 		/*
 		 * Upgrade button glow
@@ -126,7 +130,7 @@ public class MainMenuScreen implements Screen{
 		upgradeButton2.setWidth(playButton.getWidth());
 		upgradeButton2.setHeight(playButton.getHeight());
 		upgradeButton2.setX(playButton.getX());
-		upgradeButton2.setY(playButton.getY() - upgradeButton.getHeight() - Gdx.graphics.getHeight()/100);
+		upgradeButton2.setY(playButton.getY() - upgradeButton.getHeight() - menuSpacing);
 		upgradeButton2.addAction(Actions.alpha(0));
 		/*
 		 * ******************************************
@@ -137,13 +141,22 @@ public class MainMenuScreen implements Screen{
 		optionButton.setWidth(playButton.getWidth());
 		optionButton.setHeight(playButton.getHeight());
 		optionButton.setX(playButton.getX());
-		optionButton.setY(upgradeButton.getY() - optionButton.getHeight() - Gdx.graphics.getHeight()/100);
+		optionButton.setY(upgradeButton.getY() - optionButton.getHeight() - menuSpacing);
 		
 		quitButton = new TextButton(game.text.get("Quit"), textButtonStyle);
 		quitButton.setWidth(playButton.getWidth());
 		quitButton.setHeight(playButton.getHeight());
 		quitButton.setX(playButton.getX());
-		quitButton.setY(optionButton.getY() - quitButton.getHeight() - Gdx.graphics.getHeight()/100);
+		quitButton.setY(optionButton.getY() - quitButton.getHeight() - menuSpacing);
+
+		if(Gdx.app.getType() == ApplicationType.WebGL){
+			upgradeButton.setVisible(false);
+			upgradeButton.setTouchable(Touchable.disabled);
+			upgradeButton2.setVisible(false);
+			upgradeButton2.setTouchable(Touchable.disabled);
+			optionButton.setY(playButton.getY() - optionButton.getHeight() - menuSpacing);
+			quitButton.setY(optionButton.getY() - quitButton.getHeight() - menuSpacing);
+		}
 		
 		/*
 		 * Réseaux sociaux
