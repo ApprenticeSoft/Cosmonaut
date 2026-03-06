@@ -148,13 +148,13 @@ public class Obstacle {
 	public void setInitialState(MapObject mapObject){
 		//Association Number
 		if(mapObject.getProperties().get("Association Number") != null){
-			associationNumber = Integer.parseInt((String) mapObject.getProperties().get("Association Number"));
+			associationNumber = Integer.parseInt(mapObject.getProperties().get("Association Number").toString());
 		}
 		else associationNumber = 666;
 		
 		//Is the Obstacle active ?
 		if(mapObject.getProperties().get("Active") != null){
-			if(Integer.parseInt((String) mapObject.getProperties().get("Active")) == 1)
+			if(Integer.parseInt(mapObject.getProperties().get("Active").toString()) == 1)
 				active = true;
 			else 
 				active = false;

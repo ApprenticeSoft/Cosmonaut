@@ -35,13 +35,13 @@ public class ObstacleDoor extends Obstacle{
 		
 		//Is the door out of order ?
 		if(rectangleObject.getProperties().get("Out of order") != null){
-			outOfOrder = Boolean.parseBoolean((String) rectangleObject.getProperties().get("Out of order"));
+			outOfOrder = Boolean.parseBoolean(rectangleObject.getProperties().get("Out of order").toString());
 		}
 		else outOfOrder = false;
 		
 		//Motion speed
 		if(rectangleObject.getProperties().get("Speed") != null){
-			speed = Float.parseFloat((String) rectangleObject.getProperties().get("Speed"));
+			speed = Float.parseFloat(rectangleObject.getProperties().get("Speed").toString());
 		}
 		else speed = 5;
 		
@@ -68,7 +68,7 @@ public class ObstacleDoor extends Obstacle{
 		
 		//Is the door already open ?
 		if(rectangleObject.getProperties().get("Open") != null){
-			alreadyOpen = Boolean.parseBoolean((String) rectangleObject.getProperties().get("Open"));
+			alreadyOpen = Boolean.parseBoolean(rectangleObject.getProperties().get("Open").toString());
 		}
 		else alreadyOpen = false;
 		
@@ -102,13 +102,13 @@ public class ObstacleDoor extends Obstacle{
 		
 		//Is the door out of order ?
 		if(rectangleObject.getProperties().get("Out of order") != null){
-			outOfOrder = Boolean.parseBoolean((String) rectangleObject.getProperties().get("Out of order"));
+			outOfOrder = Boolean.parseBoolean(rectangleObject.getProperties().get("Out of order").toString());
 		}
 		else outOfOrder = false;
 		
 		//Motion speed
 		if(rectangleObject.getProperties().get("Speed") != null){
-			speed = Float.parseFloat((String) rectangleObject.getProperties().get("Speed"));
+			speed = Float.parseFloat(rectangleObject.getProperties().get("Speed").toString());
 		}
 		else speed = 5;
 		
@@ -135,7 +135,7 @@ public class ObstacleDoor extends Obstacle{
 		
 		//Is the door already open ?
 		if(rectangleObject.getProperties().get("Open") != null){
-			alreadyOpen = Boolean.parseBoolean((String) rectangleObject.getProperties().get("Open"));
+			alreadyOpen = Boolean.parseBoolean(rectangleObject.getProperties().get("Open").toString());
 		}
 		else alreadyOpen = false;
 		

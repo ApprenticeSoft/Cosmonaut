@@ -61,27 +61,27 @@ public class ObstaclePiston extends Obstacle{
 			
 		//Delay before activation
 		if(rectangleObject1.getProperties().get("Delay") != null){
-			delay = Float.parseFloat((String) rectangleObject1.getProperties().get("Delay"));
+			delay = Float.parseFloat(rectangleObject1.getProperties().get("Delay").toString());
 		}
 		else if(rectangleObject2.getProperties().get("Delay") != null){
-			delay = Float.parseFloat((String) rectangleObject2.getProperties().get("Delay"));
+			delay = Float.parseFloat(rectangleObject2.getProperties().get("Delay").toString());
 		}
 		
 		//Motion speed
 		if(rectangleObject1.getProperties().get("Speed") != null){
-			speedReference = Float.parseFloat((String) rectangleObject1.getProperties().get("Speed"));
+			speedReference = Float.parseFloat(rectangleObject1.getProperties().get("Speed").toString());
 		}
 		else if(rectangleObject2.getProperties().get("Speed") != null){
-			speedReference = Float.parseFloat((String) rectangleObject2.getProperties().get("Speed"));
+			speedReference = Float.parseFloat(rectangleObject2.getProperties().get("Speed").toString());
 		}
 		speed = speedReference;
 		
 		//Pause
 		if(rectangleObject1.getProperties().get("Pause") != null){
-			pauseReference = Float.parseFloat((String) rectangleObject1.getProperties().get("Pause"));
+			pauseReference = Float.parseFloat(rectangleObject1.getProperties().get("Pause").toString());
 		}
 		else if(rectangleObject2.getProperties().get("Pause") != null){
-			pauseReference = Float.parseFloat((String) rectangleObject2.getProperties().get("Pause"));
+			pauseReference = Float.parseFloat(rectangleObject2.getProperties().get("Pause").toString());
 		}
 		else pauseReference = 0;
 		
@@ -193,19 +193,19 @@ public class ObstaclePiston extends Obstacle{
 			
 		//Delay before activation
 		if(rectangleObject1.getProperties().get("Delay") != null){
-			delay = Float.parseFloat((String) rectangleObject1.getProperties().get("Delay"));
+			delay = Float.parseFloat(rectangleObject1.getProperties().get("Delay").toString());
 		}
 		else if(rectangleObject2.getProperties().get("Delay") != null){
-			delay = Float.parseFloat((String) rectangleObject2.getProperties().get("Delay"));
+			delay = Float.parseFloat(rectangleObject2.getProperties().get("Delay").toString());
 		}
 		else delay = 0;
 		
 		//Motion speed
 		if(rectangleObject1.getProperties().get("Speed") != null){
-			speedReference = Float.parseFloat((String) rectangleObject1.getProperties().get("Speed"));
+			speedReference = Float.parseFloat(rectangleObject1.getProperties().get("Speed").toString());
 		}
 		else if(rectangleObject2.getProperties().get("Speed") != null){
-			speedReference = Float.parseFloat((String) rectangleObject2.getProperties().get("Speed"));
+			speedReference = Float.parseFloat(rectangleObject2.getProperties().get("Speed").toString());
 		}
 		else speedReference = 10;
 		
@@ -213,10 +213,10 @@ public class ObstaclePiston extends Obstacle{
 		
 		//Pause
 		if(rectangleObject1.getProperties().get("Pause") != null){
-			pauseReference = Float.parseFloat((String) rectangleObject1.getProperties().get("Pause"));
+			pauseReference = Float.parseFloat(rectangleObject1.getProperties().get("Pause").toString());
 		}
 		else if(rectangleObject2.getProperties().get("Pause") != null){
-			pauseReference = Float.parseFloat((String) rectangleObject2.getProperties().get("Pause"));
+			pauseReference = Float.parseFloat(rectangleObject2.getProperties().get("Pause").toString());
 		}
 		else pauseReference = 0;
 		pause = 0;

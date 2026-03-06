@@ -63,7 +63,7 @@ public class Gyrophare {
     	
 		//Distance
 		if(mapObject.getProperties().get("Distance") != null)
-			distance = Float.parseFloat((String) mapObject.getProperties().get("Distance"));
+			distance = Float.parseFloat(mapObject.getProperties().get("Distance").toString());
 		else distance = 60;
 		
 		//Color
@@ -81,14 +81,14 @@ public class Gyrophare {
 
 		//Cone angle
 		if(mapObject.getProperties().get("Angle") != null)
-			angle = Float.parseFloat((String) mapObject.getProperties().get("Angle"));
+			angle = Float.parseFloat(mapObject.getProperties().get("Angle").toString());
 		else angle = 35;
 		
 		nbRay = (int)(angle * 2 * GameConstants.LIGHT_RAY_MULTIPLICATOR);
 
 		//Speed
 		if(mapObject.getProperties().get("Speed") != null)
-			speed = Integer.parseInt((String) mapObject.getProperties().get("Speed"));
+			speed = Integer.parseInt(mapObject.getProperties().get("Speed").toString());
 		else speed = 10;
 	}
 	

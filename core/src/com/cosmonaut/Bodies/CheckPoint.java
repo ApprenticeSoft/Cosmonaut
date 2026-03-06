@@ -24,7 +24,7 @@ public class CheckPoint extends Obstacle{
 		
 		//Reference Number
 		if(rectangleObject.getProperties().get("Number") != null){
-			referenceNumber = Integer.parseInt((String) rectangleObject.getProperties().get("Number"));
+			referenceNumber = Integer.parseInt(rectangleObject.getProperties().get("Number").toString());
 		}
 	}
 	

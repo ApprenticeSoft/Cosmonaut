@@ -26,27 +26,27 @@ public class Dialogue extends Obstacle{
 		
 		//Reference Number
 		if(rectangleObject.getProperties().get("Number") != null){
-			referenceNumber = Integer.parseInt((String) rectangleObject.getProperties().get("Number"));
+			referenceNumber = Integer.parseInt(rectangleObject.getProperties().get("Number").toString());
 		}
 		
 		//Paragraph Number
 		if(rectangleObject.getProperties().get("Paragraph") != null){
-			paragraphNumber = Integer.parseInt((String) rectangleObject.getProperties().get("Paragraph"));
+			paragraphNumber = Integer.parseInt(rectangleObject.getProperties().get("Paragraph").toString());
 		}
 		
 		//Line Number
 		if(rectangleObject.getProperties().get("Line") != null){
-			lineNumber = Integer.parseInt((String) rectangleObject.getProperties().get("Line"));
+			lineNumber = Integer.parseInt(rectangleObject.getProperties().get("Line").toString());
 		}
 		
 		//File Name
 		if(rectangleObject.getProperties().get("File") != null){
-			fileName = (String) rectangleObject.getProperties().get("File");
+			fileName = rectangleObject.getProperties().get("File").toString();
 		}
 		
 		//Is the switch on ?
 		if(rectangleObject.getProperties().get("SingleUse") != null){
-			singleUse = Boolean.parseBoolean((String) rectangleObject.getProperties().get("SingleUse"));
+			singleUse = Boolean.parseBoolean(rectangleObject.getProperties().get("SingleUse").toString());
 		}
 	}
 	

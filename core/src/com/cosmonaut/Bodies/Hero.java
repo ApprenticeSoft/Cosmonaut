@@ -184,21 +184,30 @@ public class Hero {
         spriteSuffocateHeight = spriteHeight * tomSuffocate.getKeyFrame(0, true).getRegionHeight() / idleAnimations[0].getKeyFrame(0, true).getRegionHeight();
       
         //Shader
-        ShaderProgram.pedantic = false;	     
-        contourShader = new ShaderProgram(	Gdx.files.internal("Shaders/Outline-vertex.glsl"),
-						        		  	Gdx.files.internal("Shaders/Outline-fragment.glsl")
-        );
-          
-        Vector2 shaderResolution = Pools.obtain(Vector2.class).set(1f / Gdx.graphics.getWidth(), 1f / Gdx.graphics.getHeight());
-        Vector3 shaderColor = Pools.obtain(Vector3.class).set(14/256, 110/256, 1);
-		contourShader.begin();
-		contourShader.setUniformf("u_viewportInverse", shaderResolution);
-		contourShader.setUniformf("u_offset", 3);
-		contourShader.setUniformf("u_step", Math.min(1f, Gdx.graphics.getWidth() / 70f));
-		contourShader.setUniformf("u_color", shaderColor);
-		contourShader.end();
-		Pools.free(shaderResolution);
-		Pools.free(shaderColor);
+        boolean supportsContourShader = Gdx.app.getType() != ApplicationType.WebGL;
+        if(supportsContourShader){
+	        ShaderProgram.pedantic = false;
+	        contourShader = new ShaderProgram(	Gdx.files.internal("Shaders/Outline-vertex.glsl"),
+							        		  	Gdx.files.internal("Shaders/Outline-fragment.glsl")
+	        );
+	        if(contourShader.isCompiled()){
+	        	Vector2 shaderResolution = Pools.obtain(Vector2.class).set(1f / Gdx.graphics.getWidth(), 1f / Gdx.graphics.getHeight());
+	        	Vector3 shaderColor = Pools.obtain(Vector3.class).set(14/256, 110/256, 1);
+				contourShader.begin();
+				contourShader.setUniformf("u_viewportInverse", shaderResolution);
+				contourShader.setUniformf("u_offset", 3);
+				contourShader.setUniformf("u_step", Math.min(1f, Gdx.graphics.getWidth() / 70f));
+				contourShader.setUniformf("u_color", shaderColor);
+				contourShader.end();
+				Pools.free(shaderResolution);
+				Pools.free(shaderColor);
+	        }
+	        else{
+	        	Gdx.app.error("Hero", "Outline shader compile failed: " + contourShader.getLog());
+	        	contourShader.dispose();
+	        	contourShader = null;
+	        }
+        }
 
         for(int i = 0; i < legCoordinates.length; i++)
     		Pools.free(legCoordinates[i]); 	
@@ -309,7 +318,9 @@ public class Hero {
 			/*
 			 * Contour bleuté
 			 */
-			game.batch.setShader(contourShader);
+			if(contourShader != null){
+				game.batch.setShader(contourShader);
+			}
 			batch.draw(	tomElectrocuted.getKeyFrame(animTime, true), 
 						heroBody.getPosition().x - spriteElectrocutedWidth/2, 
 						heroBody.getPosition().y - spriteElectrocutedHeight/2 - bodyHeight/2, 
@@ -320,7 +331,9 @@ public class Hero {
 						1,
 						1,
 						heroBody.getAngle()*MathUtils.radiansToDegrees);
-			game.batch.setShader(null);
+			if(contourShader != null){
+				game.batch.setShader(null);
+			}
 			
 			/*
 			 * Dessin du cosmonaute

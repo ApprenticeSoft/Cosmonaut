@@ -31,9 +31,9 @@ public class SoundTrigger extends Item{
 		this.game = game;
 		
 		if(mapObject.getProperties().get("Fading") != null)
-			fading = Float.parseFloat((String) mapObject.getProperties().get("Fading"));
+			fading = Float.parseFloat(mapObject.getProperties().get("Fading").toString());
 		else fading = 0.1f;
-		music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/" + (String) mapObject.getProperties().get("MusicFile") +".ogg"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/" + mapObject.getProperties().get("MusicFile").toString() +".ogg"));
 		music.setVolume(volume);
 		game.musics.add(music);
 

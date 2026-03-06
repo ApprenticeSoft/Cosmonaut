@@ -32,7 +32,7 @@ public class Upgrade extends Item{
 		upgradeAnimation = new Animation<TextureRegion>(0.08f, upgradeAtlas.findRegions("Upgrade_Animation"), Animation.PlayMode.LOOP);
 		
 		if(mapObject.getProperties().get("ID") != null)
-			ID = Integer.parseInt((String) mapObject.getProperties().get("ID"));
+			ID = Integer.parseInt(mapObject.getProperties().get("ID").toString());
 
 		create(world, mapObject, rayHandler);
 
@@ -57,7 +57,7 @@ public class Upgrade extends Item{
 		lightColor.set(14/256f, 151/256f, 237/256f, 0.98f);	
 		
 		if(mapObject.getProperties().get("ID") != null)
-			ID = Integer.parseInt((String) mapObject.getProperties().get("ID"));
+			ID = Integer.parseInt(mapObject.getProperties().get("ID").toString());
 
 		create(world, mapObject, rayHandler);
 

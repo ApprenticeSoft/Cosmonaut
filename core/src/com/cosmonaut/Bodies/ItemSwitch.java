@@ -72,7 +72,7 @@ public class ItemSwitch {
 		
 		//Is the switch on ?
 		if(mapObject.getProperties().get("On") != null){
-			isOn = Boolean.parseBoolean((String) mapObject.getProperties().get("On"));
+			isOn = Boolean.parseBoolean(mapObject.getProperties().get("On").toString());
 		}
 		else
 			isOn = false;

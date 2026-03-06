@@ -72,12 +72,12 @@ public class MyLight {
     	
 		//Association Number
 		if(mapObject.getProperties().get("Association Number") != null)
-			associationNumber = Integer.parseInt((String) mapObject.getProperties().get("Association Number"));
+			associationNumber = Integer.parseInt(mapObject.getProperties().get("Association Number").toString());
 		else associationNumber = 666;
 
 		//Distance
 		if(mapObject.getProperties().get("Distance") != null)
-			distance = Float.parseFloat((String) mapObject.getProperties().get("Distance"));
+			distance = Float.parseFloat(mapObject.getProperties().get("Distance").toString());
 		else distance = 20;
 		
 		//Color

@@ -491,7 +491,7 @@ public class HUD {
 			public void clicked(InputEvent event, float x, float y){
 				game.getScreen().dispose();
 				
-				if(GameConstants.SELECTED_LEVEL == 1 && !game.levelHandler.isLevelUnlocked(2))
+				if(GameConstants.SELECTED_LEVEL == 1 && !game.levelHandler.isLevelUnlocked(2) && !game.isWebGLRuntime())
 					game.setScreen(new TutorialScreen(game));
 				else
 					game.setScreen(new GameScreen(game));

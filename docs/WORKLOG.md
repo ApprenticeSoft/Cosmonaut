@@ -318,6 +318,58 @@ Known platform constraint:
 
 - Mobile fullscreen/orientation lock remains best-effort due browser permission/policy rules; behavior now retries across user interactions and lifecycle events.
 
+## 2026-03-06 Mobile Intro Handoff + True Viewport Fill (Follow-up)
+
+User-reported issues in this pass:
+
+- Mobile HTML reached intro end but did not reliably start level 1.
+- Mobile HTML looked like "fake fullscreen" with capped bars/tiny play area.
+
+Root causes addressed:
+
+- Intro progression on WebGL could stall for long periods due touch-only line advancement and fragile mid-render transition/dispose sequence.
+- Mobile launcher sizing used generic client dimensions; on some mobile browsers this can drift from the effective visual viewport.
+
+Changes implemented:
+
+- `html/src/com/cosmonaut/client/HtmlLauncher.java`
+  - added mobile visual-viewport sizing (`visualViewport.width/height` fallback to `innerWidth/innerHeight`).
+  - mobile sizing now tracks effective viewport area directly.
+  - desktop keeps centered 16:9 behavior.
+- `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - enabled timed dialogue progression (`timeControl=true`) while keeping touch skip support.
+  - added faster web dialogue timing for intro/alarm blocks.
+  - added WebGL safety timeout (95s absolute intro cap) to force level handoff if intro flow stalls.
+  - fixed transition sequence to avoid `game.getScreen().dispose()` mid-render; now builds next screen, disposes intro safely, then switches.
+  - stopped disposing asset-managed sounds (`Alarm`, `Background`) in `dispose()`; now only stops them.
+
+Validation performed:
+
+- Build:
+  - `./gradlew :core:compileJava :html:dist` -> SUCCESS
+- Targeted mobile no-touch intro test (Play -> wait):
+  - final screenshot shows active gameplay/HUD after intro:
+    - `qa/reports/mobile_intro_autostart_wait_final.png`
+- Full smoke (post-fix, pre/post deploy):
+  - `node qa/web_smoke.js`
+  - `local-desktop` PASS
+  - `local-mobile` PASS
+  - `rpi-desktop` PASS
+  - `rpi-mobile` PASS
+
+Deployment log:
+
+- Rebuilt dist and packaged `/tmp/cosmonaut-dist.tar.gz`.
+- Uploaded to Pi and deployed:
+  - staging: `/home/marc/cosmonaut-deploy`
+  - live root: `/var/www/cosmonaut`
+- Restarted backend service:
+  - `cosmonaut-static.service` -> `active`
+- Pi-side host-header checks:
+  - `/` -> `HTTP/1.1 200 OK`
+  - `/html/html.nocache.js` -> `HTTP/1.1 200 OK`
+  - `/assets/assets.txt` -> `HTTP/1.1 200 OK`
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

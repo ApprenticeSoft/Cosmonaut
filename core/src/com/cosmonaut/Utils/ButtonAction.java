@@ -26,7 +26,7 @@ public class ButtonAction {
 					game.music.stop();
 					game.getScreen().dispose();
 					
-					if(game.levelHandler.isLevelUnlocked(2))
+					if(game.isWebGLRuntime() || game.levelHandler.isLevelUnlocked(2))
 						game.setScreen(new GameScreen(game));
 					else
 						game.setScreen(new TutorialScreen(game));	

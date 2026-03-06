@@ -41,6 +41,8 @@ public class IntroScreen implements Screen{
 	private boolean alarmSoundPlay = false, musicPlay = false, crashSoundPlay = false, alarmText = false, vuePerso = false, transition = false;
 	private Image transitionImage;
 	private float transitionAlpha = 0, spaceshipSoundVolume = 0, musicIntroVolume = 0f, labelIntroAlpha = 0f;
+	private float introStep3Timer = 0f;
+	private boolean postIntroTransitionDone = false;
 	private int introStep = 1;
 	private long soundId;
 	private Label labelIntro;
@@ -119,6 +121,12 @@ public class IntroScreen implements Screen{
 		stage.addActor(transitionImage);
 					
 		textBox = new TextBox(game, stage, "Texts/" + GameConstants.GAME_VERSION + "/" + Data.getLanguage() + "/Dialogue.txt", "\n", ";");
+		textBox.timeControl = true;
+		textBox.touchControl = true;
+		if(webRuntime){
+			textBox.setBaseTimeLimit(0.85f);
+			textBox.setFactorTimeLimit(0.02f);
+		}
 		textBox.setLabelPos(Gdx.graphics.getWidth()/2 - textBox.getTextBoxWidth()/2, 2*Gdx.graphics.getHeight()/3);
 		
 		interlocutors = new Array<Interlocutor>();
@@ -195,6 +203,10 @@ public class IntroScreen implements Screen{
 		game.batch.setProjectionMatrix(stage.getCamera().combined);
 		
 		introTimer += Gdx.graphics.getDeltaTime();
+		if(webRuntime && introTimer > 95f && !postIntroTransitionDone){
+			finishIntroTransition();
+			return;
+		}
 		
 		//If the 1st level is complete, don`t play the intro anymore
 		/*
@@ -388,13 +400,19 @@ public class IntroScreen implements Screen{
 			else if(MathUtils.cos(alerteRougeTimer += 1.8f*Gdx.graphics.getDeltaTime()) < 0)
 				alarmSoundPlay = false;
 			
-			if(!alarmText){
-				alarmText = true;
-				textBox.newTextFile("Texts/" + GameConstants.GAME_VERSION + "/" + Data.getLanguage() + "/Alarm.txt");
-				textBox.setLabelPos(Gdx.graphics.getWidth()/2 - textBox.getTextBoxWidth()/2, 2*Gdx.graphics.getHeight()/3);
-				textBox.setBaseTimeLimit(1.8f);
-				textBox.setFactorTimeLimit(0.04f);
-			}
+				if(!alarmText){
+					alarmText = true;
+					textBox.newTextFile("Texts/" + GameConstants.GAME_VERSION + "/" + Data.getLanguage() + "/Alarm.txt");
+					textBox.setLabelPos(Gdx.graphics.getWidth()/2 - textBox.getTextBoxWidth()/2, 2*Gdx.graphics.getHeight()/3);
+					if(webRuntime){
+						textBox.setBaseTimeLimit(0.75f);
+						textBox.setFactorTimeLimit(0.02f);
+					}
+					else{
+						textBox.setBaseTimeLimit(1.8f);
+						textBox.setFactorTimeLimit(0.04f);
+					}
+				}
 			if(!textBox.write){
 		    	textBox.setTimer(0);
 		    	textBox.writeDialogue();
@@ -410,25 +428,40 @@ public class IntroScreen implements Screen{
 		    }
 		}	
 	    else{
-	    	if(game.assets.update()){
-	    		Data.setIntroPlayed(true);
-				game.getScreen().dispose();
-
-				if(GameConstants.PLAY_INTRO)
-					game.setScreen(new MainMenuScreen(game));
-				else if(game.levelHandler.isLevelUnlocked(2))
-					game.setScreen(new GameScreen(game));
-				else
-					game.setScreen(new TutorialScreen(game));
-	
-				game.assets.unload("Images/Intro/Images_Intro.pack");
-	    	}	
+	    	introStep3Timer += delta;
+	    	boolean assetsReady = game.assets.update();
+	    	boolean allowWebFallbackTransition = webRuntime && introStep3Timer > 1.2f;
+	    	if(assetsReady || allowWebFallbackTransition){
+	    		finishIntroTransition();
+	    		return;
+	    	}
 	    }
 	    
 	    /**********************************************************/
 	    game.batch.setShader(null);
 	    stage.act();
 	    stage.draw();	
+	}
+
+	private void finishIntroTransition(){
+		if(postIntroTransitionDone)
+			return;
+		postIntroTransitionDone = true;
+
+		Data.setIntroPlayed(true);
+		Screen nextScreen;
+		if(GameConstants.PLAY_INTRO)
+			nextScreen = new MainMenuScreen(game);
+		else if(webRuntime || game.levelHandler.isLevelUnlocked(2))
+			nextScreen = new GameScreen(game);
+		else
+			nextScreen = new TutorialScreen(game);
+
+		if(game.assets.isLoaded("Images/Intro/Images_Intro.pack", TextureAtlas.class))
+			game.assets.unload("Images/Intro/Images_Intro.pack");
+
+		dispose();
+		game.setScreen(nextScreen);
 	}
 
 	@Override
@@ -473,8 +506,12 @@ public class IntroScreen implements Screen{
 		game.batch.setShader(null);
 		
 		musicIntro.dispose();
-		alarmSound.dispose();
-		spaceshipSound.dispose();
+		if(alarmSound != null){
+			alarmSound.stop();
+		}
+		if(spaceshipSound != null){
+			spaceshipSound.stop();
+		}
 		stage.dispose();
 		System.gc();
 	}

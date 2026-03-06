@@ -70,13 +70,13 @@ public class ObstacleLightning extends Obstacle{
 		
 		//Delay before activation
 		if(rectangleObject.getProperties().get("Delay") != null){
-			delay = Float.parseFloat((String) rectangleObject.getProperties().get("Delay"));
+			delay = Float.parseFloat(rectangleObject.getProperties().get("Delay").toString());
 		}
 		else delay = 0;
 		
 		//Is the lightning active ?
 		if(rectangleObject.getProperties().get("On") != null){
-			active = Boolean.parseBoolean((String) rectangleObject.getProperties().get("On"));
+			active = Boolean.parseBoolean(rectangleObject.getProperties().get("On").toString());
 		}
 		else
 			active = true;
@@ -148,13 +148,13 @@ public class ObstacleLightning extends Obstacle{
 		
 		//Delay before activation
 		if(rectangleObject.getProperties().get("Delay") != null){
-			delay = Float.parseFloat((String) rectangleObject.getProperties().get("Delay"));
+			delay = Float.parseFloat(rectangleObject.getProperties().get("Delay").toString());
 		}
 		else delay = 0;
 		
 		//Is the lightning active ?
 		if(rectangleObject.getProperties().get("On") != null){
-			active = Boolean.parseBoolean((String) rectangleObject.getProperties().get("On"));
+			active = Boolean.parseBoolean(rectangleObject.getProperties().get("On").toString());
 		}
 		else
 			active = true;

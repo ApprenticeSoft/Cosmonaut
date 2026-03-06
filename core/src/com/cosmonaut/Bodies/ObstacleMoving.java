@@ -61,29 +61,29 @@ public class ObstacleMoving extends Obstacle{
 		
 		//Delay before activation
 		if(polylineObject.getProperties().get("Delay") != null)
-			delay = Float.parseFloat((String) polylineObject.getProperties().get("Delay"));
+			delay = Float.parseFloat(polylineObject.getProperties().get("Delay").toString());
 		else delay = 0;
 		
 		//Pause between each step
 		if(polylineObject.getProperties().get("Pause") != null)
-			pause = Float.parseFloat((String) polylineObject.getProperties().get("Pause"));
+			pause = Float.parseFloat(polylineObject.getProperties().get("Pause").toString());
 		else pause = 0;
 		pauseCooldown = pause;
 		
 		//SPEED
 		if(polylineObject.getProperties().get("Speed") != null)
-			speed = Float.parseFloat((String) polylineObject.getProperties().get("Speed"));
+			speed = Float.parseFloat(polylineObject.getProperties().get("Speed").toString());
 		else speed = 5;
 		
 		//DOES THE PATH MAKE A LOOP ?
 		if(polylineObject.getProperties().get("Loop") != null){
-			loop =  Boolean.parseBoolean((String) polylineObject.getProperties().get("Loop"));
+			loop =  Boolean.parseBoolean(polylineObject.getProperties().get("Loop").toString());
 		}
 		else loop = false;
 		
 		//WIDTH OF THE MOVING OBJECT		
 		if(polylineObject.getProperties().get("Width") != null)
-			widthFactor = Float.parseFloat((String) polylineObject.getProperties().get("Width"));
+			widthFactor = Float.parseFloat(polylineObject.getProperties().get("Width").toString());
 		else widthFactor = 1;
 		
 		width = GameConstants.PPT * GameConstants.MPP/2;
@@ -91,7 +91,7 @@ public class ObstacleMoving extends Obstacle{
 		
 		//HEIGHT OF THE MOVING OBJECT
 		if(polylineObject.getProperties().get("Height") != null)
-			heightFactor = Float.parseFloat((String) polylineObject.getProperties().get("Height"));
+			heightFactor = Float.parseFloat(polylineObject.getProperties().get("Height").toString());
 		else heightFactor = 1;
 		
 		height = GameConstants.PPT * GameConstants.MPP/2;

@@ -44,7 +44,7 @@ public class ObstacleLight extends Obstacle{
 			Vector2 impulseCenter = Pools.obtain(Vector2.class).set(body.getPosition().x + MathUtils.random(-0.9f * width, 0.9f * width), 
 																	body.getPosition().y + MathUtils.random(-0.9f * height, 0.9f * height));
 			
-			if(Boolean.parseBoolean((String) rectangleObject.getProperties().get("Impulse")))
+			if(Boolean.parseBoolean(rectangleObject.getProperties().get("Impulse").toString()))
 				body.applyLinearImpulse(impulseForce, impulseCenter, true);
 			
 			Pools.free(impulseForce);
@@ -88,7 +88,7 @@ public class ObstacleLight extends Obstacle{
 			Vector2 impulseCenter = Pools.obtain(Vector2.class).set(body.getPosition().x + MathUtils.random(-0.9f * width, 0.9f * width), 
 																	body.getPosition().y + MathUtils.random(-0.9f * height, 0.9f * height));
 			
-			if(Boolean.parseBoolean((String) rectangleObject.getProperties().get("Impulse")))
+			if(Boolean.parseBoolean(rectangleObject.getProperties().get("Impulse").toString()))
 			body.applyLinearImpulse(impulseForce, impulseCenter, true);
 			
 			Pools.free(impulseForce);

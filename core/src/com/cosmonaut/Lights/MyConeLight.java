@@ -65,7 +65,7 @@ public class MyConeLight extends MyLight{
 		
 		//Cone angle
 		if(mapObject.getProperties().get("Angle") != null)
-			coneAngle = Float.parseFloat((String) mapObject.getProperties().get("Angle"));
+			coneAngle = Float.parseFloat(mapObject.getProperties().get("Angle").toString());
 		else coneAngle = 45;
 		
 		nbRay = (int)(coneAngle * 2 * GameConstants.LIGHT_RAY_MULTIPLICATOR);

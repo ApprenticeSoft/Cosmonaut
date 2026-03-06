@@ -25,7 +25,7 @@ public class ObstacleRevolving extends Obstacle{
 		
 		//Rotation speed
 		if(rectangleObject.getProperties().get("Speed") != null)
-			speed = Float.parseFloat((String) rectangleObject.getProperties().get("Speed"));
+			speed = Float.parseFloat(rectangleObject.getProperties().get("Speed").toString());
 		else speed = 90;
 		
 		body.setFixedRotation(false);
@@ -50,7 +50,7 @@ public class ObstacleRevolving extends Obstacle{
 		
 		//Rotation speed
 		if(rectangleObject.getProperties().get("Speed") != null)
-			speed = Float.parseFloat((String) rectangleObject.getProperties().get("Speed"));
+			speed = Float.parseFloat(rectangleObject.getProperties().get("Speed").toString());
 		else speed = 90;
 		
 		body.setFixedRotation(false);

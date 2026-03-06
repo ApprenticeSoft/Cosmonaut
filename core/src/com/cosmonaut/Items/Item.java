@@ -88,7 +88,7 @@ public class Item {
 			Vector2 impulseCenter = Pools.obtain(Vector2.class).set(body.getPosition().x + MathUtils.random(-0.9f * width, 0.9f * width), 
 																	body.getPosition().y + MathUtils.random(-0.9f * height, 0.9f * height));
 
-			if(Boolean.parseBoolean((String) mapObject.getProperties().get("Impulse")))
+			if(Boolean.parseBoolean(mapObject.getProperties().get("Impulse").toString()))
 				body.applyLinearImpulse(impulseForce, impulseCenter, true);
 			
 			Pools.free(impulseForce);

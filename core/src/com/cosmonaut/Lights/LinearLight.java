@@ -53,7 +53,7 @@ public class LinearLight extends MyLight{
 		
 		//Direction
 		if(mapObject.getProperties().get("Direction") != null){
-			direction = Integer.parseInt((String) mapObject.getProperties().get("Direction"));
+			direction = Integer.parseInt(mapObject.getProperties().get("Direction").toString());
 		}
 		else direction = -1;
 		

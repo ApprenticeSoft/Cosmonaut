@@ -18,6 +18,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -30,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.cosmonaut.Bodies.CheckPoint;
 import com.cosmonaut.Bodies.Dialogue;
@@ -104,7 +109,42 @@ public class MyGdxGame extends Game implements ApplicationListener{
 		Data.Load();
 		
 		pools = new MyPools(this);
-		Pools.get(Vector2.class, 1000);	
+		Pools.set(Vector2.class, new Pool<Vector2>(128, 4096){
+			@Override
+			protected Vector2 newObject() {
+				return new Vector2();
+			}
+		});
+		Pools.set(Vector3.class, new Pool<Vector3>(32, 1024){
+			@Override
+			protected Vector3 newObject() {
+				return new Vector3();
+			}
+		});
+		Pools.set(PolygonShape.class, new Pool<PolygonShape>(16, 2048){
+			@Override
+			protected PolygonShape newObject() {
+				return new PolygonShape();
+			}
+		});
+		Pools.set(BodyDef.class, new Pool<BodyDef>(16, 2048){
+			@Override
+			protected BodyDef newObject() {
+				return new BodyDef();
+			}
+		});
+		Pools.set(FixtureDef.class, new Pool<FixtureDef>(16, 2048){
+			@Override
+			protected FixtureDef newObject() {
+				return new FixtureDef();
+			}
+		});
+		Pools.set(Color.class, new Pool<Color>(32, 2048){
+			@Override
+			protected Color newObject() {
+				return new Color();
+			}
+		});
 		
 		/*
 		 * Tableaux divers
@@ -277,7 +317,20 @@ public class MyGdxGame extends Game implements ApplicationListener{
 		}
 		catch(RuntimeException runtimeException){
 			String screenName = getScreen() == null ? "null" : getScreen().getClass().getName();
-			Gdx.app.error("Cosmonaut", "Render crash on screen: " + screenName, runtimeException);
+			StringBuilder details = new StringBuilder();
+			details.append("Render crash on screen: ").append(screenName)
+				.append(" | ").append(runtimeException.getClass().getName())
+				.append(" | message=").append(runtimeException.getMessage());
+			Throwable cause = runtimeException.getCause();
+			int depth = 0;
+			while(cause != null && depth < 5){
+				details.append(" | cause[").append(depth).append("]=")
+					.append(cause.getClass().getName())
+					.append(" msg=").append(cause.getMessage());
+				cause = cause.getCause();
+				depth++;
+			}
+			Gdx.app.error("Cosmonaut", details.toString(), runtimeException);
 			throw runtimeException;
 		}
 		//pools.write();

@@ -229,7 +229,7 @@ public class TiledMapReader {
         		else if(polylineObject.getProperties().get("type").equals("LinearLight")){
         			if(polylineObject.getProperties().get("Association Number") != null){
         				for(Obstacle obstacle : game.obstacles){
-		        			if(Integer.parseInt((String) polylineObject.getProperties().get("Association Number")) == obstacle.associationNumber){
+		        			if(Integer.parseInt(polylineObject.getProperties().get("Association Number").toString()) == obstacle.associationNumber){
 		    		        	LinearLight linearLight = new LinearLight(polylineObject, rayHandler, obstacle);
 		    		        	game.myLights.add(linearLight);
 		        			}
@@ -243,7 +243,7 @@ public class TiledMapReader {
         		else if(polylineObject.getProperties().get("type").equals("ConeLight")){
         			if(polylineObject.getProperties().get("Association Number") != null){
         				for(Obstacle obstacle : game.obstacles){
-		        			if(Integer.parseInt((String) polylineObject.getProperties().get("Association Number")) == obstacle.associationNumber){
+		        			if(Integer.parseInt(polylineObject.getProperties().get("Association Number").toString()) == obstacle.associationNumber){
 		    		        	MyConeLight myConeLight = new MyConeLight(polylineObject, rayHandler, obstacle);
 		    		        	game.myLights.add(myConeLight);
 		        			}
@@ -297,19 +297,19 @@ public class TiledMapReader {
         		}
         		//Upgrade
         		else if(tiledMap.getLayers().get("Spawn").getObjects().get(i).getProperties().get("type").equals("Upgrade")){
-        			if(Integer.parseInt((String)tiledMap.getLayers().get("Spawn").getObjects().get(i).getProperties().get("ID")) == 1 && !GameConstants.UPGRADE_1){
+        			if(Integer.parseInt(tiledMap.getLayers().get("Spawn").getObjects().get(i).getProperties().get("ID").toString()) == 1 && !GameConstants.UPGRADE_1){
 	        			//Upgrade upgrade = new Upgrade(game, world, tiledMap.getLayers().get("Spawn").getObjects().get(i), rayHandler);
         				Upgrade upgrade = game.pools.upgradePool.obtain();
         				upgrade.init(world, tiledMap.getLayers().get("Spawn").getObjects().get(i), rayHandler);
 	        			game.items.add(upgrade);
         			}
-        			else if(Integer.parseInt((String)tiledMap.getLayers().get("Spawn").getObjects().get(i).getProperties().get("ID")) == 2 && !GameConstants.UPGRADE_2){
+        			else if(Integer.parseInt(tiledMap.getLayers().get("Spawn").getObjects().get(i).getProperties().get("ID").toString()) == 2 && !GameConstants.UPGRADE_2){
 	        			//Upgrade upgrade = new Upgrade(game, world, tiledMap.getLayers().get("Spawn").getObjects().get(i), rayHandler);
 	        			Upgrade upgrade = game.pools.upgradePool.obtain();
         				upgrade.init(world, tiledMap.getLayers().get("Spawn").getObjects().get(i), rayHandler);
 	        			game.items.add(upgrade);
         			}
-        			else if(Integer.parseInt((String)tiledMap.getLayers().get("Spawn").getObjects().get(i).getProperties().get("ID")) == 3 && !GameConstants.UPGRADE_3){
+        			else if(Integer.parseInt(tiledMap.getLayers().get("Spawn").getObjects().get(i).getProperties().get("ID").toString()) == 3 && !GameConstants.UPGRADE_3){
 	        			//Upgrade upgrade = new Upgrade(game, world, tiledMap.getLayers().get("Spawn").getObjects().get(i), rayHandler);
         				Upgrade upgrade = game.pools.upgradePool.obtain();
         				upgrade.init(world, tiledMap.getLayers().get("Spawn").getObjects().get(i), rayHandler);

@@ -11,8 +11,13 @@ import com.google.gwt.user.client.Window;
 
 public class HtmlLauncher extends GwtApplication {
     private static final float LANDSCAPE_ASPECT = 16f / 9f;
+    private final boolean mobileClient = isLikelyMobileClient();
 
     private int[] computeTargetSize(int browserWidth, int browserHeight){
+        if(mobileClient){
+            return new int[]{Math.max(1, browserWidth), Math.max(1, browserHeight)};
+        }
+
         float browserAspect = browserWidth / (float) browserHeight;
         int targetWidth;
         int targetHeight;
@@ -28,10 +33,43 @@ public class HtmlLauncher extends GwtApplication {
         return new int[]{Math.max(1, targetWidth), Math.max(1, targetHeight)};
     }
 
+    private native boolean isLikelyMobileClient() /*-{
+        var ua = ($wnd.navigator && $wnd.navigator.userAgent) ? $wnd.navigator.userAgent : "";
+        var touchPoints = ($wnd.navigator && typeof $wnd.navigator.maxTouchPoints === "number") ? $wnd.navigator.maxTouchPoints : 0;
+        var mobileUA = /Android|iPhone|iPad|iPod|Mobile|Silk|Kindle|Opera Mini/i.test(ua);
+        return mobileUA || touchPoints > 1;
+    }-*/;
+
+    private native int getVisualViewportWidth() /*-{
+        var vv = $wnd.visualViewport;
+        if (vv && vv.width) return Math.max(1, Math.round(vv.width));
+        return Math.max(1, $wnd.innerWidth || $doc.documentElement.clientWidth || 1);
+    }-*/;
+
+    private native int getVisualViewportHeight() /*-{
+        var vv = $wnd.visualViewport;
+        if (vv && vv.height) return Math.max(1, Math.round(vv.height));
+        return Math.max(1, $wnd.innerHeight || $doc.documentElement.clientHeight || 1);
+    }-*/;
+
+    private int getBrowserWidth() {
+        if (mobileClient) {
+            return getVisualViewportWidth();
+        }
+        return Math.max(1, Window.getClientWidth());
+    }
+
+    private int getBrowserHeight() {
+        if (mobileClient) {
+            return getVisualViewportHeight();
+        }
+        return Math.max(1, Window.getClientHeight());
+    }
+
     @Override
     public GwtApplicationConfiguration getConfig() {
-        int browserWidth = Math.max(1, Window.getClientWidth());
-        int browserHeight = Math.max(1, Window.getClientHeight());
+        int browserWidth = getBrowserWidth();
+        int browserHeight = getBrowserHeight();
         int[] size = computeTargetSize(browserWidth, browserHeight);
         int targetWidth = size[0];
         int targetHeight = size[1];
@@ -56,8 +94,8 @@ public class HtmlLauncher extends GwtApplication {
     }
 
     private void applyResponsiveSize() {
-        int browserWidth = Math.max(1, Window.getClientWidth());
-        int browserHeight = Math.max(1, Window.getClientHeight());
+        int browserWidth = getBrowserWidth();
+        int browserHeight = getBrowserHeight();
         int[] size = computeTargetSize(browserWidth, browserHeight);
         int targetWidth = size[0];
         int targetHeight = size[1];
