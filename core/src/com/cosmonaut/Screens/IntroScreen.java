@@ -37,6 +37,7 @@ public class IntroScreen implements Screen{
 	private TextBox textBox;
 	private Texture backgroundTexture;
 	private float backgroundPosX = 0, spaceshipPosX = 0, spaceshipHeight, spaceshipWidth, alerteRougeTimer = 0, introTimer = 0;
+	private float spaceshipStartDelay, spaceshipSpeed;
 	private Sound alarmSound, crashSound;
 	private boolean alarmSoundPlay = false, musicPlay = false, crashSoundPlay = false, alarmText = false, vuePerso = false, transition = false;
 	private Image transitionImage;
@@ -106,8 +107,15 @@ public class IntroScreen implements Screen{
 		spaceshipWidth = spaceshipHeight * skin.getRegion("Vaisseau_Mere").getRegionWidth()/skin.getRegion("Vaisseau_Mere").getRegionHeight();
 		spaceshipPosX = -spaceshipHeight * skin.getRegion("Vaisseau_Mere").getRegionWidth()/skin.getRegion("Vaisseau_Mere").getRegionHeight();
 		if(webRuntime){
-			// Show the intro ship much earlier on web so intro does not look like a static black screen.
-			spaceshipPosX = -0.45f * spaceshipWidth;
+			spaceshipStartDelay = 0f;
+			// Keep ship travel synchronized with the full first intro segment.
+			float travelEndX = Gdx.graphics.getWidth() + 0.3f * spaceshipWidth;
+			float travelDistance = travelEndX - spaceshipPosX;
+			spaceshipSpeed = travelDistance / 49f;
+		}
+		else{
+			spaceshipStartDelay = 9f;
+			spaceshipSpeed = 28f;
 		}
 		
 		//Transition
@@ -268,27 +276,27 @@ public class IntroScreen implements Screen{
 		    
 		    game.batch.end();
 		    //Vaisseau
-		    if(!vuePerso){	
-			    game.batch.setShader(null);
-			    game.batch.setColor(1f, 1f, 1f, 1f);
-			    game.batch.begin();
-			    float spaceshipDelay = webRuntime ? 1.5f : 9f;
-			    float spaceshipSpeed = webRuntime ? 42f : 28f;
-			    if(introTimer > spaceshipDelay)
-			    game.batch.draw(skin.getRegion("Vaisseau_Mere"), 
-			    				spaceshipPosX += spaceshipSpeed * Gdx.graphics.getDeltaTime(), 
-			    				0.4f*Gdx.graphics.getHeight() - 0.5f*spaceshipHeight, 
-			    				spaceshipWidth, 
-			    				spaceshipHeight);
-			    if(useIntroShaders)
-			    	game.batch.setShader(colorReplacementProgram);
-			    game.batch.draw(skin.getRegion("Vaisseau_Survie"), 
-			    				spaceshipPosX + 0.65f*spaceshipWidth, 
-			    				0.4f*Gdx.graphics.getHeight() + 0.31f*spaceshipHeight, 
-			    				0.25f*spaceshipHeight * skin.getRegion("Vaisseau_Survie").getRegionWidth()/skin.getRegion("Vaisseau_Survie").getRegionHeight(), 
-			    				0.25f*spaceshipHeight);
-			    game.batch.setShader(null);
-			    game.batch.end();
+			    if(!vuePerso){	
+				    game.batch.setShader(null);
+				    game.batch.setColor(1f, 1f, 1f, 1f);
+				    game.batch.begin();
+				    if(introTimer >= spaceshipStartDelay){
+				    	spaceshipPosX += spaceshipSpeed * Gdx.graphics.getDeltaTime();
+				    	game.batch.draw(skin.getRegion("Vaisseau_Mere"), 
+				    				spaceshipPosX, 
+				    				0.4f*Gdx.graphics.getHeight() - 0.5f*spaceshipHeight, 
+				    				spaceshipWidth, 
+				    				spaceshipHeight);
+				    	if(useIntroShaders)
+				    		game.batch.setShader(colorReplacementProgram);
+				    	game.batch.draw(skin.getRegion("Vaisseau_Survie"), 
+				    				spaceshipPosX + 0.65f*spaceshipWidth, 
+				    				0.4f*Gdx.graphics.getHeight() + 0.31f*spaceshipHeight, 
+				    				0.25f*spaceshipHeight * skin.getRegion("Vaisseau_Survie").getRegionWidth()/skin.getRegion("Vaisseau_Survie").getRegionHeight(), 
+				    				0.25f*spaceshipHeight);
+				    }
+				    game.batch.setShader(null);
+				    game.batch.end();
 
 			    if(introTimer > 50.2f){
 			    	vuePerso = true;

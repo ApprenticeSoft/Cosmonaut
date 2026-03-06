@@ -336,21 +336,21 @@ public class HUD {
 		
 		
 		
-		//Controles avec les boutons
-		if(GameConstants.GAME_CONTROLS == GameConstants.ANDROID_BUTTONS_CONTROLS){
-			if(!hero.isDead()){
-				if(buttonLeft.isOver())
-					hero.rotateClockwise();
-				else if(buttonRight.isOver())
-					hero.rotateCounterClockwise();
-				else
-					hero.stopRotating();		
-				
-				if(buttonJetPack.isOver() && hero.getFuelLevel() > 0)
-					hero.jetpackOn();        
-				else
-					hero.jetpackOff();
-			}
+			//Controles avec les boutons
+			if(GameConstants.GAME_CONTROLS == GameConstants.ANDROID_BUTTONS_CONTROLS){
+				if(!hero.isDead()){
+					if(buttonLeft.isPressed())
+						hero.rotateClockwise();
+					else if(buttonRight.isPressed())
+						hero.rotateCounterClockwise();
+					else
+						hero.stopRotating();		
+					
+					if(buttonJetPack.isPressed() && hero.getFuelLevel() > 0)
+						hero.jetpackOn();        
+					else
+						hero.jetpackOff();
+				}
 		}
 		
 		/*

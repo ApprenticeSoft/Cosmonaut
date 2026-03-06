@@ -419,6 +419,53 @@ Deployment log:
   - `/` -> `HTTP/1.1 200 OK`
   - `/html/html.nocache.js` -> `HTTP/1.1 200 OK`
 
+## 2026-03-06 Intro Ship Timing + Mobile Control Hold Fix
+
+User-reported regressions in this pass:
+
+- Intro opening on wide mobile landscape showed small ship early/static and mother ship appearing later mid-screen.
+- After ships exited right, delay before next intro part felt too long.
+- In gameplay, touch buttons could act like they stayed held after finger release.
+
+Root causes:
+
+- Intro draw path rendered `Vaisseau_Survie` even before the mother ship draw gate, with web start position previously partially on-screen.
+- Web ship travel speed was fixed and not aligned with full intro segment duration.
+- HUD gameplay input used `Button.isOver()` (hover state) instead of actual press state.
+
+Code changes:
+
+- `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - Added explicit ship motion config fields: `spaceshipStartDelay`, `spaceshipSpeed`.
+  - Web intro now starts at `t=0` from fully off-screen left (`-spaceshipWidth`).
+  - Web ship speed is computed from travel distance to cover the first intro segment duration (`~49s`) so crossing pace matches dialogue timing.
+  - Small ship now renders only when the mother ship is actively rendered (keeps both connected from first visible frame).
+- `core/src/com/cosmonaut/Utils/HUD.java`
+  - Gameplay touch controls switched from `isOver()` to `isPressed()`:
+    - left/right rotation now active only while button is actually pressed.
+    - jetpack now active only while button is actually pressed.
+
+Validation:
+
+- Build passed:
+  - `./gradlew :core:compileJava :html:dist`
+- Intro visual probe (mobile landscape emulation) confirmed correct ship entry/motion:
+  - `qa/reports/intro_ship_check_t0.png`
+  - `qa/reports/intro_ship_check_t2.png`
+  - `qa/reports/intro_ship_check_t5.png`
+- Full smoke suite passed after deploy:
+  - `node qa/web_smoke.js`
+  - `local-desktop` PASS
+  - `local-mobile` PASS
+  - `rpi-desktop` PASS
+  - `rpi-mobile` PASS
+
+Deployment:
+
+- Rebuilt and deployed HTML dist to Pi `/var/www/cosmonaut`.
+- Restarted backend `cosmonaut-static.service` -> `active`.
+- Verified host-header HTTPS responses are `HTTP/1.1 200 OK`.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`
