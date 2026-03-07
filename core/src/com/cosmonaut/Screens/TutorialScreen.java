@@ -291,6 +291,7 @@ public class TutorialScreen extends GameScreen{
 		if(tutoStep == 0){
 			if(previousTutoStep != tutoStep){
 				System.out.println("tutoStep = " + tutoStep);
+				directionArrow = false;
 				tutoTextBox.initiate();
 				tutoTextBox.resizeBox();
 				tutoTextBox.dialogueFinished();
@@ -672,6 +673,7 @@ public class TutorialScreen extends GameScreen{
 		else if (tutoStep == 17){
 			if(previousTutoStep != tutoStep){
 				System.out.println("tutoStep = " + tutoStep);
+				directionArrow = true;
 				tutoTextBox.initiate();
 				tutoTextBox.resizeBox();
 				tutoTextBox.dialogueFinished();
@@ -699,12 +701,9 @@ public class TutorialScreen extends GameScreen{
 				GameConstants.BOX_STEP = 0;
 				GameConstants.TUTORIAL = true;
 				
-				if(camera.viewportWidth <= GameConstants.SCREEN_WIDTH/2){
-					tutoTextBox.writeParagraph(15);
-					if(tutoTextBox.posLine == 1)
-						if(tutoTextBox.posChar == 30)
-							directionArrow = true;
-				}
+					if(camera.viewportWidth <= GameConstants.SCREEN_WIDTH/2){
+						tutoTextBox.writeParagraph(15);
+					}
 				
 				if(tutoTextBox.dialogueFinished){
 					if(camera.viewportWidth < GameConstants.SCREEN_WIDTH){

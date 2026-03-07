@@ -772,3 +772,80 @@ Validation:
   - `./qa/smoke_levels_desktop.sh` -> **PASS** (levels 1..24 launch without immediate crash).
 - Web smoke:
   - `node qa/web_smoke.js` -> `rpi-desktop PASS`, `rpi-mobile PASS`, `local-*` failed in this environment.
+
+## 2026-03-07 Mobile HTML Intro/Tutorial/Progression Regression Fix Pack
+
+User-reported regressions addressed in this pass:
+
+- Mobile HTML intro was skipping before the black-screen shock/alarm sequence.
+- Tutorial directional arrow animation was missing during the guidance segment.
+- After level 1 tutorial completion:
+  - `Next`/`Replay` actions appeared inactive,
+  - level 2 looked unlocked but could not be reliably started.
+
+### Root-cause findings
+
+- Intro had a web-only hard timeout and short fallback window that could force early transition.
+- Tutorial arrow activation depended on a brittle exact text cursor position.
+- Multiple TMX levels were still encoded as base64+zlib, which produced GWT runtime failures on level load.
+- Additional web reflection dependency (`box2dLight.Spinor`) was missing for some level/light paths.
+- Win popup and level-select interactions were hardened to avoid fragile state-gating edge cases.
+
+### Code changes
+
+- Intro transition timing fixes:
+  - `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - Removed web hard timeout auto-skip.
+  - Increased step-3 web fallback transition delay to prevent premature cut.
+
+- Tutorial arrow reliability:
+  - `core/src/com/cosmonaut/Screens/TutorialScreen.java`
+  - Made arrow state explicit on tutorial-step transitions.
+  - Removed char-index based trigger logic.
+
+- Web level-load stability (GWT):
+  - `android/assets/Levels/Level 2.tmx`
+  - `android/assets/Levels/Level 4.tmx`
+  - `android/assets/Levels/Level 9.tmx`
+  - `android/assets/Levels/Level 10.tmx`
+  - `android/assets/Levels/Level 11.tmx`
+  - `android/assets/Levels/Level 13.tmx`
+  - `android/assets/Levels/Level 15.tmx`
+  - Converted compressed base64 layers to CSV data compatible with this web loader path.
+
+- GWT reflection include:
+  - `html/src/com/cosmonaut/GdxDefinition.gwt.xml`
+  - Added `box2dLight.Spinor` reflect include.
+
+- Progression UI hardening:
+  - `core/src/com/cosmonaut/Utils/HUD.java`
+  - Explicitly enabled/topped win-screen buttons (`Next`, `Replay`, `Menu`) on level clear.
+  - `core/src/com/cosmonaut/Screens/LevelSelectionScreen.java`
+  - Listener binding now keyed from touchability instead of style identity check.
+
+### Verification
+
+Build:
+
+- `./gradlew :core:compileJava :html:dist` -> **SUCCESS**
+
+Targeted local web checks:
+
+- Mobile intro timeline capture confirms alarm/crash phase is present before transition.
+- Mobile level-selection flow confirms level 2 opens and no runtime load errors are raised.
+
+Post-deploy smoke:
+
+- `node qa/web_smoke.js` -> **PASS**
+  - `local-desktop`: PASS
+  - `local-mobile`: PASS
+  - `rpi-desktop`: PASS
+  - `rpi-mobile`: PASS
+
+### Deployment log
+
+- Built `html/build/dist` and packaged `cosmonaut-dist-20260307.tgz`.
+- Uploaded package to Pi `192.168.68.65` (`/home/marc/cosmonaut-dist-20260307.tgz`).
+- Deployed to live root `/var/www/cosmonaut`.
+- Restarted backend service: `cosmonaut-static.service` -> `active`.
+- Live host-header check: `https://cosmonaut.marcvidal.ca` -> `HTTP/1.1 200 OK`.

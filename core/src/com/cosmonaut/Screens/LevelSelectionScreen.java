@@ -204,7 +204,7 @@ public class LevelSelectionScreen implements Screen{
 		Gdx.input.setInputProcessor(stage);
 
 		for(int i = 0; i < levels.size; i++){
-			if(levels.get(i).getStyle() == textButtonStyleActive)
+			if(levels.get(i).getTouchable() != Touchable.disabled)
 				buttonAction.levelListener(game, levels.get(i), (i+1));
 		}
 		

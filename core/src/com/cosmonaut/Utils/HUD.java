@@ -399,10 +399,24 @@ public class HUD {
 
 		resumeButtonSpace.setVisible(false);
 		labelResume.setVisible(false);
+		restartButtonSpace.setVisible(true);
+		homeButtonSpace.setVisible(true);
+		nextButtonSpace.setVisible(true);
+		restartButtonSpace.setTouchable(Touchable.enabled);
+		homeButtonSpace.setTouchable(Touchable.enabled);
+		nextButtonSpace.setTouchable(Touchable.enabled);
+		resumeButtonSpace.setTouchable(Touchable.disabled);
 		labelRestart.setTouchable(Touchable.disabled);
 		labelResume.setTouchable(Touchable.disabled);
 		labelHome.setTouchable(Touchable.disabled);
 		labelNext.setTouchable(Touchable.disabled);
+
+		restartButtonSpace.toFront();
+		homeButtonSpace.toFront();
+		nextButtonSpace.toFront();
+		labelRestart.toFront();
+		labelHome.toFront();
+		labelNext.toFront();
 	}
 	
 	public void lose(){

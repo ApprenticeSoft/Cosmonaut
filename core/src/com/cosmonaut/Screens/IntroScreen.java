@@ -283,10 +283,6 @@ public class IntroScreen implements Screen{
 		game.batch.setProjectionMatrix(stage.getCamera().combined);
 		
 		introTimer += Gdx.graphics.getDeltaTime();
-		if(webRuntime && introTimer > 95f && !postIntroTransitionDone){
-			finishIntroTransition();
-			return;
-		}
 		
 		//If the 1st level is complete, don`t play the intro anymore
 		/*
@@ -510,7 +506,7 @@ public class IntroScreen implements Screen{
 	    else{
 	    	introStep3Timer += delta;
 	    	boolean assetsReady = game.assets.update();
-	    	boolean allowWebFallbackTransition = webRuntime && introStep3Timer > 1.2f;
+	    	boolean allowWebFallbackTransition = webRuntime && introStep3Timer > 8f;
 	    	if(assetsReady || allowWebFallbackTransition){
 	    		finishIntroTransition();
 	    		return;
