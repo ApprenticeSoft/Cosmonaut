@@ -466,6 +466,44 @@ Deployment:
 - Restarted backend `cosmonaut-static.service` -> `active`.
 - Verified host-header HTTPS responses are `HTTP/1.1 200 OK`.
 
+## 2026-03-06 Portable Desktop Intro Crash Hardening
+
+User report:
+
+- Portable desktop build crashes during intro sequence.
+
+Likely risk area and fix strategy:
+
+- Intro desktop path relied on multiple custom shaders without compile-status guardrails.
+- On some Windows GPU/driver stacks, invalid shader programs can crash or abort during intro render.
+- Added defensive shader initialization with explicit compile checks and automatic fallback to non-shader intro rendering.
+
+Code changes:
+
+- `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - `useIntroShaders` is now runtime-switchable (non-final) to allow fallback.
+  - Added `initializeIntroShaders()` to compile/init all intro shader resources.
+  - Added `createCompiledShader(...)` helper with compile validation and error logging.
+  - Added `disposeIntroShaderResources()` for safe cleanup when shader setup fails.
+  - If any intro shader fails compilation, intro now logs and falls back to plain rendering path instead of crashing.
+
+Validation:
+
+- Build:
+  - `./gradlew :core:compileJava :desktop:build :html:dist` -> SUCCESS
+- Web regression checks (post-change):
+  - `node qa/web_smoke.js` -> `local-desktop PASS`, `local-mobile PASS`, `rpi-desktop PASS`, `rpi-mobile PASS`
+
+Deployment:
+
+- Rebuilt and redeployed HTML dist to Pi `/var/www/cosmonaut`.
+- Restarted `cosmonaut-static.service` (`active`).
+- Verified live host-header response `HTTP/1.1 200 OK`.
+
+Note:
+
+- Direct runtime verification of Windows portable executable is still pending on a native Windows host.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

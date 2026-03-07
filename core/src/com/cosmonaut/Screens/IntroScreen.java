@@ -31,7 +31,7 @@ public class IntroScreen implements Screen{
 
 	final MyGdxGame game;
 	private final boolean webRuntime;
-	private final boolean useIntroShaders;
+	private boolean useIntroShaders;
 	private Stage stage;
 	private Music musicIntro, spaceshipSound;
 	private TextBox textBox;
@@ -147,55 +147,120 @@ public class IntroScreen implements Screen{
 		
 		/*******************SHADERS**********************/
 		if(useIntroShaders){
-			ShaderProgram.pedantic = false;	//Important pour pouvoir modifier les variables uniformes
-	      	vertexShader = Gdx.files.internal("Shaders/PassThrough-vertex.glsl").readString();
-	      	fragmentShader = Gdx.files.internal("Shaders/Flicker-fragment.glsl").readString();
-	      	flickerShaderProgram = new ShaderProgram(vertexShader,fragmentShader);
-	      	System.out.println("Flicker Shader log : " + flickerShaderProgram.getLog());
-	      	game.batch.setShader(flickerShaderProgram);
-	      	game.batch.setColor(1, 1, 1, 1);
-
-	      	colorFlicker = Pools.obtain(Vector3.class).set(MathUtils.random(0.78f, 1),	MathUtils.random(0.12f, 0.51f),	MathUtils.random(0, 0.16f));
-	      	flickerShaderProgram.begin();
-	      	flickerShaderProgram.setUniformf("u_color", colorFlicker);
-	      	flickerShaderProgram.end();
-	      	
-	      	alphaShaderProgram = new ShaderProgram(vertexShader,Gdx.files.internal("Shaders/AlphaMask-fragment.glsl").readString());
-			map = new Texture(Gdx.files.internal("Images/SmokeMask.png"));
-			textureTest = new Texture(Gdx.files.internal("Images/Smoke.png"));
-	      	System.out.println("Alpha Shader log : " + alphaShaderProgram.getLog());
-	      	
-	      	Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
-	      	colorReplacementProgram = new ShaderProgram(vertexShader,Gdx.files.internal("Shaders/ColorReplacement-fragment.glsl").readString());
-	      	colorReplacementProgram.begin();
-	      	colorReplacementProgram.setUniformf("u_output_color", colorBlack);
-	      	Pools.free(colorBlack);
-	      	System.out.println("Color Shader log : " + colorReplacementProgram.getLog());
-	   
-	      	vignetteProgram = new ShaderProgram(Gdx.files.internal("Shaders/Vignette-vertex.glsl").readString(), Gdx.files.internal("Shaders/Vignette-fragment.glsl").readString());
-	      	System.out.println("Vignette Shader log : " + vignetteProgram.getLog());
-
-	      	vignetteProgram.begin();
-	      	vignetteProgram.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	      	vignetteProgram.setUniformf("u_PosX", 0.38f);
-	      	vignetteProgram.setUniformf("u_PosY", 0.5f);
-	      	vignetteProgram.setUniformf("outerRadius", 0.75f);
-	      	vignetteProgram.setUniformf("innerRadius", 0.12f);
-	      	vignetteProgram.setUniformf("intensity", 0.5f);
-	      	vignetteProgram.end();
+			useIntroShaders = initializeIntroShaders();
+			if(!useIntroShaders){
+				Gdx.app.log("Cosmonaut", "Intro shader pipeline disabled. Falling back to non-shader intro rendering.");
+			}
 		}
       	
       	boolean touchControls = GameConstants.GAME_CONTROLS == GameConstants.ANDROID_BUTTONS_CONTROLS
       			|| GameConstants.GAME_CONTROLS == GameConstants.ANDROID_GESTURE_CONTROLS
       			|| GameConstants.GAME_CONTROLS == 12;
-      	if(touchControls){
+	      	if(touchControls){
 				game.assets.load("Images/Animations/Controls_Animation.pack", TextureAtlas.class);
 			
 			//if(GameConstants.SELECTED_LEVEL == 1 && !game.levelHandler.isLevelUnlocked(2)){
 				game.assets.load("Images/Animations/Rotation_Control_Animation.pack", TextureAtlas.class);
 				game.assets.load("Images/Animations/Jetpack_Control_Animation.pack", TextureAtlas.class);
 			//}
+			}
 		}
+
+	private boolean initializeIntroShaders(){
+		ShaderProgram.pedantic = false;
+		vertexShader = Gdx.files.internal("Shaders/PassThrough-vertex.glsl").readString();
+
+		flickerShaderProgram = createCompiledShader(vertexShader,
+				Gdx.files.internal("Shaders/Flicker-fragment.glsl").readString(),
+				"Flicker");
+		alphaShaderProgram = createCompiledShader(vertexShader,
+				Gdx.files.internal("Shaders/AlphaMask-fragment.glsl").readString(),
+				"AlphaMask");
+		colorReplacementProgram = createCompiledShader(vertexShader,
+				Gdx.files.internal("Shaders/ColorReplacement-fragment.glsl").readString(),
+				"ColorReplacement");
+		vignetteProgram = createCompiledShader(
+				Gdx.files.internal("Shaders/Vignette-vertex.glsl").readString(),
+				Gdx.files.internal("Shaders/Vignette-fragment.glsl").readString(),
+				"Vignette");
+
+		if(flickerShaderProgram == null || alphaShaderProgram == null
+				|| colorReplacementProgram == null || vignetteProgram == null){
+			disposeIntroShaderResources();
+			return false;
+		}
+
+		map = new Texture(Gdx.files.internal("Images/SmokeMask.png"));
+		textureTest = new Texture(Gdx.files.internal("Images/Smoke.png"));
+
+		game.batch.setShader(flickerShaderProgram);
+		game.batch.setColor(1, 1, 1, 1);
+
+		colorFlicker = Pools.obtain(Vector3.class).set(MathUtils.random(0.78f, 1),
+				MathUtils.random(0.12f, 0.51f),
+				MathUtils.random(0, 0.16f));
+		flickerShaderProgram.begin();
+		flickerShaderProgram.setUniformf("u_color", colorFlicker);
+		flickerShaderProgram.end();
+
+		Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
+		colorReplacementProgram.begin();
+		colorReplacementProgram.setUniformf("u_output_color", colorBlack);
+		colorReplacementProgram.end();
+		Pools.free(colorBlack);
+
+		vignetteProgram.begin();
+		vignetteProgram.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		vignetteProgram.setUniformf("u_PosX", 0.38f);
+		vignetteProgram.setUniformf("u_PosY", 0.5f);
+		vignetteProgram.setUniformf("outerRadius", 0.75f);
+		vignetteProgram.setUniformf("innerRadius", 0.12f);
+		vignetteProgram.setUniformf("intensity", 0.5f);
+		vignetteProgram.end();
+
+		return true;
+	}
+
+	private ShaderProgram createCompiledShader(String vertexSource, String fragmentSource, String label){
+		ShaderProgram shaderProgram = new ShaderProgram(vertexSource, fragmentSource);
+		if(!shaderProgram.isCompiled()){
+			Gdx.app.error("Cosmonaut", label + " shader compile failed: " + shaderProgram.getLog());
+			shaderProgram.dispose();
+			return null;
+		}
+		return shaderProgram;
+	}
+
+	private void disposeIntroShaderResources(){
+		if(colorFlicker != null){
+			Pools.free(colorFlicker);
+			colorFlicker = null;
+		}
+		if(flickerShaderProgram != null){
+			flickerShaderProgram.dispose();
+			flickerShaderProgram = null;
+		}
+		if(alphaShaderProgram != null){
+			alphaShaderProgram.dispose();
+			alphaShaderProgram = null;
+		}
+		if(colorReplacementProgram != null){
+			colorReplacementProgram.dispose();
+			colorReplacementProgram = null;
+		}
+		if(vignetteProgram != null){
+			vignetteProgram.dispose();
+			vignetteProgram = null;
+		}
+		if(map != null){
+			map.dispose();
+			map = null;
+		}
+		if(textureTest != null){
+			textureTest.dispose();
+			textureTest = null;
+		}
+		game.batch.setShader(null);
 	}
 		
 	@Override
