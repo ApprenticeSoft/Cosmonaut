@@ -72,6 +72,9 @@ public class GameScreen implements Screen{
 
 	private boolean levelTransitionHandled;
 	private boolean cursorCaptured;
+	private float physicsAccumulator;
+	private static final float MAX_FRAME_DELTA = 0.25f;
+	private static final int MAX_PHYSICS_STEPS_PER_FRAME = 5;
 
 	public GameScreen(final MyGdxGame game){
 		this.game= game;
@@ -95,6 +98,7 @@ public class GameScreen implements Screen{
 		GameConstants.LEVEL_TIME = 0;
 		levelTransitionHandled = false;
 		cursorCaptured = false;
+		physicsAccumulator = 0f;
 		checkUpgrades();
 
 		backgroundSound = game.assets.get("Sounds/Background.ogg", Music.class);
@@ -200,12 +204,21 @@ public class GameScreen implements Screen{
 
 		if(!GameConstants.GAME_PAUSED){
 			updateCursorCapture(true);
+			float frameDelta = Math.min(delta, MAX_FRAME_DELTA);
 	        //Animation
-	        GameConstants.ANIM_TIME += delta;
-	        backgroundTime += delta;
-	        GameConstants.LEVEL_TIME += delta;
+	        GameConstants.ANIM_TIME += frameDelta;
+	        backgroundTime += frameDelta;
+	        GameConstants.LEVEL_TIME += frameDelta;
 
-			world.step(GameConstants.BOX_STEP, GameConstants.BOX_VELOCITY_ITERATIONS, GameConstants.BOX_POSITION_ITERATIONS);
+			physicsAccumulator = Math.min(
+					physicsAccumulator + frameDelta,
+					GameConstants.BOX_STEP * MAX_PHYSICS_STEPS_PER_FRAME);
+			int stepCount = 0;
+			while(physicsAccumulator >= GameConstants.BOX_STEP && stepCount < MAX_PHYSICS_STEPS_PER_FRAME){
+				world.step(GameConstants.BOX_STEP, GameConstants.BOX_VELOCITY_ITERATIONS, GameConstants.BOX_POSITION_ITERATIONS);
+				physicsAccumulator -= GameConstants.BOX_STEP;
+				stepCount++;
+			}
 			mapReader.active();
 
 	        if(Gdx.input.isKeyJustPressed(Keys.ESCAPE))

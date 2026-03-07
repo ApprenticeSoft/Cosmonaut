@@ -28,6 +28,10 @@ import com.cosmonaut.Utils.Interlocutor;
 import com.cosmonaut.Utils.TextBox;
 
 public class IntroScreen implements Screen{
+	private static final float INTRO_REFERENCE_WIDTH = 1920f;
+	private static final float INTRO_SHIP_START_DELAY = 9f;
+	private static final float INTRO_SHIP_BASE_SPEED = 28f;
+	private static final float INTRO_BACKGROUND_BASE_SCROLL_SPEED = 20f;
 
 	final MyGdxGame game;
 	private final boolean webRuntime;
@@ -38,6 +42,7 @@ public class IntroScreen implements Screen{
 	private Texture backgroundTexture;
 	private float backgroundPosX = 0, spaceshipPosX = 0, spaceshipHeight, spaceshipWidth, alerteRougeTimer = 0, introTimer = 0;
 	private float spaceshipStartDelay, spaceshipSpeed;
+	private float backgroundTileWidth, backgroundScrollSpeed;
 	private Sound alarmSound, crashSound;
 	private boolean alarmSoundPlay = false, musicPlay = false, crashSoundPlay = false, alarmText = false, vuePerso = false, transition = false;
 	private Image transitionImage;
@@ -100,23 +105,16 @@ public class IntroScreen implements Screen{
 		
 		//Background
 		backgroundTexture = game.loadScreenTexture("Images/Space.jpg");
+		backgroundTileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+		backgroundScrollSpeed = INTRO_BACKGROUND_BASE_SCROLL_SPEED * Gdx.graphics.getWidth() / INTRO_REFERENCE_WIDTH;
 		
 		//Spaceship
 		//spaceshipHeight = 0.19f * skin.getRegion("Spaceship").getRegionHeight();
 		spaceshipHeight = 0.32f * Gdx.graphics.getHeight();
 		spaceshipWidth = spaceshipHeight * skin.getRegion("Vaisseau_Mere").getRegionWidth()/skin.getRegion("Vaisseau_Mere").getRegionHeight();
 		spaceshipPosX = -spaceshipHeight * skin.getRegion("Vaisseau_Mere").getRegionWidth()/skin.getRegion("Vaisseau_Mere").getRegionHeight();
-		if(webRuntime){
-			spaceshipStartDelay = 0f;
-			// Keep ship travel synchronized with the full first intro segment.
-			float travelEndX = Gdx.graphics.getWidth() + 0.3f * spaceshipWidth;
-			float travelDistance = travelEndX - spaceshipPosX;
-			spaceshipSpeed = travelDistance / 49f;
-		}
-		else{
-			spaceshipStartDelay = 9f;
-			spaceshipSpeed = 28f;
-		}
+		spaceshipStartDelay = INTRO_SHIP_START_DELAY;
+		spaceshipSpeed = INTRO_SHIP_BASE_SPEED * Gdx.graphics.getWidth() / INTRO_REFERENCE_WIDTH;
 		
 		//Transition
 		transitionImage = new Image(game.skin.getDrawable("WhiteSquare"));
@@ -131,10 +129,6 @@ public class IntroScreen implements Screen{
 		textBox = new TextBox(game, stage, "Texts/" + GameConstants.GAME_VERSION + "/" + Data.getLanguage() + "/Dialogue.txt", "\n", ";");
 		textBox.timeControl = true;
 		textBox.touchControl = true;
-		if(webRuntime){
-			textBox.setBaseTimeLimit(0.85f);
-			textBox.setFactorTimeLimit(0.02f);
-		}
 		textBox.setLabelPos(Gdx.graphics.getWidth()/2 - textBox.getTextBoxWidth()/2, 2*Gdx.graphics.getHeight()/3);
 		
 		interlocutors = new Array<Interlocutor>();
@@ -315,7 +309,7 @@ public class IntroScreen implements Screen{
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			
-			backgroundPosX -= 20 * Gdx.graphics.getDeltaTime();
+			updateBackgroundScroll(delta);
 			
 			//Sons
 				if(introTimer < 15){	
@@ -345,18 +339,12 @@ public class IntroScreen implements Screen{
 				}
 			
 			//Images
-		    game.batch.setShader(null);
-		    game.batch.setColor(1f, 1f, 1f, 1f);
-		    game.batch.begin();
-		    for(int i = 0; i < 3; i++){
-			    game.batch.draw(backgroundTexture, 
-			    				backgroundPosX + i * Gdx.graphics.getHeight()*backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-			    				0, 
-			    				Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-			    				Gdx.graphics.getHeight());
-			}  
-		    
-		    game.batch.end();
+			    game.batch.setShader(null);
+			    game.batch.setColor(1f, 1f, 1f, 1f);
+			    game.batch.begin();
+			    drawScrollingBackground();
+			    
+			    game.batch.end();
 		    //Vaisseau
 			    if(!vuePerso){	
 				    game.batch.setShader(null);
@@ -498,19 +486,13 @@ public class IntroScreen implements Screen{
 			else if(MathUtils.cos(alerteRougeTimer += 1.8f*Gdx.graphics.getDeltaTime()) < 0)
 				alarmSoundPlay = false;
 			
-				if(!alarmText){
-					alarmText = true;
-					textBox.newTextFile("Texts/" + GameConstants.GAME_VERSION + "/" + Data.getLanguage() + "/Alarm.txt");
-					textBox.setLabelPos(Gdx.graphics.getWidth()/2 - textBox.getTextBoxWidth()/2, 2*Gdx.graphics.getHeight()/3);
-					if(webRuntime){
-						textBox.setBaseTimeLimit(0.75f);
-						textBox.setFactorTimeLimit(0.02f);
-					}
-					else{
+					if(!alarmText){
+						alarmText = true;
+						textBox.newTextFile("Texts/" + GameConstants.GAME_VERSION + "/" + Data.getLanguage() + "/Alarm.txt");
+						textBox.setLabelPos(Gdx.graphics.getWidth()/2 - textBox.getTextBoxWidth()/2, 2*Gdx.graphics.getHeight()/3);
 						textBox.setBaseTimeLimit(1.8f);
 						textBox.setFactorTimeLimit(0.04f);
 					}
-				}
 			if(!textBox.write){
 		    	textBox.setTimer(0);
 		    	textBox.writeDialogue();
@@ -550,7 +532,7 @@ public class IntroScreen implements Screen{
 		Screen nextScreen;
 		if(GameConstants.PLAY_INTRO)
 			nextScreen = new MainMenuScreen(game);
-		else if(webRuntime || game.levelHandler.isLevelUnlocked(2))
+		else if(game.levelHandler.isLevelUnlocked(2))
 			nextScreen = new GameScreen(game);
 		else
 			nextScreen = new TutorialScreen(game);
@@ -560,6 +542,32 @@ public class IntroScreen implements Screen{
 
 		dispose();
 		game.setScreen(nextScreen);
+	}
+
+	private void updateBackgroundScroll(float delta){
+		if(backgroundTileWidth <= 0f){
+			backgroundTileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+		}
+		backgroundPosX -= backgroundScrollSpeed * delta;
+		while(backgroundPosX <= -backgroundTileWidth){
+			backgroundPosX += backgroundTileWidth;
+		}
+	}
+
+	private void drawScrollingBackground(){
+		float tileWidth = backgroundTileWidth;
+		if(tileWidth <= 0f){
+			tileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+		}
+		int tilesToDraw = Math.max(3, (int)Math.ceil(Gdx.graphics.getWidth() / tileWidth) + 2);
+		float startX = backgroundPosX - tileWidth;
+		for(int i = 0; i < tilesToDraw; i++){
+			game.batch.draw(backgroundTexture,
+					startX + i * tileWidth,
+					0,
+					tileWidth,
+					Gdx.graphics.getHeight());
+		}
 	}
 
 	@Override

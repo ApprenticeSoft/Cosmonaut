@@ -26,41 +26,76 @@
         || ('maxTouchPoints' in navigator && navigator.maxTouchPoints > 1);
 
     let immersiveRequested = false;
+    let immersiveRequestInFlight = false;
     let lastImmersiveAttemptAt = 0;
+    const IMMERSIVE_RETRY_MS = 350;
+
+    async function requestFullscreenOnElement(element) {
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            return true;
+        }
+
+        const requestFn = element.requestFullscreen || element.webkitRequestFullscreen || element.msRequestFullscreen;
+        if (!requestFn) {
+            return false;
+        }
+
+        try {
+            const result = requestFn.call(element, { navigationUI: 'hide' });
+            if (result && typeof result.then === 'function') {
+                await result;
+            }
+        } catch (firstError) {
+            try {
+                const result = requestFn.call(element);
+                if (result && typeof result.then === 'function') {
+                    await result;
+                }
+            } catch (secondError) {
+                return false;
+            }
+        }
+
+        return !!(document.fullscreenElement || document.webkitFullscreenElement);
+    }
 
     async function requestImmersiveLandscape() {
-        if (!isLikelyMobile || immersiveRequested) {
+        if (!isLikelyMobile || immersiveRequestInFlight) {
             return;
         }
+
+        if (immersiveRequested && (document.fullscreenElement || document.webkitFullscreenElement)) {
+            return;
+        }
+
         const now = Date.now();
-        if (now - lastImmersiveAttemptAt < 500) return;
+        if (now - lastImmersiveAttemptAt < IMMERSIVE_RETRY_MS) return;
         lastImmersiveAttemptAt = now;
+        immersiveRequestInFlight = true;
 
         const root = document.documentElement;
+        const fullscreenTarget = document.getElementById('embed-html') || root;
         try {
-            if (!document.fullscreenElement) {
-                if (root.requestFullscreen) {
-                    await root.requestFullscreen({ navigationUI: 'hide' });
-                } else if (root.webkitRequestFullscreen) {
-                    root.webkitRequestFullscreen();
-                } else {
-                    return;
-                }
-            }
-        } catch (err) {
-            // Allow retry after a blocked fullscreen request.
-            return;
-        }
+            const enteredFullscreen = await requestFullscreenOnElement(fullscreenTarget);
+            immersiveRequested = enteredFullscreen;
 
-        immersiveRequested = !!document.fullscreenElement;
-        try {
-            if (screen.orientation && screen.orientation.lock) {
-                await screen.orientation.lock('landscape');
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    await screen.orientation.lock('landscape');
+                }
+            } catch (err) {
+                // Ignore unsupported orientation locking.
             }
-        } catch (err) {
-            // Ignore unsupported orientation locking.
+
+            // Extra nudge for Android browsers that keep browser chrome visible until scroll/resize.
+            window.scrollTo(0, 1);
+            setTimeout(function () {
+                window.scrollTo(0, 1);
+                window.dispatchEvent(new Event('resize'));
+            }, 60);
+        } finally {
+            immersiveRequestInFlight = false;
         }
-        window.dispatchEvent(new Event('resize'));
     }
 
     function triggerImmersiveRequest() {
@@ -74,6 +109,8 @@
         rotateHint.style.display = portrait ? 'flex' : 'none';
     }
 
+    window.addEventListener('touchstart', triggerImmersiveRequest, { passive: true });
+    window.addEventListener('pointerdown', triggerImmersiveRequest, { passive: true });
     window.addEventListener('click', triggerImmersiveRequest, { passive: true });
     window.addEventListener('mousedown', triggerImmersiveRequest, { passive: true });
     window.addEventListener('touchend', triggerImmersiveRequest, { passive: true });

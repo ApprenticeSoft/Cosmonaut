@@ -1,14 +1,14 @@
 Control;Control de tierra a SS Astraeus.
-Tom;¿hmm?
+Tom;Â¿hmm?
 Control;Tenemos malas noticias.
-Tom;¿hmm hmm?
-Control;Bueno...;Ya sabes...;hum...;¿Sabes, este aprendiz del que te hablé la semana pasada?
-Tom;¿hmm?
-Control;Sí, es él.;Bueno, él metió la pata.;Fue asignado a la detección de asteroides mientras cruzas el cinturón de asteroides.;Y...;¿Cómo decirlo?;Él estaba haciendo un buen trabajo el primer mes, así que no lo he visto mucho últimamente.;Y este pequeño mocoso, mientras se suponía que debía vigilar los asteroides que se acercaban, pasó su tiempo jugando a Bandy Crush en Fakebook y...
-Tom;¡TOMÓ LA VENTAJA DE MI AUSENCIA PARA BATER MI PUNTUACIÓN!?!?!?!?
-Control;No...;hum...;Larga historia corta: Vas directamente en una región muy densa del cinturón de asteroides.;Y dada su velocidad, no hay forma de evitarlo.;En realidad se puede llegar a esta región en cualquier momento.
-Tom;¿hmm?
-Control;Sí.;Si tienes la suerte de no golpear un asteroide enorme que todavía tendrá que hacer frente a una lluvia micrometeorótica que se romperá su nave espacial.
-Tom;Así que...;¿Cuál es el plan?
-Control;Tendrás una muerte dolorosa.
-Tom;¿hmm?
+Tom;Â¿hmm hmm?
+Control;Bueno...;Ya sabes...;hum...;Â¿Sabes, este aprendiz del que te hablÃ© la semana pasada?
+Tom;Â¿hmm?
+Control;SÃ­, es Ã©l.;Bueno, Ã©l metiÃ³ la pata.;Fue asignado a la detecciÃ³n de asteroides mientras cruzas el cinturÃ³n de asteroides.;Y...;Â¿CÃ³mo decirlo?;Ã‰l estaba haciendo un buen trabajo el primer mes, asÃ­ que no lo he visto mucho Ãºltimamente.;Y este pequeÃ±o mocoso, mientras se suponÃ­a que debÃ­a vigilar los asteroides que se acercaban, pasÃ³ su tiempo jugando a Bandy Crush en Fakebook y...
+Tom;Â¡TOMÃ“ LA VENTAJA DE MI AUSENCIA PARA BATER MI PUNTUACIÃ“N!?!?!?!?
+Control;No...;hum...;Larga historia corta: Vas directamente en una regiÃ³n muy densa del cinturÃ³n de asteroides.;Y dada su velocidad, no hay forma de evitarlo.;En realidad se puede llegar a esta regiÃ³n en cualquier momento.
+Tom;Â¿hmm?
+Control;SÃ­.;Si tienes la suerte de no golpear un asteroide enorme que todavÃ­a tendrÃ¡ que hacer frente a una lluvia micrometeorÃ³tica que se romperÃ¡ su nave espacial.
+Tom;AsÃ­ que...;Â¿CuÃ¡l es el plan?
+Control;TendrÃ¡s una muerte dolorosa.
+Tom;Â¿hmm?

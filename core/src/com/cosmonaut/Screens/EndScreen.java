@@ -24,6 +24,7 @@ import com.cosmonaut.MyGdxGame;
 import com.cosmonaut.Utils.GameConstants;
 
 public class EndScreen implements Screen{
+	private static final float CINEMATIC_REFERENCE_WIDTH = 1920f;
 	
 	final MyGdxGame game;
 	private OrthographicCamera camera;
@@ -46,9 +47,15 @@ public class EndScreen implements Screen{
 	private Vector3 colorYellow;
 	private TextureRegion regionMurGauche, regionMurDroite, regionMurHaut, regionMurBas;
 	
-    //Background
-    private Texture backgroundTexture;
-   	private float backgroundPosX = 0, backgroundPosY = 0, speedFactor = 1;
+	    //Background
+	    private Texture backgroundTexture;
+	   	private float backgroundPosX = 0, backgroundPosY = 0, speedFactor = 1;
+	   	private float backgroundTileWidth;
+	   	private float backgroundScrollSpeedX;
+	   	private float spaceshipMoveSpeedX;
+	   	private float heroWalkSpeedX;
+	   	private float heroWalkSpeedY;
+	   	private float faceGrowthSpeed;
    	
    	//Credits
    	private Label creditLabel, nameLabel;
@@ -83,8 +90,15 @@ public class EndScreen implements Screen{
 			stage = new Stage();
 		stage.addActor(game.blackImage);
 		
-        //Background  
-		backgroundTexture = game.loadScreenTexture("Images/Space.jpg");
+	        //Background  
+			backgroundTexture = game.loadScreenTexture("Images/Space.jpg");
+			backgroundTileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+			backgroundScrollSpeedX = scaleByReferenceWidth(8f);
+			spaceshipMoveSpeedX = scaleByReferenceWidth(10f);
+			heroWalkSpeedX = scaleByReferenceWidth(7f);
+			heroWalkSpeedY = scaleByReferenceWidth(1f);
+			faceGrowthSpeed = scaleByReferenceWidth(7f);
+			animationSpeed = scaleByReferenceWidth(40f);
 		
 		/*
 		 * Test shader
@@ -323,14 +337,8 @@ public class EndScreen implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.batch.begin();
 		//Background
-		backgroundPosX -= 8 * Gdx.graphics.getDeltaTime();
-		for(int i = 0; i < 3; i++){
-		    game.batch.draw(backgroundTexture, 
-		    				backgroundPosX + i * Gdx.graphics.getHeight()*backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-		    				0, 
-		    				Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-		    				Gdx.graphics.getHeight());
-		}
+		advanceBackgroundX(Gdx.graphics.getDeltaTime());
+		drawBackgroundRows(0f, 1);
 		//Couloir
 		game.batch.setColor(0.65f, 0.65f, 0.65f, 1);
 		game.batch.draw(skin.getRegion("Fin_Couloir"), 
@@ -396,8 +404,8 @@ public class EndScreen implements Screen{
 						porteHeight);
 		//Personnage
 		game.batch.draw(skin.getRegion("Fin_Personnage_Dos"), 
-						personnageX += 7*Gdx.graphics.getDeltaTime(), 
-						personnageY += 1*Gdx.graphics.getDeltaTime(), 
+						personnageX += heroWalkSpeedX * Gdx.graphics.getDeltaTime(), 
+						personnageY += heroWalkSpeedY * Gdx.graphics.getDeltaTime(), 
 						0,
 						0,
 						1.3f*porteHeight * skin.getRegion("Fin_Personnage_Dos").getRegionWidth()/skin.getRegion("Fin_Personnage_Dos").getRegionHeight(), 
@@ -436,14 +444,8 @@ public class EndScreen implements Screen{
 		
 		game.batch.begin();
 		//Background
-		backgroundPosX -= 8 * Gdx.graphics.getDeltaTime();
-		for(int i = 0; i < 3; i++){
-		    game.batch.draw(backgroundTexture, 
-		    				backgroundPosX + i * Gdx.graphics.getHeight()*backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-		    				0, 
-		    				Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-		    				Gdx.graphics.getHeight());
-		}
+		advanceBackgroundX(Gdx.graphics.getDeltaTime());
+		drawBackgroundRows(0f, 1);
 		//Couloir
 		game.batch.draw(skin.getRegion("Fin_Couloir2"),
 						0,
@@ -465,7 +467,7 @@ public class EndScreen implements Screen{
 						personnageFaceY, 
 						0,
 						0,
-						personnageFaceWidth += 7*Gdx.graphics.getDeltaTime(), 
+						personnageFaceWidth += faceGrowthSpeed * Gdx.graphics.getDeltaTime(), 
 						personnageFaceWidth * skin.getRegion("Fin_Personnage_Face").getRegionHeight()/skin.getRegion("Fin_Personnage_Face").getRegionWidth(),
 						1,
 						1,
@@ -487,17 +489,11 @@ public class EndScreen implements Screen{
 		
 		game.batch.begin();
 		//Background
-		backgroundPosX -= 8 * Gdx.graphics.getDeltaTime();
-		for(int i = 0; i < 3; i++){
-		    game.batch.draw(backgroundTexture, 
-		    				backgroundPosX + i * Gdx.graphics.getHeight()*backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-		    				0, 
-		    				Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-		    				Gdx.graphics.getHeight());
-		}
+		advanceBackgroundX(Gdx.graphics.getDeltaTime());
+		drawBackgroundRows(0f, 1);
 		
-		 game.batch.draw(	skin.getRegion("Vaisseau_Mere"), 
-			 				spaceshipPosX += 10 * Gdx.graphics.getDeltaTime(), 
+			 game.batch.draw(	skin.getRegion("Vaisseau_Mere"), 
+			 				spaceshipPosX += spaceshipMoveSpeedX * Gdx.graphics.getDeltaTime(), 
 			 				0.3f*Gdx.graphics.getHeight() - 0.5f*spaceshipHeight, 
 			 				spaceshipWidth, 
 			 				spaceshipHeight);
@@ -548,16 +544,8 @@ public class EndScreen implements Screen{
 		
 		game.batch.begin();
 		//Background
-		backgroundPosX -= 8 * Gdx.graphics.getDeltaTime();
-		for(int i = 0; i < 3; i++){
-			for(int j = 0; j < 4; j++){
-			    game.batch.draw(backgroundTexture, 
-			    				backgroundPosX + i * Gdx.graphics.getHeight()*backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-			    				backgroundPosY + j * Gdx.graphics.getHeight(), 
-			    				Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-			    				Gdx.graphics.getHeight());
-			}
-		}
+		advanceBackgroundX(Gdx.graphics.getDeltaTime());
+		drawBackgroundRows(backgroundPosY, 4);
 		game.batch.draw(skin.getRegion("Surface_Vaisseau"),
 						0,
 						backgroundPosY,
@@ -597,17 +585,9 @@ public class EndScreen implements Screen{
 		game.batch.begin();
 		//Background
 		speedFactor = MathUtils.clamp(speedFactor -= 0.11f* Gdx.graphics.getDeltaTime(), 0, 1);	
-		backgroundPosX -= 8 * Gdx.graphics.getDeltaTime();
+		advanceBackgroundX(Gdx.graphics.getDeltaTime());
 		backgroundPosY -= speedFactor * speedFactor * Gdx.graphics.getHeight() * Gdx.graphics.getDeltaTime();
-		for(int i = 0; i < 3; i++){
-			for(int j = 0; j < 5; j++){
-			    game.batch.draw(backgroundTexture, 
-			    				backgroundPosX + i * Gdx.graphics.getHeight()*backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-			    				backgroundPosY + j * Gdx.graphics.getHeight(), 
-			    				Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-			    				Gdx.graphics.getHeight());
-			}
-		}
+		drawBackgroundRows(backgroundPosY, 5);
 		
 		if(vaisseauFinReacteurAlpha < 1 && creditTimer == 0)
 			vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha += 0.65f * Gdx.graphics.getDeltaTime(), 0f , 1f);
@@ -682,17 +662,9 @@ public class EndScreen implements Screen{
 		game.batch.setColor(1 - vaisseauFinReacteurAlpha, 1 - vaisseauFinReacteurAlpha, 1 - vaisseauFinReacteurAlpha, 1 - vaisseauFinReacteurAlpha);
 		//Background
 		speedFactor = MathUtils.clamp(speedFactor -= 0.11f* Gdx.graphics.getDeltaTime(), 0, 1);	
-		backgroundPosX -= 8 * Gdx.graphics.getDeltaTime();
+		advanceBackgroundX(Gdx.graphics.getDeltaTime());
 		backgroundPosY -= speedFactor * speedFactor * Gdx.graphics.getHeight() * Gdx.graphics.getDeltaTime();
-		for(int i = 0; i < 3; i++){
-			for(int j = 0; j < 5; j++){
-			    game.batch.draw(backgroundTexture, 
-			    				backgroundPosX + i * Gdx.graphics.getHeight()*backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-			    				backgroundPosY + j * Gdx.graphics.getHeight(), 
-			    				Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight(), 
-			    				Gdx.graphics.getHeight());
-			}
-		}
+		drawBackgroundRows(backgroundPosY, 5);
 		game.batch.end();
 		
 		if(vaisseauFinReacteurAlpha == 1){
@@ -728,6 +700,38 @@ public class EndScreen implements Screen{
 		}
 		Pools.free(vaisseauFinPosition);
 		Pools.free(colorYellow);
+	}
+
+	private float scaleByReferenceWidth(float baseSpeed){
+		return baseSpeed * Gdx.graphics.getWidth() / CINEMATIC_REFERENCE_WIDTH;
+	}
+
+	private void advanceBackgroundX(float delta){
+		if(backgroundTileWidth <= 0f){
+			backgroundTileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+		}
+		backgroundPosX -= backgroundScrollSpeedX * delta;
+		while(backgroundPosX <= -backgroundTileWidth){
+			backgroundPosX += backgroundTileWidth;
+		}
+	}
+
+	private void drawBackgroundRows(float baseY, int rowCount){
+		float tileWidth = backgroundTileWidth;
+		if(tileWidth <= 0f){
+			tileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+		}
+		int columns = Math.max(3, (int)Math.ceil(Gdx.graphics.getWidth() / tileWidth) + 2);
+		float startX = backgroundPosX - tileWidth;
+		for(int i = 0; i < columns; i++){
+			for(int j = 0; j < rowCount; j++){
+				game.batch.draw(backgroundTexture,
+						startX + i * tileWidth,
+						baseY + j * Gdx.graphics.getHeight(),
+						tileWidth,
+						Gdx.graphics.getHeight());
+			}
+		}
 	}
 
 	private boolean initializeEndShaders(){

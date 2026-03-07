@@ -652,6 +652,68 @@ Build/deploy verification:
   - restarted `cosmonaut-static.service` (`active`),
   - HTTPS check returns `HTTP/1.1 200 OK`.
 
+## 2026-03-07 HTML Cross-Device Timing/Fullscreen/Tutorial Fix Pack
+
+User-reported issues in this pass:
+
+- Desktop HTML:
+  - FR/ES special characters not rendered correctly.
+  - Intro flow could degrade into black-screen behavior.
+- Mobile HTML (Samsung S24 FE):
+  - browser UI bars visible again (immersive fullscreen unreliable),
+  - intro ship/background timing/speeds mismatched vs desktop baseline,
+  - gameplay controls (rotation/jetpack) running too fast on high-refresh displays.
+- Missing tutorial in HTML first-time level-1 flow.
+
+Fixes implemented:
+
+- Frame-rate normalization (core gameplay):
+  - `core/src/com/cosmonaut/Screens/GameScreen.java`
+  - Replaced one-physics-step-per-render behavior with fixed-step accumulator (`1/60`) and frame-delta clamp.
+  - This removes refresh-rate speed-up on 90/120Hz mobile displays while keeping deterministic stepping.
+
+- Intro timing + background loop normalization:
+  - `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - Removed web-only fast intro overrides and aligned intro ship start timing to desktop baseline.
+  - Scaled ship/background motion by reference width (`1920`) so timing/progress is resolution-independent.
+  - Added robust tiled background looping helper to keep star field continuous on wide screens.
+  - Unified alarm text timing with native values (removed web-shortened timings).
+
+- End cinematic normalization (intro/finish parity requirement):
+  - `core/src/com/cosmonaut/Screens/EndScreen.java`
+  - Added reference-width speed scaling for ship/corridor character movement and background drift.
+  - Replaced fixed 3-column background draws with dynamic column count + wrapped tiling helper.
+
+- HTML mobile immersive/fullscreen hardening:
+  - `html/webapp/index.html`
+  - Added resilient fullscreen request fallback chain (with/without options + prefixed API fallback).
+  - Added in-flight guard + retry throttling.
+  - Added extra user-gesture triggers (`touchstart`, `pointerdown`) and resize/scroll nudges after request.
+  - Keeps landscape lock attempts and re-resize dispatches after immersive transitions.
+
+- Special-character rendering on HTML:
+  - Converted desktop localized text files from ISO-8859-1 to UTF-8:
+    - `android/assets/Texts/desktop/{DE,FR,ES}/*.txt`
+  - `html/src/com/cosmonaut/supersrc/com/cosmonaut/Screens/LoadingScreen.java`
+    - Web runtime fonts now load from discovered hashed `lsans-15-*.fnt` bitmap font when available (accent-capable), with scaled runtime registration.
+
+- Tutorial re-enabled on HTML first-time level 1:
+  - `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - `core/src/com/cosmonaut/Utils/ButtonAction.java`
+  - Removed WebGL bypass that forced direct `GameScreen` and skipped `TutorialScreen`.
+  - Behavior now matches native first-time progression: level 1 opens tutorial until level 2 unlock state is present.
+
+Verification:
+
+- Build:
+  - `./gradlew :core:compileJava :desktop:build :html:dist` -> **SUCCESS**
+- Deploy:
+  - synced `html/build/dist/` to Pi `/var/www/cosmonaut`
+  - restarted backend service -> `cosmonaut-static.service: active`
+- Web smoke:
+  - `node qa/web_smoke.js` -> **ALL PASS**
+    - `local-desktop`, `local-mobile`, `rpi-desktop`, `rpi-mobile`.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

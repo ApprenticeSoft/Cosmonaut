@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +28,7 @@ import com.cosmonaut.MyGdxGame;
 import com.cosmonaut.Utils.GameConstants;
 
 public class LoadingScreen implements Screen {
+    private static final String WEB_BITMAP_FONT_PREFIX = "lsans-15-";
 
     final MyGdxGame game;
     OrthographicCamera camera;
@@ -40,6 +42,7 @@ public class LoadingScreen implements Screen {
     private ProgressBar progressBar;
     private ProgressBarStyle progressBarStyle;
     private NinePatchDrawable ninePatchKnob, ninePatchKnobBefore, ninePatchBar;
+    private FileHandle cachedWebBitmapFontFile;
 
     public LoadingScreen(final MyGdxGame game) {
         this.game = game;
@@ -148,7 +151,7 @@ public class LoadingScreen implements Screen {
     }
 
     private void registerFallbackFont(String fontKey, float targetSizePx) {
-        BitmapFont font = new BitmapFont();
+        BitmapFont font = createWebFallbackFont();
         float baseLineHeight = Math.max(1f, font.getLineHeight());
         float scale = Math.max(0.75f, targetSizePx / baseLineHeight);
         font.getData().setScale(scale);
@@ -157,6 +160,31 @@ public class LoadingScreen implements Screen {
             region.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
         }
         game.registerRuntimeFont(fontKey, font);
+    }
+
+    private BitmapFont createWebFallbackFont() {
+        FileHandle bitmapFontFile = resolveWebBitmapFontFile();
+        if (bitmapFontFile != null) {
+            return new BitmapFont(bitmapFontFile, false);
+        }
+        // Last-resort fallback if hashed lsans font cannot be resolved.
+        return new BitmapFont();
+    }
+
+    private FileHandle resolveWebBitmapFontFile() {
+        if (cachedWebBitmapFontFile != null && cachedWebBitmapFontFile.exists()) {
+            return cachedWebBitmapFontFile;
+        }
+
+        FileHandle[] rootFiles = Gdx.files.internal("").list();
+        for (FileHandle file : rootFiles) {
+            String name = file.name();
+            if (name.startsWith(WEB_BITMAP_FONT_PREFIX) && name.endsWith(".fnt")) {
+                cachedWebBitmapFontFile = file;
+                return cachedWebBitmapFontFile;
+            }
+        }
+        return null;
     }
 
     private Texture loadWebTexture(String internalPath) {

@@ -2,5 +2,5 @@ Alarm;WARNUNG
 Tom;Verdammt !
 Alarm;SAUERSTOFF AUSTRITT FESTGESTELLT
 Tom;Ich muss die Rettungskapsel erreichen.
-Alarm;KÜNSTLICHES SCHWERKRAFTMODUL BESCHÄDIGT
+Alarm;KÃœNSTLICHES SCHWERKRAFTMODUL BESCHÃ„DIGT
 Tom;Wo ist mein Raumanzug ?
