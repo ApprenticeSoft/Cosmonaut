@@ -621,6 +621,37 @@ Verification:
 - `timeout 160s ./gradlew :desktop:run --console=plain`:
   - no `volume cannot be < 0` crash observed during the intro runtime window.
 
+## 2026-03-07 Spawned Object Vertical Offset Fix (Tiled Unit Conversion)
+
+User report:
+
+- Spawned level objects (switches, powerups, oxygen/fuel refills) were vertically offset upward by roughly one tile, making some unreachable/outside playable space.
+
+Root cause:
+
+- Spawned-object coordinate conversion used:
+  - `y + 1.5 * objectHeight`
+- For Tiled spawn objects, this adds an extra full object-height (one tile in most levels), pushing objects too high.
+
+Fix applied:
+
+- Standardized affected spawned-object center conversion to:
+  - `y + 0.5 * objectHeight`
+- Updated files:
+  - `core/src/com/cosmonaut/Items/Item.java`
+  - `core/src/com/cosmonaut/Bodies/ItemSwitch.java`
+  - `core/src/com/cosmonaut/Items/Gyrophare.java`
+
+Build/deploy verification:
+
+- `./gradlew :core:compileJava :desktop:build :html:dist :desktop:windowsPortableBundle` -> **SUCCESS**
+- Web smoke after deploy:
+  - `node qa/web_smoke.js` -> `local-desktop PASS`, `local-mobile PASS`, `rpi-desktop PASS`, `rpi-mobile PASS`.
+- Pi deploy:
+  - updated `/var/www/cosmonaut`,
+  - restarted `cosmonaut-static.service` (`active`),
+  - HTTPS check returns `HTTP/1.1 200 OK`.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

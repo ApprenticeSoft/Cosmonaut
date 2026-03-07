@@ -23,7 +23,7 @@ public class Gyrophare {
 	public Gyrophare(final MyGdxGame game, MapObject mapObject, RayHandler rayHandler){
 		this.game = game;
 		x = (mapObject.getProperties().get("x", float.class) + mapObject.getProperties().get("width", float.class)/2) * GameConstants.MPP;
-		y = (mapObject.getProperties().get("y", float.class) + 1.5f*mapObject.getProperties().get("height", float.class)) * GameConstants.MPP;
+		y = (mapObject.getProperties().get("y", float.class) + 0.5f*mapObject.getProperties().get("height", float.class)) * GameConstants.MPP;
 		size = mapObject.getProperties().get("height", float.class)/2 * GameConstants.MPP/4;
 
 		initialState(mapObject);
@@ -44,7 +44,7 @@ public class Gyrophare {
 		rotationAngle = 0;
 		nbRay = 50;
 		x = (mapObject.getProperties().get("x", float.class) + mapObject.getProperties().get("width", float.class)/2) * GameConstants.MPP;
-		y = (mapObject.getProperties().get("y", float.class) + 1.5f*mapObject.getProperties().get("height", float.class)) * GameConstants.MPP;
+		y = (mapObject.getProperties().get("y", float.class) + 0.5f*mapObject.getProperties().get("height", float.class)) * GameConstants.MPP;
 		size = mapObject.getProperties().get("height", float.class)/2 * GameConstants.MPP/4;
 
 		initialState(mapObject);

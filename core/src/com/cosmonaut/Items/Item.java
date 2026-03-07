@@ -60,7 +60,7 @@ public class Item {
 		bodyDef.type = BodyType.DynamicBody;
 
 		bodyDef.position.set((mapObject.getProperties().get("x", float.class) + mapObject.getProperties().get("width", float.class)/2) * GameConstants.MPP,
-							(mapObject.getProperties().get("y", float.class) + 1.5f*mapObject.getProperties().get("height", float.class)) * GameConstants.MPP);
+							(mapObject.getProperties().get("y", float.class) + 0.5f*mapObject.getProperties().get("height", float.class)) * GameConstants.MPP);
 		
 		polygonShape.setAsBox(width, height);
 		
