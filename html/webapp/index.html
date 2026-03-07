@@ -29,6 +29,11 @@
     let immersiveRequestInFlight = false;
     let lastImmersiveAttemptAt = 0;
     const IMMERSIVE_RETRY_MS = 350;
+    const wakeLockSupported = typeof navigator !== 'undefined'
+        && navigator.wakeLock
+        && typeof navigator.wakeLock.request === 'function';
+    let wakeLock = null;
+    let wakeLockRequestInFlight = false;
 
     async function requestFullscreenOnElement(element) {
         if (document.fullscreenElement || document.webkitFullscreenElement) {
@@ -98,8 +103,45 @@
         }
     }
 
+    async function requestWakeLock() {
+        if (!isLikelyMobile || !wakeLockSupported) {
+            return;
+        }
+        if (document.visibilityState !== 'visible') {
+            return;
+        }
+        if (wakeLock || wakeLockRequestInFlight) {
+            return;
+        }
+        wakeLockRequestInFlight = true;
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            wakeLock.addEventListener('release', function () {
+                wakeLock = null;
+            });
+        } catch (err) {
+            wakeLock = null;
+        } finally {
+            wakeLockRequestInFlight = false;
+        }
+    }
+
+    async function releaseWakeLock() {
+        if (!wakeLock) {
+            return;
+        }
+        try {
+            await wakeLock.release();
+        } catch (err) {
+            // Ignore release errors.
+        } finally {
+            wakeLock = null;
+        }
+    }
+
     function triggerImmersiveRequest() {
         requestImmersiveLandscape();
+        requestWakeLock();
     }
 
     function updateRotateHint() {
@@ -125,16 +167,28 @@
         triggerImmersiveRequest();
     });
     window.addEventListener('focus', triggerImmersiveRequest);
+    window.addEventListener('pageshow', function () {
+        immersiveRequested = false;
+        triggerImmersiveRequest();
+    });
+    window.addEventListener('pagehide', function () {
+        releaseWakeLock();
+    });
     updateRotateHint();
 
     document.addEventListener('fullscreenchange', function () {
         if (!document.fullscreenElement) {
             immersiveRequested = false;
         }
+        requestWakeLock();
     });
     document.addEventListener('visibilitychange', function () {
         if (document.visibilityState === 'visible') {
+            immersiveRequested = false;
             triggerImmersiveRequest();
+            setTimeout(triggerImmersiveRequest, 250);
+        } else {
+            releaseWakeLock();
         }
     });
 </script>

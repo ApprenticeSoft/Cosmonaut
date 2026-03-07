@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.cosmonaut.MyGdxGame;
+import com.cosmonaut.Utils.LaunchConfig;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Timer;
@@ -61,6 +62,19 @@ public class HtmlLauncher extends GwtApplication {
         var vv = $wnd.visualViewport;
         if (vv && vv.height) return Math.max(1, Math.round(vv.height));
         return Math.max(1, $wnd.innerHeight || $doc.documentElement.clientHeight || 1);
+    }-*/;
+
+    private native int getStartLevelOverrideFromQuery() /*-{
+        try {
+            var params = new URLSearchParams(($wnd.location && $wnd.location.search) ? $wnd.location.search : "");
+            var levelValue = params.get("level");
+            if (!levelValue) return -1;
+            var level = parseInt(levelValue, 10);
+            if (isNaN(level)) return -1;
+            return level;
+        } catch (e) {
+            return -1;
+        }
     }-*/;
 
     private int getBrowserWidth() {
@@ -136,6 +150,13 @@ public class HtmlLauncher extends GwtApplication {
 
     @Override
     public ApplicationListener createApplicationListener() {
+        int startLevelOverride = getStartLevelOverrideFromQuery();
+        if(startLevelOverride >= 1 && startLevelOverride <= 24){
+            LaunchConfig.startLevelOverride = startLevelOverride;
+        }
+        else{
+            LaunchConfig.startLevelOverride = -1;
+        }
         return new MyGdxGame(new ActionResolverHtml());
     }
 }

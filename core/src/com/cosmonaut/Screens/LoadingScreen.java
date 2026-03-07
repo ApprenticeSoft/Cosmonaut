@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.cosmonaut.MyGdxGame;
 import com.cosmonaut.Utils.GameConstants;
+import com.cosmonaut.Utils.LaunchConfig;
 
 public class LoadingScreen implements Screen{
 
@@ -233,11 +234,15 @@ public class LoadingScreen implements Screen{
 	    
 	    progressBar.setValue(100*game.assets.getProgress());
 	    
-		if(game.assets.update()){
-			dispose();
-			((Game)Gdx.app.getApplicationListener()).setScreen(new HomeScreen(game));	    		
+			if(game.assets.update()){
+				dispose();
+				if(LaunchConfig.startLevelOverride >= 1 && LaunchConfig.startLevelOverride <= GameConstants.NUMBER_OF_LEVEL){
+					GameConstants.PLAY_INTRO = false;
+					GameConstants.SELECTED_LEVEL = LaunchConfig.startLevelOverride;
+				}
+				((Game)Gdx.app.getApplicationListener()).setScreen(new HomeScreen(game));
+			}
 		}
-	}
 
 	@Override
 	public void resize(int width, int height) {

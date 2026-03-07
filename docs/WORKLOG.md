@@ -720,3 +720,55 @@ Verification:
 2. `./gradlew :core:compileJava :android:assembleDebug :desktop:build :desktop:windowsBundle :html:dist`
 3. Deploy `html/build/dist/` to Pi and run host-header `curl` checks.
 4. Review this worklog section "Deployment execution log" for the next pending item.
+
+## 2026-03-07 Mobile HTML Stability + Progression Fix Pack
+
+User-reported issues:
+
+- Intro star background looked flickery on mobile.
+- After phone sleep/wake, immersive fullscreen was often lost and not restored.
+- Level progression/access regression:
+  - finishing level 1 then pressing `Next` returned to main menu,
+  - selecting level 2 from level selection could lead to black screen.
+- Request for a repeatable level-start test covering all levels.
+
+Fixes implemented:
+
+- Transition safety for gameplay/menu listeners:
+  - `core/src/com/cosmonaut/Utils/HUD.java`
+  - `core/src/com/cosmonaut/Utils/ButtonAction.java`
+  - Reworked transitions to `setScreen(newScreen)` first, then dispose previous screen.
+  - Removed the old `Next` fallback path that silently redirected to `HomeScreen` on exception.
+  - Added guarded error logging for transition failures instead of masking errors.
+  - Restored level-1 tutorial restart logic for web by removing web-only bypass.
+
+- Intro background anti-flicker adjustments:
+  - `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - Pixel-snapped tiled background draw positions/width and rounded tile width to reduce subpixel shimmer.
+
+- Mobile fullscreen resilience and wake handling:
+  - `html/webapp/index.html`
+  - Added Wake Lock support (`navigator.wakeLock`) with acquire/release lifecycle.
+  - Added stronger fullscreen recovery hooks on visibility/focus/page events.
+  - Added re-attempt scheduling after resume so immersive mode can recover after sleep.
+
+- New level-launch override for QA:
+  - `core/src/com/cosmonaut/Utils/LaunchConfig.java`
+  - `html/src/com/cosmonaut/client/HtmlLauncher.java`
+  - `core/src/com/cosmonaut/Screens/LoadingScreen.java`
+  - `core/src/com/cosmonaut/Screens/HomeScreen.java`
+  - `desktop/src/com/cosmonaut/desktop/DesktopLauncher.java`
+  - HTML: `?level=N` now starts directly at level `N` (1..24) for smoke testing.
+  - Desktop: launcher supports `--level=N`.
+
+- QA artifacts:
+  - Added `qa/smoke_levels_desktop.sh` for automated desktop level-launch smoke.
+  - Added `qa/LEVEL_ACCESS_TEST.md` usage guide.
+
+Validation:
+
+- Build: `./gradlew :core:compileJava :desktop:build :html:dist` -> **SUCCESS**.
+- Level accessibility smoke:
+  - `./qa/smoke_levels_desktop.sh` -> **PASS** (levels 1..24 launch without immediate crash).
+- Web smoke:
+  - `node qa/web_smoke.js` -> `rpi-desktop PASS`, `rpi-mobile PASS`, `local-*` failed in this environment.

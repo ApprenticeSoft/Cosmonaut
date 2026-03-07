@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.cosmonaut.MyGdxGame;
 import com.cosmonaut.Utils.GameConstants;
+import com.cosmonaut.Utils.LaunchConfig;
 
 public class HomeScreen implements Screen{
 
@@ -86,6 +87,20 @@ public class HomeScreen implements Screen{
 
 		stage.act();
 		stage.draw();
+
+		if(!nextScreen
+				&& LaunchConfig.startLevelOverride >= 1
+				&& LaunchConfig.startLevelOverride <= GameConstants.NUMBER_OF_LEVEL
+				&& game.blackImage != null
+				&& game.fullVersionWindow != null){
+			nextScreen = true;
+			GameConstants.SELECTED_LEVEL = LaunchConfig.startLevelOverride;
+			LaunchConfig.startLevelOverride = -1;
+			game.music.stop();
+			dispose();
+			game.setScreen(new GameScreen(game));
+			return;
+		}
 
 		if((Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) && !nextScreen){
 			nextScreen = true;

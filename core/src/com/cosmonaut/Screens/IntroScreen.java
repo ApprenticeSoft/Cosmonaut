@@ -105,7 +105,7 @@ public class IntroScreen implements Screen{
 		
 		//Background
 		backgroundTexture = game.loadScreenTexture("Images/Space.jpg");
-		backgroundTileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+		backgroundTileWidth = Math.max(1f, Math.round(Gdx.graphics.getHeight() * backgroundTexture.getWidth()/(float)backgroundTexture.getHeight()));
 		backgroundScrollSpeed = INTRO_BACKGROUND_BASE_SCROLL_SPEED * Gdx.graphics.getWidth() / INTRO_REFERENCE_WIDTH;
 		
 		//Spaceship
@@ -546,7 +546,7 @@ public class IntroScreen implements Screen{
 
 	private void updateBackgroundScroll(float delta){
 		if(backgroundTileWidth <= 0f){
-			backgroundTileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+			backgroundTileWidth = Math.max(1f, Math.round(Gdx.graphics.getHeight() * backgroundTexture.getWidth()/(float)backgroundTexture.getHeight()));
 		}
 		backgroundPosX -= backgroundScrollSpeed * delta;
 		while(backgroundPosX <= -backgroundTileWidth){
@@ -557,16 +557,18 @@ public class IntroScreen implements Screen{
 	private void drawScrollingBackground(){
 		float tileWidth = backgroundTileWidth;
 		if(tileWidth <= 0f){
-			tileWidth = Gdx.graphics.getHeight() * backgroundTexture.getWidth()/backgroundTexture.getHeight();
+			tileWidth = Math.max(1f, Math.round(Gdx.graphics.getHeight() * backgroundTexture.getWidth()/(float)backgroundTexture.getHeight()));
 		}
+		tileWidth = Math.max(1f, Math.round(tileWidth));
 		int tilesToDraw = Math.max(3, (int)Math.ceil(Gdx.graphics.getWidth() / tileWidth) + 2);
-		float startX = backgroundPosX - tileWidth;
+		float startX = Math.round(backgroundPosX - tileWidth);
+		float drawHeight = Gdx.graphics.getHeight();
 		for(int i = 0; i < tilesToDraw; i++){
 			game.batch.draw(backgroundTexture,
 					startX + i * tileWidth,
 					0,
-					tileWidth,
-					Gdx.graphics.getHeight());
+					tileWidth + 1f,
+					drawHeight);
 		}
 	}
 

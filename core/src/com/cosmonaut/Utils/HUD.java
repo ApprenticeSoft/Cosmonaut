@@ -1,6 +1,7 @@
 package com.cosmonaut.Utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,7 +27,6 @@ import com.cosmonaut.MyGdxGame;
 import com.cosmonaut.Bodies.Hero;
 import com.cosmonaut.Screens.EndScreen;
 import com.cosmonaut.Screens.GameScreen;
-import com.cosmonaut.Screens.HomeScreen;
 import com.cosmonaut.Screens.MainMenuScreen;
 import com.cosmonaut.Screens.TutorialScreen;
 
@@ -486,47 +486,68 @@ public class HUD {
 			}
 		});
 		
-		restartButtonSpace.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y){
-				game.getScreen().dispose();
-				
-				if(GameConstants.SELECTED_LEVEL == 1 && !game.levelHandler.isLevelUnlocked(2) && !game.isWebGLRuntime())
-					game.setScreen(new TutorialScreen(game));
-				else
-					game.setScreen(new GameScreen(game));
-			
-				stopMusic();
-			}
-		});
-		
-		homeButtonSpace.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y){
-				game.getScreen().dispose();
-				game.setScreen(new MainMenuScreen(game));
-				
-				stopMusic();
-			}
-		});
-		
-		nextButtonSpace.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y){
-				GameConstants.SELECTED_LEVEL++;
-				try{
-					if(GameConstants.SELECTED_LEVEL == 24){
-						game.assets.load("Images/Fin/Images_Fin.pack", TextureAtlas.class);
-						game.assets.finishLoading();
-			        }
-					game.getScreen().dispose();
-					game.setScreen(new GameScreen(game));
-				}catch(Exception e){
-					game.getScreen().dispose();
-					game.setScreen(new HomeScreen(game));
+			restartButtonSpace.addListener(new ClickListener(){
+				@Override
+				public void clicked(InputEvent event, float x, float y){
+					Screen currentScreen = game.getScreen();
+					Screen nextScreen;
+					if(GameConstants.SELECTED_LEVEL == 1 && !game.levelHandler.isLevelUnlocked(2)){
+						nextScreen = new TutorialScreen(game);
+					}
+					else{
+						nextScreen = new GameScreen(game);
+					}
+					game.setScreen(nextScreen);
+					if(currentScreen != null && currentScreen != nextScreen){
+						currentScreen.dispose();
+					}
+					stopMusic();
 				}
-			}
-		});
+			});
+			
+			homeButtonSpace.addListener(new ClickListener(){
+				@Override
+				public void clicked(InputEvent event, float x, float y){
+					Screen currentScreen = game.getScreen();
+					Screen nextScreen = new MainMenuScreen(game);
+					game.setScreen(nextScreen);
+					if(currentScreen != null && currentScreen != nextScreen){
+						currentScreen.dispose();
+					}
+					stopMusic();
+				}
+			});
+		
+			nextButtonSpace.addListener(new ClickListener(){
+				@Override
+				public void clicked(InputEvent event, float x, float y){
+					final int previousLevel = GameConstants.SELECTED_LEVEL;
+					final int nextLevel = Math.min(GameConstants.NUMBER_OF_LEVEL, previousLevel + 1);
+					if(nextLevel == previousLevel){
+						return;
+					}
+
+					try{
+						if(nextLevel == 24 && !game.assets.isLoaded("Images/Fin/Images_Fin.pack", TextureAtlas.class)){
+							game.assets.load("Images/Fin/Images_Fin.pack", TextureAtlas.class);
+							game.assets.finishLoading();
+				        }
+
+						Screen currentScreen = game.getScreen();
+						GameConstants.SELECTED_LEVEL = nextLevel;
+						Screen nextScreen = new GameScreen(game);
+						game.setScreen(nextScreen);
+						if(currentScreen != null && currentScreen != nextScreen){
+							currentScreen.dispose();
+						}
+						stopMusic();
+					}
+					catch(RuntimeException runtimeException){
+						GameConstants.SELECTED_LEVEL = previousLevel;
+						Gdx.app.error("Cosmonaut", "Unable to open next level " + nextLevel, runtimeException);
+					}
+				}
+			});
 		
 		pauseButton.addListener(new ClickListener(){
 			@Override
