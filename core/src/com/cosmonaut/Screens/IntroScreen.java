@@ -200,7 +200,6 @@ public class IntroScreen implements Screen{
 				MathUtils.random(0.12f, 0.51f),
 				MathUtils.random(0, 0.16f));
 		flickerShaderProgram.begin();
-		flickerShaderProgram.setUniformi("u_sampler2D", 0);
 		flickerShaderProgram.setUniformf("u_color", colorFlicker);
 		flickerShaderProgram.end();
 
@@ -211,13 +210,11 @@ public class IntroScreen implements Screen{
 
 		Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
 		colorReplacementProgram.begin();
-		colorReplacementProgram.setUniformi("u_sampler2D", 0);
 		colorReplacementProgram.setUniformf("u_output_color", colorBlack);
 		colorReplacementProgram.end();
 		Pools.free(colorBlack);
 
 		vignetteProgram.begin();
-		vignetteProgram.setUniformi("u_sampler2D", 0);
 		vignetteProgram.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		vignetteProgram.setUniformf("u_PosX", 0.38f);
 		vignetteProgram.setUniformf("u_PosY", 0.5f);
@@ -368,16 +365,24 @@ public class IntroScreen implements Screen{
 				    				0.4f*Gdx.graphics.getHeight() - 0.5f*spaceshipHeight, 
 				    				spaceshipWidth, 
 				    				spaceshipHeight);
-				    	if(useIntroShaders)
+				    }
+				    game.batch.end();
+				    if(introTimer >= spaceshipStartDelay){
+				    	if(useIntroShaders && colorReplacementProgram != null){
 				    		game.batch.setShader(colorReplacementProgram);
+				    	}
+				    	else{
+				    		game.batch.setShader(null);
+				    	}
+					    game.batch.begin();
 				    	game.batch.draw(skin.getRegion("Vaisseau_Survie"), 
 				    				spaceshipPosX + 0.65f*spaceshipWidth, 
 				    				0.4f*Gdx.graphics.getHeight() + 0.31f*spaceshipHeight, 
 				    				0.25f*spaceshipHeight * skin.getRegion("Vaisseau_Survie").getRegionWidth()/skin.getRegion("Vaisseau_Survie").getRegionHeight(), 
 				    				0.25f*spaceshipHeight);
+					    game.batch.end();
 				    }
 				    game.batch.setShader(null);
-				    game.batch.end();
 
 			    if(introTimer > 50.2f){
 			    	vuePerso = true;

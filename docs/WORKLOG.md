@@ -550,6 +550,46 @@ Known limitation:
 
 - Native Windows execution still cannot be run from this Linux environment; final crash confirmation on the portable `.exe` requires one Windows runtime pass.
 
+## 2026-03-07 Intro Ship-Travel Crash Hardening (Follow-up)
+
+User report in this pass:
+
+- Portable desktop still crashes at the same intro point while the ship travels left-to-right.
+
+Targeted hardening changes:
+
+- `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - Removed mid-batch shader swap during ship rendering.
+  - New flow:
+    - draw mother ship in a normal batch pass,
+    - close batch,
+    - open a dedicated pass for survival ship with `colorReplacementProgram`.
+  - This avoids shader-state switching while a batch is already active, which can trigger driver-specific instability.
+- Shader uniform alignment to `SpriteBatch` conventions:
+  - Updated intro/end custom fragment shaders to use `u_texture` (auto-bound by `SpriteBatch`) instead of custom `u_sampler2D`.
+  - Updated initialization code accordingly.
+- Shader source files normalized to clean ASCII/UTF-8-safe content:
+  - `android/assets/Shaders/ColorReplacement-fragment.glsl`
+  - `android/assets/Shaders/Flicker-fragment.glsl`
+  - `android/assets/Shaders/Vignette-fragment.glsl`
+- `ColorReplacement-fragment.glsl` logic simplified to branchless mask/mix replacement to reduce shader-driver sensitivity.
+
+Validation in this pass:
+
+- Build:
+  - `./gradlew :core:compileJava :desktop:build :html:dist` -> **SUCCESS**
+  - `./gradlew :desktop:windowsPortableBundle` -> **SUCCESS**
+- Desktop runtime probe:
+  - `timeout 150s ./gradlew :desktop:run --console=plain`
+  - Ran through intro runtime window on this machine without Java-side crash output.
+- Web smoke:
+  - `node qa/web_smoke.js` -> all scenarios PASS:
+    - `local-desktop`, `local-mobile`, `rpi-desktop`, `rpi-mobile`.
+- Pi deploy:
+  - Synced fresh dist to `/var/www/cosmonaut`.
+  - Restarted `cosmonaut-static.service` -> `active`.
+  - HTTPS host check returns `HTTP/1.1 200 OK`.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

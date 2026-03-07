@@ -743,7 +743,6 @@ public class EndScreen implements Screen{
       	vignettePosX = 0.7f;
       	vignettePosY = 0.5f;
       	shaderProgram.begin();
-      	shaderProgram.setUniformi("u_sampler2D", 0);
       	shaderProgram.setUniformf("u_resolution", camera.viewportWidth, camera.viewportHeight);
       	shaderProgram.setUniformf("u_PosX", vignettePosX);
       	shaderProgram.setUniformf("u_PosY", vignettePosY);
@@ -763,7 +762,6 @@ public class EndScreen implements Screen{
       	}
       	Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
       	colorReplacementProgram.begin();
-      	colorReplacementProgram.setUniformi("u_sampler2D", 0);
       	colorReplacementProgram.setUniformf("u_output_color", colorBlack);
       	colorReplacementProgram.end();
       	Pools.free(colorBlack);
