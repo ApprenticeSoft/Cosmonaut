@@ -500,24 +500,29 @@ public class HUD {
 			}
 		});
 		
-			restartButtonSpace.addListener(new ClickListener(){
-				@Override
-				public void clicked(InputEvent event, float x, float y){
-					Screen currentScreen = game.getScreen();
-					Screen nextScreen;
-					if(GameConstants.SELECTED_LEVEL == 1 && !game.levelHandler.isLevelUnlocked(2)){
-						nextScreen = new TutorialScreen(game);
+				restartButtonSpace.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y){
+						Gdx.app.postRunnable(new Runnable(){
+							@Override
+							public void run(){
+								Screen currentScreen = game.getScreen();
+								if(currentScreen != null){
+									currentScreen.dispose();
+								}
+								Screen nextScreen;
+								if(GameConstants.SELECTED_LEVEL == 1 && !game.levelHandler.isLevelUnlocked(2)){
+									nextScreen = new TutorialScreen(game);
+								}
+								else{
+									nextScreen = new GameScreen(game);
+								}
+								game.setScreen(nextScreen);
+								stopMusic();
+							}
+						});
 					}
-					else{
-						nextScreen = new GameScreen(game);
-					}
-					game.setScreen(nextScreen);
-					if(currentScreen != null && currentScreen != nextScreen){
-						currentScreen.dispose();
-					}
-					stopMusic();
-				}
-			});
+				});
 			
 			homeButtonSpace.addListener(new ClickListener(){
 				@Override
@@ -532,34 +537,45 @@ public class HUD {
 				}
 			});
 		
-			nextButtonSpace.addListener(new ClickListener(){
-				@Override
-				public void clicked(InputEvent event, float x, float y){
-					final int previousLevel = GameConstants.SELECTED_LEVEL;
-					final int nextLevel = Math.min(GameConstants.NUMBER_OF_LEVEL, previousLevel + 1);
-					if(nextLevel == previousLevel){
-						return;
-					}
-
-					try{
-						if(nextLevel == 24 && !game.assets.isLoaded("Images/Fin/Images_Fin.pack", TextureAtlas.class)){
-							game.assets.load("Images/Fin/Images_Fin.pack", TextureAtlas.class);
-							game.assets.finishLoading();
-				        }
-
-						Screen currentScreen = game.getScreen();
-						GameConstants.SELECTED_LEVEL = nextLevel;
-						Screen nextScreen = new GameScreen(game);
-						game.setScreen(nextScreen);
-						if(currentScreen != null && currentScreen != nextScreen){
-							currentScreen.dispose();
+				nextButtonSpace.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y){
+						final int previousLevel = GameConstants.SELECTED_LEVEL;
+						final int nextLevel = Math.min(GameConstants.NUMBER_OF_LEVEL, previousLevel + 1);
+						if(nextLevel == previousLevel){
+							return;
 						}
-						stopMusic();
-					}
-					catch(RuntimeException runtimeException){
-						GameConstants.SELECTED_LEVEL = previousLevel;
-						Gdx.app.error("Cosmonaut", "Unable to open next level " + nextLevel, runtimeException);
-					}
+
+						try{
+							if(nextLevel == 24 && !game.assets.isLoaded("Images/Fin/Images_Fin.pack", TextureAtlas.class)){
+								game.assets.load("Images/Fin/Images_Fin.pack", TextureAtlas.class);
+								game.assets.finishLoading();
+					        }
+
+							Gdx.app.postRunnable(new Runnable(){
+								@Override
+								public void run(){
+									try{
+										Screen currentScreen = game.getScreen();
+										if(currentScreen != null){
+											currentScreen.dispose();
+										}
+										GameConstants.SELECTED_LEVEL = nextLevel;
+										Screen nextScreen = new GameScreen(game);
+										game.setScreen(nextScreen);
+										stopMusic();
+									}
+									catch(RuntimeException runtimeException){
+										GameConstants.SELECTED_LEVEL = previousLevel;
+										Gdx.app.error("Cosmonaut", "Unable to open next level " + nextLevel, runtimeException);
+									}
+								}
+							});
+						}
+						catch(RuntimeException runtimeException){
+							GameConstants.SELECTED_LEVEL = previousLevel;
+							Gdx.app.error("Cosmonaut", "Unable to open next level " + nextLevel, runtimeException);
+						}
 				}
 			});
 		

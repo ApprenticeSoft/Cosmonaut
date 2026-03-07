@@ -88,7 +88,8 @@ public class TutorialScreen extends GameScreen{
 				arrowAnimationTime += Gdx.graphics.getDeltaTime();
 				if(arrowAnimationTime > 3)
 					arrowAnimationTime = 0;
-				
+
+				game.batch.setProjectionMatrix(camera.combined);
 				game.batch.begin();
 				game.batch.setColor(14/256f, 110/256f, 1, 0.6f);
 				game.batch.draw(directionAnimation.getKeyFrame(arrowAnimationTime), 
@@ -291,7 +292,6 @@ public class TutorialScreen extends GameScreen{
 		if(tutoStep == 0){
 			if(previousTutoStep != tutoStep){
 				System.out.println("tutoStep = " + tutoStep);
-				directionArrow = false;
 				tutoTextBox.initiate();
 				tutoTextBox.resizeBox();
 				tutoTextBox.dialogueFinished();

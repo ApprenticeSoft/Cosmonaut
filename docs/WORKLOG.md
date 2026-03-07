@@ -849,3 +849,43 @@ Post-deploy smoke:
 - Deployed to live root `/var/www/cosmonaut`.
 - Restarted backend service: `cosmonaut-static.service` -> `active`.
 - Live host-header check: `https://cosmonaut.marcvidal.ca` -> `HTTP/1.1 200 OK`.
+
+## 2026-03-07 Mobile HTML Follow-up: Tutorial Arrow + Next/Restart Level Integrity
+
+New user-reported regressions after prior patch:
+
+- Tutorial blue directional arrow still not visible on mobile web.
+- After finishing a level and pressing `Next` (or `Restart`), next load missed interactive entities (switches/exit/moving objects/refills/upgrades), with leftover/invisible collisions.
+- If returning to menu and launching from level selection, level loaded correctly.
+
+### Root cause
+
+- `TutorialScreen` arrow draw pass happened after `super.render(...)` without restoring world-camera projection matrix, so the arrow sprite could render off-context in WebGL.
+- `HUD` `Next`/`Restart` transitions created a new `GameScreen` before disposing current one. `TiledMapReader.dispose()` clears shared game arrays; disposing old screen after new construction could wipe the freshly built level state.
+
+### Fixes implemented
+
+- Arrow visibility and persistence:
+  - `core/src/com/cosmonaut/Screens/TutorialScreen.java`
+  - Set `game.batch` projection to `camera.combined` before drawing arrow overlay.
+  - Removed step-0 arrow reset so once enabled by tutorial step 17 (vertical thrust explanation), it remains visible through the rest of tutorial gameplay.
+
+- Level integrity across `Next` / `Restart`:
+  - `core/src/com/cosmonaut/Utils/HUD.java`
+  - Reworked handlers to run transition in `Gdx.app.postRunnable(...)` and dispose current screen first, then construct/set new gameplay screen.
+  - This guarantees old level cleanup occurs before new level build, preventing shared-array wipe of newly spawned entities.
+
+### Verification
+
+- Build:
+  - `./gradlew :core:compileJava :html:dist` -> **SUCCESS**
+
+- Web smoke (after deploy):
+  - `node qa/web_smoke.js` -> **PASS**
+    - `local-desktop`, `local-mobile`, `rpi-desktop`, `rpi-mobile` all pass.
+
+### Deployment
+
+- Deployed fresh dist package to Pi `/var/www/cosmonaut`.
+- Restarted backend service `cosmonaut-static.service` -> `active`.
+- Live host-header HTTPS check -> `HTTP/1.1 200 OK`.
