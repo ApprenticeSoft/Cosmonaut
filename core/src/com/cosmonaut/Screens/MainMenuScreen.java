@@ -3,6 +3,7 @@ package com.cosmonaut.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -103,19 +104,40 @@ public class MainMenuScreen implements Screen{
 		textButtonStyle.font = game.getFont("fontTable.ttf");
 		textButtonStyle.fontColor = Color.WHITE;
 		textButtonStyle.downFontColor = Color.BLACK;
+
+		boolean webRuntime = Gdx.app.getType() == ApplicationType.WebGL;
+		boolean touchWebClient = webRuntime && Gdx.input.isPeripheralAvailable(Peripheral.MultitouchScreen);
+		float webMenuScale = webRuntime ? (touchWebClient ? 1.12f : 1.2f) : 1f;
+		float playButtonYRatio = webRuntime ? 0.64f : 0.6f;
+		GlyphLayout menuLabelLayout = new GlyphLayout();
+		float maxMenuLabelWidth = 0f;
+		String[] menuLabels = {
+			game.text.get("Play"),
+			game.text.get("Upgrades"),
+			game.text.get("Options"),
+			game.text.get("Quit")
+		};
+		for(String label : menuLabels){
+			menuLabelLayout.setText(textButtonStyle.font, label);
+			maxMenuLabelWidth = Math.max(maxMenuLabelWidth, menuLabelLayout.width);
+		}
+		float menuButtonWidthFactor = webRuntime ? (touchWebClient ? 1.45f : 1.55f) : 1.2f;
+		float menuLabelScale = webRuntime ? (touchWebClient ? 1.15f : 1.9f) : 1f;
 		
 		playButton = new TextButton(game.text.get("Play"), textButtonStyle);
-		playButton.setHeight(Gdx.graphics.getHeight()/8);
-		playButton.setWidth(new GlyphLayout(game.getFont("fontTable.ttf"), game.text.get("Upgrades")).width * 1.2f);
+		playButton.setHeight((Gdx.graphics.getHeight()/8f) * webMenuScale);
+		playButton.setWidth(maxMenuLabelWidth * menuButtonWidthFactor);
 		playButton.setX(Gdx.graphics.getWidth() - 0.17f * Gdx.graphics.getWidth() - playButton.getWidth()/2);
-		playButton.setY(0.6f * Gdx.graphics.getHeight());
-		float menuSpacing = Gdx.graphics.getHeight()/100f;
+		playButton.setY(playButtonYRatio * Gdx.graphics.getHeight());
+		playButton.getLabel().setFontScale(menuLabelScale);
+		float menuSpacing = (Gdx.graphics.getHeight()/100f) * webMenuScale;
 
 		upgradeButton = new TextButton(game.text.get("Upgrades"), textButtonStyle);
 		upgradeButton.setWidth(playButton.getWidth());
 		upgradeButton.setHeight(playButton.getHeight());
 		upgradeButton.setX(playButton.getX());
 		upgradeButton.setY(playButton.getY() - upgradeButton.getHeight() - menuSpacing);
+		upgradeButton.getLabel().setFontScale(menuLabelScale);
 
 		/*
 		 * Upgrade button glow
@@ -127,12 +149,13 @@ public class MainMenuScreen implements Screen{
 		textButtonStyle2.fontColor = Color.WHITE;
 		textButtonStyle2.downFontColor = Color.BLACK;
 		
-		upgradeButton2 = new TextButton(game.text.get("Upgrades"), textButtonStyle2);
-		upgradeButton2.setWidth(playButton.getWidth());
-		upgradeButton2.setHeight(playButton.getHeight());
-		upgradeButton2.setX(playButton.getX());
-		upgradeButton2.setY(playButton.getY() - upgradeButton.getHeight() - menuSpacing);
-		upgradeButton2.addAction(Actions.alpha(0));
+			upgradeButton2 = new TextButton(game.text.get("Upgrades"), textButtonStyle2);
+			upgradeButton2.setWidth(playButton.getWidth());
+			upgradeButton2.setHeight(playButton.getHeight());
+			upgradeButton2.setX(playButton.getX());
+			upgradeButton2.setY(playButton.getY() - upgradeButton.getHeight() - menuSpacing);
+			upgradeButton2.getLabel().setFontScale(menuLabelScale);
+			upgradeButton2.addAction(Actions.alpha(0));
 		/*
 		 * ******************************************
 		 */
@@ -143,21 +166,14 @@ public class MainMenuScreen implements Screen{
 		optionButton.setHeight(playButton.getHeight());
 		optionButton.setX(playButton.getX());
 		optionButton.setY(upgradeButton.getY() - optionButton.getHeight() - menuSpacing);
+		optionButton.getLabel().setFontScale(menuLabelScale);
 		
 		quitButton = new TextButton(game.text.get("Quit"), textButtonStyle);
 		quitButton.setWidth(playButton.getWidth());
 		quitButton.setHeight(playButton.getHeight());
 		quitButton.setX(playButton.getX());
 		quitButton.setY(optionButton.getY() - quitButton.getHeight() - menuSpacing);
-
-		if(Gdx.app.getType() == ApplicationType.WebGL){
-			upgradeButton.setVisible(false);
-			upgradeButton.setTouchable(Touchable.disabled);
-			upgradeButton2.setVisible(false);
-			upgradeButton2.setTouchable(Touchable.disabled);
-			optionButton.setY(playButton.getY() - optionButton.getHeight() - menuSpacing);
-			quitButton.setY(optionButton.getY() - quitButton.getHeight() - menuSpacing);
-		}
+		quitButton.getLabel().setFontScale(menuLabelScale);
 		
 		/*
 		 * Réseaux sociaux

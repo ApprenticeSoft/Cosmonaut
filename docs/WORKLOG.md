@@ -889,3 +889,34 @@ New user-reported regressions after prior patch:
 - Deployed fresh dist package to Pi `/var/www/cosmonaut`.
 - Restarted backend service `cosmonaut-static.service` -> `active`.
 - Live host-header HTTPS check -> `HTTP/1.1 200 OK`.
+
+## 2026-03-07 HTML Main Menu Follow-up: Upgrade Button + Proportional Sizing
+
+User request:
+
+- Restore missing `Amélioration` button on HTML main menu between `Jouer` and `Options`.
+- Increase HTML main-menu button/text proportions to better match desktop-portable 1080p feel.
+
+Changes:
+
+- `core/src/com/cosmonaut/Screens/MainMenuScreen.java`
+  - Removed WebGL-only logic that hid `upgradeButton` / `upgradeButton2`.
+  - Added WebGL-aware menu sizing profile:
+    - larger button height/width on web,
+    - label width now based on max localized label (`Play/Upgrades/Options/Quit`),
+    - explicit label font scaling for menu buttons,
+    - separate desktop-web vs touch-web sizing factors.
+
+Validation:
+
+- Build: `./gradlew :core:compileJava :html:dist` -> **SUCCESS**.
+- Visual checks (FR screenshots, desktop + mobile):
+  - `Améliorations` appears correctly between `Jouer` and `Options`.
+  - menu buttons/text are larger and more legible on HTML.
+- Smoke: `node qa/web_smoke.js` -> **PASS** (`local/rpi`, desktop/mobile).
+
+Deployment:
+
+- Deployed new dist to Pi `/var/www/cosmonaut`.
+- Restarted `cosmonaut-static.service` -> `active`.
+- Live check `https://cosmonaut.marcvidal.ca` -> `HTTP/1.1 200 OK`.
