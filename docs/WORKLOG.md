@@ -590,6 +590,14 @@ Validation in this pass:
   - Restarted `cosmonaut-static.service` -> `active`.
   - HTTPS host check returns `HTTP/1.1 200 OK`.
 
+Additional desktop packaging diagnostic hardening:
+
+- Updated Launch4j configs in `desktop/build.gradle` (normal + portable):
+  - added JVM option `-XX:ErrorFile=./hs_err.log`
+  - added JVM option `-XX:+HeapDumpOnOutOfMemoryError`
+- Purpose:
+  - if a JVM/native crash still occurs on Windows, a deterministic crash file is written next to `Cosmonaut.exe` for direct root-cause analysis.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

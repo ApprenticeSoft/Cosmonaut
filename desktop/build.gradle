@@ -168,6 +168,8 @@ tasks.register("writeLaunch4jConfig") {
   <chdir>.</chdir>
   <jre>
     <minVersion>17</minVersion>
+    <opt>-XX:ErrorFile=./hs_err.log</opt>
+    <opt>-XX:+HeapDumpOnOutOfMemoryError</opt>
   </jre>
 </launch4jConfig>
 """
@@ -242,6 +244,8 @@ tasks.register("writeLaunch4jPortableConfig") {
   <jre>
     <path>runtime</path>
     <minVersion>17</minVersion>
+    <opt>-XX:ErrorFile=./hs_err.log</opt>
+    <opt>-XX:+HeapDumpOnOutOfMemoryError</opt>
   </jre>
 </launch4jConfig>
 """
