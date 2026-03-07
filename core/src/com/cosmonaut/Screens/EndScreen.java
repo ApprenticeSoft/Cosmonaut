@@ -21,9 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pools;
 import com.cosmonaut.MyGdxGame;
-import com.cosmonaut.ShaderUtils.Bloom;
-import com.cosmonaut.ShaderUtils.PostProcessor;
-import com.cosmonaut.ShaderUtils.ShaderLoader;
 import com.cosmonaut.Utils.GameConstants;
 
 public class EndScreen implements Screen{
@@ -66,6 +63,7 @@ public class EndScreen implements Screen{
     String vertexShader;
     String fragmentShader;
     ShaderProgram shaderProgram, colorReplacementProgram;
+    private boolean useEndShaders;
     //Vignettage
     float vignettePosX, vignettePosY;
 	
@@ -168,29 +166,10 @@ public class EndScreen implements Screen{
 		game.blackImage.addAction(Actions.alpha(0,1));
 		
 		/*******************TEST SHADERS**********************/
-		ShaderProgram.pedantic = false;	//Important pour pouvoir modifier les variables uniformes
-      	vertexShader = Gdx.files.internal("Shaders/Vignette-vertex.glsl").readString();
-      	fragmentShader = Gdx.files.internal("Shaders/Vignette-fragment.glsl").readString();
-      	shaderProgram = new ShaderProgram(vertexShader,fragmentShader);
-      	game.batch.setShader(shaderProgram);
-
-      	vignettePosX = 0.7f;
-      	vignettePosY = 0.5f;
-      	shaderProgram.begin();
-      	shaderProgram.setUniformf("u_resolution", camera.viewportWidth, camera.viewportHeight);
-      	shaderProgram.setUniformf("u_PosX", vignettePosX);
-      	shaderProgram.setUniformf("u_PosY", vignettePosY);
-      	shaderProgram.setUniformf("outerRadius", 1.0f);
-      	shaderProgram.setUniformf("innerRadius", 0.25f);
-      	shaderProgram.setUniformf("intensity", 0.75f);
-      	shaderProgram.end();
-      	
-      	Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
-      	colorReplacementProgram = new ShaderProgram(vertexShader,Gdx.files.internal("Shaders/ColorReplacement-fragment.glsl").readString()); 
-      	colorReplacementProgram.begin();
-      	colorReplacementProgram.setUniformf("u_output_color", colorBlack);
-      	colorReplacementProgram.end();
-      	Pools.free(colorBlack);
+		useEndShaders = initializeEndShaders();
+		if(!useEndShaders){
+			Gdx.app.error("EndScreen", "End-screen shaders failed to initialize. Falling back to non-shader rendering.");
+		}
       	
       	colorYellow = Pools.obtain(Vector3.class).set(0.668f, 0.617f, 0.188f);
       	
@@ -241,16 +220,18 @@ public class EndScreen implements Screen{
 			timer += Gdx.graphics.getDeltaTime();
 			
 			//Shader
-			vignettePosX = 0.5f;
-	      	vignettePosY = 0.5f;
-	      	shaderProgram.begin();
-	      	shaderProgram.setUniformf("u_resolution", camera.viewportWidth, camera.viewportHeight);
-	      	shaderProgram.setUniformf("u_PosX", vignettePosX);
-	      	shaderProgram.setUniformf("u_PosY", vignettePosY);
-	      	shaderProgram.setUniformf("outerRadius", 0.6f);
-	      	shaderProgram.setUniformf("innerRadius", 0.05f);
-	      	shaderProgram.setUniformf("intensity", 0.8f);
-	      	shaderProgram.end();
+			if(useEndShaders){
+				vignettePosX = 0.5f;
+		      	vignettePosY = 0.5f;
+		      	shaderProgram.begin();
+		      	shaderProgram.setUniformf("u_resolution", camera.viewportWidth, camera.viewportHeight);
+		      	shaderProgram.setUniformf("u_PosX", vignettePosX);
+		      	shaderProgram.setUniformf("u_PosY", vignettePosY);
+		      	shaderProgram.setUniformf("outerRadius", 0.6f);
+		      	shaderProgram.setUniformf("innerRadius", 0.05f);
+		      	shaderProgram.setUniformf("intensity", 0.8f);
+		      	shaderProgram.end();
+			}
 	      	
 			porteHeight = 0.43f*Gdx.graphics.getHeight();
 			porteWidth = porteHeight * skin.getRegion("Porte_Gauche").getRegionWidth()/skin.getRegion("Porte_Gauche").getRegionHeight();
@@ -498,7 +479,7 @@ public class EndScreen implements Screen{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		if(timer - stepTime > 4){
+		if(useEndShaders && timer - stepTime > 4){
 			colorReplacementProgram.begin();
 	      	colorReplacementProgram.setUniformf("u_output_color", colorYellow);
 	      	colorReplacementProgram.end();
@@ -520,13 +501,17 @@ public class EndScreen implements Screen{
 			 				0.3f*Gdx.graphics.getHeight() - 0.5f*spaceshipHeight, 
 			 				spaceshipWidth, 
 			 				spaceshipHeight);
-		 game.batch.setShader(colorReplacementProgram);
+		 if(useEndShaders){
+			 game.batch.setShader(colorReplacementProgram);
+		 }
 		 game.batch.draw(	skin.getRegion("Vaisseau_Survie"), 
 		 					spaceshipPosX + 0.65f*spaceshipWidth, 
 		 					0.3f*Gdx.graphics.getHeight() + 0.31f*spaceshipHeight, 
 		 					0.25f*spaceshipHeight * skin.getRegion("Vaisseau_Survie").getRegionWidth()/skin.getRegion("Vaisseau_Survie").getRegionHeight(), 
 		 					0.25f*spaceshipHeight);
-		 game.batch.setShader(null);
+		 if(useEndShaders){
+			 game.batch.setShader(null);
+		 }
 		 game.batch.end();
 	}
 	
@@ -728,6 +713,14 @@ public class EndScreen implements Screen{
 		//postProcessor.dispose();
 		//skin.dispose();
 		game.batch.setShader(null);
+		if(shaderProgram != null){
+			shaderProgram.dispose();
+			shaderProgram = null;
+		}
+		if(colorReplacementProgram != null){
+			colorReplacementProgram.dispose();
+			colorReplacementProgram = null;
+		}
 		game.assets.unload("Images/Fin/Images_Fin.pack");
 		for(int i = 0; i < game.musics.size; i++){
 			game.musics.get(i).stop();
@@ -735,6 +728,64 @@ public class EndScreen implements Screen{
 		}
 		Pools.free(vaisseauFinPosition);
 		Pools.free(colorYellow);
+	}
+
+	private boolean initializeEndShaders(){
+		ShaderProgram.pedantic = false;
+      	vertexShader = readShaderSource("Shaders/Vignette-vertex.glsl");
+      	fragmentShader = readShaderSource("Shaders/Vignette-fragment.glsl");
+      	shaderProgram = createCompiledShader(vertexShader, fragmentShader, "EndVignette");
+      	if(shaderProgram == null){
+      		return false;
+      	}
+      	game.batch.setShader(shaderProgram);
+
+      	vignettePosX = 0.7f;
+      	vignettePosY = 0.5f;
+      	shaderProgram.begin();
+      	shaderProgram.setUniformi("u_sampler2D", 0);
+      	shaderProgram.setUniformf("u_resolution", camera.viewportWidth, camera.viewportHeight);
+      	shaderProgram.setUniformf("u_PosX", vignettePosX);
+      	shaderProgram.setUniformf("u_PosY", vignettePosY);
+      	shaderProgram.setUniformf("outerRadius", 1.0f);
+      	shaderProgram.setUniformf("innerRadius", 0.25f);
+      	shaderProgram.setUniformf("intensity", 0.75f);
+      	shaderProgram.end();
+
+      	colorReplacementProgram = createCompiledShader(vertexShader,
+      			readShaderSource("Shaders/ColorReplacement-fragment.glsl"),
+      			"EndColorReplacement");
+      	if(colorReplacementProgram == null){
+      		shaderProgram.dispose();
+      		shaderProgram = null;
+      		game.batch.setShader(null);
+      		return false;
+      	}
+      	Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
+      	colorReplacementProgram.begin();
+      	colorReplacementProgram.setUniformi("u_sampler2D", 0);
+      	colorReplacementProgram.setUniformf("u_output_color", colorBlack);
+      	colorReplacementProgram.end();
+      	Pools.free(colorBlack);
+      	return true;
+	}
+
+	private ShaderProgram createCompiledShader(String vertexSource, String fragmentSource, String label){
+		ShaderProgram program = new ShaderProgram(vertexSource, fragmentSource);
+		if(!program.isCompiled()){
+			Gdx.app.error("EndScreen", label + " shader compile failed: " + program.getLog());
+			program.dispose();
+			return null;
+		}
+		String shaderLog = program.getLog();
+		if(shaderLog != null && shaderLog.trim().length() > 0){
+			Gdx.app.log("EndScreen", label + " shader compile log: " + shaderLog);
+		}
+		return program;
+	}
+
+	private String readShaderSource(String internalPath){
+		return Gdx.files.internal(internalPath).readString("UTF-8");
 	}
 
 }

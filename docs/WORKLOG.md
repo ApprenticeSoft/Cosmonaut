@@ -504,6 +504,52 @@ Note:
 
 - Direct runtime verification of Windows portable executable is still pending on a native Windows host.
 
+## 2026-03-07 Shader Restoration Pass (Desktop Portable + HTML)
+
+User requirement in this pass:
+
+- Shaders must remain active (no web-by-default shader disable).
+- Focus first on portable desktop crash-risk paths during intro.
+- Restore shader usage in HTML as well, including gameplay shader paths.
+
+Changes implemented:
+
+- `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - Re-enabled intro shaders on all platforms (`useIntroShaders = true`).
+  - Kept guarded initialization and compile diagnostics to avoid hard crashes when a shader fails.
+  - Switched shader source loading to explicit UTF-8 reads.
+  - Set sampler uniforms explicitly (`u_sampler2D`, `u_texture`, `u_mask`) for cross-driver stability.
+- `core/src/com/cosmonaut/Bodies/Hero.java`
+  - Re-enabled contour/outline shader initialization for WebGL (removed web exclusion).
+  - Switched shader source loading to explicit UTF-8 reads.
+  - Corrected outline shader color constants to float math (`14f/256f`, `110f/256f`).
+- `android/assets/Shaders/Outline-fragment.glsl`
+  - Reworked shader loop to WebGL-safe fixed-size loops (constant compile-time bounds).
+  - Removed dynamic-uniform loop bounds (`u_step`) that are unreliable on WebGL GLSL compilers.
+- `core/src/com/cosmonaut/Screens/EndScreen.java`
+  - Added robust compile checks + logs for end-sequence shaders (vignette/color replacement).
+  - Added explicit sampler uniforms.
+  - Added shader resource disposal and guarded shader usage to prevent invalid-program crashes.
+  - Switched shader source loading to explicit UTF-8 reads.
+
+Validation and test results:
+
+- Build verification:
+  - `./gradlew :core:compileJava :desktop:build :html:dist` -> **SUCCESS**
+- Web smoke (after starting local dist server on `127.0.0.1:8090`):
+  - `node qa/web_smoke.js` -> `local-desktop PASS`, `local-mobile PASS`, `rpi-desktop PASS`, `rpi-mobile PASS`
+  - No significant console/page runtime errors reported in summary.
+- Desktop runtime probe:
+  - `timeout 140s ./gradlew :desktop:run --console=plain`
+  - Ran through startup/intro wait window without Java crash/exception output (terminated by timeout).
+- Portable package build:
+  - `./gradlew :desktop:windowsPortableBundle` -> **SUCCESS**
+  - Output refreshed at `desktop/build/windows-portable-dist/Cosmonaut.exe`.
+
+Known limitation:
+
+- Native Windows execution still cannot be run from this Linux environment; final crash confirmation on the portable `.exe` requires one Windows runtime pass.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`

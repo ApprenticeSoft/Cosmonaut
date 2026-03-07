@@ -68,7 +68,7 @@ public class IntroScreen implements Screen{
 	public IntroScreen(final MyGdxGame game){
 		this.game= game;
 		this.webRuntime = game.isWebGLRuntime();
-		this.useIntroShaders = !webRuntime;
+		this.useIntroShaders = true;
 		Gdx.input.setCursorCatched(true);
 		
 		musicIntro = Gdx.audio.newMusic(Gdx.files.internal("Sounds/Jazz.ogg"));
@@ -168,20 +168,20 @@ public class IntroScreen implements Screen{
 
 	private boolean initializeIntroShaders(){
 		ShaderProgram.pedantic = false;
-		vertexShader = Gdx.files.internal("Shaders/PassThrough-vertex.glsl").readString();
+		vertexShader = readShaderSource("Shaders/PassThrough-vertex.glsl");
 
 		flickerShaderProgram = createCompiledShader(vertexShader,
-				Gdx.files.internal("Shaders/Flicker-fragment.glsl").readString(),
+				readShaderSource("Shaders/Flicker-fragment.glsl"),
 				"Flicker");
 		alphaShaderProgram = createCompiledShader(vertexShader,
-				Gdx.files.internal("Shaders/AlphaMask-fragment.glsl").readString(),
+				readShaderSource("Shaders/AlphaMask-fragment.glsl"),
 				"AlphaMask");
 		colorReplacementProgram = createCompiledShader(vertexShader,
-				Gdx.files.internal("Shaders/ColorReplacement-fragment.glsl").readString(),
+				readShaderSource("Shaders/ColorReplacement-fragment.glsl"),
 				"ColorReplacement");
 		vignetteProgram = createCompiledShader(
-				Gdx.files.internal("Shaders/Vignette-vertex.glsl").readString(),
-				Gdx.files.internal("Shaders/Vignette-fragment.glsl").readString(),
+				readShaderSource("Shaders/Vignette-vertex.glsl"),
+				readShaderSource("Shaders/Vignette-fragment.glsl"),
 				"Vignette");
 
 		if(flickerShaderProgram == null || alphaShaderProgram == null
@@ -200,16 +200,24 @@ public class IntroScreen implements Screen{
 				MathUtils.random(0.12f, 0.51f),
 				MathUtils.random(0, 0.16f));
 		flickerShaderProgram.begin();
+		flickerShaderProgram.setUniformi("u_sampler2D", 0);
 		flickerShaderProgram.setUniformf("u_color", colorFlicker);
 		flickerShaderProgram.end();
 
+		alphaShaderProgram.begin();
+		alphaShaderProgram.setUniformi("u_texture", 0);
+		alphaShaderProgram.setUniformi("u_mask", 1);
+		alphaShaderProgram.end();
+
 		Vector3 colorBlack = Pools.obtain(Vector3.class).set(0, 0, 0);
 		colorReplacementProgram.begin();
+		colorReplacementProgram.setUniformi("u_sampler2D", 0);
 		colorReplacementProgram.setUniformf("u_output_color", colorBlack);
 		colorReplacementProgram.end();
 		Pools.free(colorBlack);
 
 		vignetteProgram.begin();
+		vignetteProgram.setUniformi("u_sampler2D", 0);
 		vignetteProgram.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		vignetteProgram.setUniformf("u_PosX", 0.38f);
 		vignetteProgram.setUniformf("u_PosY", 0.5f);
@@ -221,12 +229,20 @@ public class IntroScreen implements Screen{
 		return true;
 	}
 
+	private String readShaderSource(String internalPath){
+		return Gdx.files.internal(internalPath).readString("UTF-8");
+	}
+
 	private ShaderProgram createCompiledShader(String vertexSource, String fragmentSource, String label){
 		ShaderProgram shaderProgram = new ShaderProgram(vertexSource, fragmentSource);
 		if(!shaderProgram.isCompiled()){
 			Gdx.app.error("Cosmonaut", label + " shader compile failed: " + shaderProgram.getLog());
 			shaderProgram.dispose();
 			return null;
+		}
+		String shaderLog = shaderProgram.getLog();
+		if(shaderLog != null && shaderLog.trim().length() > 0){
+			Gdx.app.log("Cosmonaut", label + " shader compile log: " + shaderLog);
 		}
 		return shaderProgram;
 	}
