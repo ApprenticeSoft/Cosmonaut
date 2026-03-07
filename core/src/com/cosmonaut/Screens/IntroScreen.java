@@ -318,27 +318,31 @@ public class IntroScreen implements Screen{
 			backgroundPosX -= 20 * Gdx.graphics.getDeltaTime();
 			
 			//Sons
-			if(introTimer < 15){	
-				if(introTimer > 7){
-					labelIntro.setColor(1, 1, 1, labelIntroAlpha = MathUtils.clamp(labelIntroAlpha -= 0.5f * Gdx.graphics.getDeltaTime(), 0, 1));
-					spaceshipSound.setVolume(spaceshipSoundVolume += 0.07f * Gdx.graphics.getDeltaTime());
-					
-				}
+				if(introTimer < 15){	
+					if(introTimer > 7){
+						labelIntro.setColor(1, 1, 1, labelIntroAlpha = MathUtils.clamp(labelIntroAlpha -= 0.5f * Gdx.graphics.getDeltaTime(), 0, 1));
+						spaceshipSoundVolume = MathUtils.clamp(spaceshipSoundVolume + 0.07f * Gdx.graphics.getDeltaTime(), 0f, 1f);
+						spaceshipSound.setVolume(spaceshipSoundVolume);
+						
+					}
 				else if(introTimer > 2){
 					labelIntro.setColor(1, 1, 1, labelIntroAlpha = MathUtils.clamp(labelIntroAlpha += 0.5f * Gdx.graphics.getDeltaTime(), 0, 1));
 				}
 			}
-			else if(introTimer > 25){
-				if(!musicPlay){
-					musicPlay = true;
-					musicIntro.play();
+				else if(introTimer > 25){
+					if(!musicPlay){
+						musicPlay = true;
+						musicIntro.play();
+					}
+					
+					if(musicIntroVolume < 0.6f){
+						musicIntroVolume = MathUtils.clamp(musicIntroVolume + 0.05f * Gdx.graphics.getDeltaTime(), 0f, 0.6f);
+						musicIntro.setVolume(musicIntroVolume);
+					}
+					
+					spaceshipSoundVolume = MathUtils.clamp(spaceshipSoundVolume - 0.045f * Gdx.graphics.getDeltaTime(), 0f, 1f);
+					spaceshipSound.setVolume(spaceshipSoundVolume);
 				}
-				
-				if(musicIntroVolume < 0.6f)
-					musicIntro.setVolume(musicIntroVolume += 0.05f * Gdx.graphics.getDeltaTime());
-				
-				spaceshipSound.setVolume(spaceshipSoundVolume -= 0.045f * Gdx.graphics.getDeltaTime());
-			}
 			
 			//Images
 		    game.batch.setShader(null);
@@ -515,7 +519,7 @@ public class IntroScreen implements Screen{
 			//Atténuation de l'alarm/Transition
 		    if(textBox.dialogueFinished){
 		    	transitionAlpha += Gdx.graphics.getDeltaTime();
-		    	alarmSound.setVolume(soundId, 1/transitionAlpha);
+		    	alarmSound.setVolume(soundId, MathUtils.clamp(1f / transitionAlpha, 0f, 1f));
 		    	
 		    	if(transitionAlpha > 8f)
 		    		introStep = 3;

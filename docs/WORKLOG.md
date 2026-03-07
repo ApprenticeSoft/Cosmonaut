@@ -598,6 +598,29 @@ Additional desktop packaging diagnostic hardening:
 - Purpose:
   - if a JVM/native crash still occurs on Windows, a deterministic crash file is written next to `Cosmonaut.exe` for direct root-cause analysis.
 
+## 2026-03-07 Portable Desktop Crash Root Cause Found and Fixed
+
+User-provided crash log pinpointed the failure:
+
+- `IllegalArgumentException: volume cannot be < 0: -2.4678226E-4`
+- Stack trace location:
+  - `com.cosmonaut.Screens.IntroScreen.render(IntroScreen.java:340)`
+  - called from intro ship-travel segment.
+
+Fix implemented:
+
+- `core/src/com/cosmonaut/Screens/IntroScreen.java`
+  - clamped all intro volume updates to valid ranges before `setVolume(...)`:
+    - `spaceshipSoundVolume` now clamped to `[0, 1]` on increase and decrease.
+    - `musicIntroVolume` now clamped to `[0, 0.6]`.
+    - alarm attenuation now uses clamped `MathUtils.clamp(1f / transitionAlpha, 0f, 1f)`.
+
+Verification:
+
+- `./gradlew :core:compileJava :desktop:build :html:dist :desktop:windowsPortableBundle` -> **SUCCESS**
+- `timeout 160s ./gradlew :desktop:run --console=plain`:
+  - no `volume cannot be < 0` crash observed during the intro runtime window.
+
 ## Fast Resume Checklist
 
 1. `git checkout feature/full-upgrade-optimization-html-pi`
