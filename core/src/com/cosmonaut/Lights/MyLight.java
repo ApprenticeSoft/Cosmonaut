@@ -186,15 +186,15 @@ public class MyLight {
 	}
 	
 	public void pulse(Light light, float pulseFactor){
-		a += pulseFactor * Gdx.graphics.getDeltaTime();		
+		a += pulseFactor * GameConstants.FRAME_DELTA;		
 		light.setColor(r, g, b, (float)(1 + MathUtils.cos(a))/2);	
 	}
 	
 	public void pulseRGBA(Light light, float pulseFactorR, float pulseFactorG, float pulseFactorB, float pulseFactorA){
-		r += pulseFactorR * Gdx.graphics.getDeltaTime();	
-		g += pulseFactorG * Gdx.graphics.getDeltaTime();	
-		b += pulseFactorB * Gdx.graphics.getDeltaTime();	
-		a += pulseFactorA * Gdx.graphics.getDeltaTime();		
+		r += pulseFactorR * GameConstants.FRAME_DELTA;	
+		g += pulseFactorG * GameConstants.FRAME_DELTA;	
+		b += pulseFactorB * GameConstants.FRAME_DELTA;	
+		a += pulseFactorA * GameConstants.FRAME_DELTA;		
 		light.setColor((float)(1 + MathUtils.cos(r))/2, (float)(1 + MathUtils.cos(g))/2, (float)(1 + MathUtils.cos(b))/2, (float)(1 + MathUtils.cos(a))/2);
 	}
 	

@@ -361,22 +361,22 @@ public class HUD {
 	}
 	
 	public void imageFuelPulse(){
-		fuelAlpha += 4f * Gdx.graphics.getDeltaTime();		
+		fuelAlpha += 4f * GameConstants.FRAME_DELTA;		
 	}
 	
 	public void imageOxygenPulse(){
-		oxygenAlpha += 4f * Gdx.graphics.getDeltaTime();		
+		oxygenAlpha += 4f * GameConstants.FRAME_DELTA;		
 	}
 	
 	public void leftRightButtonPulse(){
-		buttonAlpha += 4f * Gdx.graphics.getDeltaTime();
+		buttonAlpha += 4f * GameConstants.FRAME_DELTA;
 		float alpha = (float)(1 + MathUtils.cos(buttonAlpha))/2;
 		setActorAlpha(buttonLeft, alpha);
 		setActorAlpha(buttonRight, alpha);
 	}
 	
 	public void jetpackButtonPulse(){
-		buttonAlpha += 4f * Gdx.graphics.getDeltaTime();
+		buttonAlpha += 4f * GameConstants.FRAME_DELTA;
 		float alpha = (float)(1 + MathUtils.cos(buttonAlpha))/2;
 		setActorAlpha(buttonJetPack, alpha);
 	}
@@ -481,7 +481,7 @@ public class HUD {
 	}
 	
 	public void outOfFuel(){
-		outOfFuelAlpha += 4 * Gdx.graphics.getDeltaTime();		
+		outOfFuelAlpha += 4 * GameConstants.FRAME_DELTA;		
 		float alpha = (float)(1 + MathUtils.cos(outOfFuelAlpha))/2;
 		setActorAlpha(outOfFuelLabel, alpha);	
 		setActorAlpha(pauseButton2, alpha);	

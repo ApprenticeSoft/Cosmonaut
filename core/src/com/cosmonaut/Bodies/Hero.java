@@ -53,9 +53,10 @@ public class Hero {
 	public boolean isRotating;
 	private boolean dead = false;
 	private boolean impulse = false;
-    public Sound soundJetPack;
-	private Sound soundImpact;
-	private Sound soundElectrocution;
+	    public Sound soundJetPack;
+		private Sound soundImpact;
+		private Sound soundElectrocution;
+		private float fixedDelta = GameConstants.BOX_STEP;
 	
 	//Test Box2DLight
 	private ConeLight coneLight;
@@ -213,9 +214,14 @@ public class Hero {
         Pools.free(fixtureDef);
 	}
 	
-	public void displacement(){	
+	public void displacement(){
+		displacement(GameConstants.BOX_STEP);
+	}
+
+	public void displacement(float fixedDelta){	
+		this.fixedDelta = fixedDelta;
 		if(!dead){
-			oxygenLevel -= Gdx.graphics.getDeltaTime();
+			oxygenLevel -= fixedDelta;
 
 			if(GameConstants.GAME_CONTROLS == GameConstants.ANDROID_GESTURE_CONTROLS)
 				gestureControl();
@@ -274,7 +280,7 @@ public class Hero {
 				}
 			}
 			
-			gameOverDelay += Gdx.graphics.getDeltaTime();
+			gameOverDelay += fixedDelta;
 		}
 	}
 
@@ -503,9 +509,9 @@ public class Hero {
 			isJetPackActive = true;
 			soundJetPack.loop(0.5f);
 		}
-		jetpackImpulse.set(0, 60*(GameConstants.JETPACK_IMPULSE + 5*Data.getPowerLevel()) * Gdx.graphics.getDeltaTime());
+		jetpackImpulse.set(0, 60*(GameConstants.JETPACK_IMPULSE + 5*Data.getPowerLevel()) * fixedDelta);
 		heroBody.applyForceToCenter(jetpackImpulse.rotate(heroBody.getAngle() * MathUtils.radiansToDegrees), true);
-		fuelLevel -= Gdx.graphics.getDeltaTime() * GameConstants.FUEL_CONSUMPTION;
+		fuelLevel -= fixedDelta * GameConstants.FUEL_CONSUMPTION;
 	}
 	
 	public void jetpackOff(){

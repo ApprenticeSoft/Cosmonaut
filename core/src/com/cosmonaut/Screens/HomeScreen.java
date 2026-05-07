@@ -80,12 +80,14 @@ public class HomeScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0,0,0,1);
+		
+		GameConstants.FRAME_DELTA = Math.min(delta, 1f/15f);
+Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		game.batch.setProjectionMatrix(camera.combined);
 
-		stage.act();
+		stage.act(GameConstants.FRAME_DELTA);
 		stage.draw();
 
 		if(!nextScreen

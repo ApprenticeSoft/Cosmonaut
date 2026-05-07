@@ -83,7 +83,7 @@ public class Upgrade extends Item{
 
 	public void active(TiledMapReader tiledMapReader){
 		super.active(tiledMapReader);
-		animTime += Gdx.graphics.getDeltaTime();
+		animTime += GameConstants.FRAME_DELTA;
 	}
 
 	@Override

@@ -42,7 +42,8 @@ public class MyCamera extends OrthographicCamera{
 			cameraZoom();
 			
 			distance.set(previousPos.x - position.x, previousPos.y - position.y);
-			speed = distance.len2()/(Gdx.graphics.getDeltaTime() * Gdx.graphics.getDeltaTime());
+				float delta = Math.max(GameConstants.FRAME_DELTA, GameConstants.BOX_STEP);
+				speed = distance.len2()/(delta * delta);
 		}
 	}
 	
@@ -65,7 +66,8 @@ public class MyCamera extends OrthographicCamera{
 		}
 
 		distance.set(previousPos.x - position.x, previousPos.y - position.y);
-		speed = distance.len2()/(Gdx.graphics.getDeltaTime() * Gdx.graphics.getDeltaTime());
+		float delta = Math.max(GameConstants.FRAME_DELTA, GameConstants.BOX_STEP);
+		speed = distance.len2()/(delta * delta);
 		
 		//Condition to go to the next step	
 		if(speed < 1.5f){
@@ -102,7 +104,8 @@ public class MyCamera extends OrthographicCamera{
 		}
 
 		distance.set(previousPos.x - position.x, previousPos.y - position.y);
-		speed = distance.len2()/(Gdx.graphics.getDeltaTime() * Gdx.graphics.getDeltaTime());
+		float delta = Math.max(GameConstants.FRAME_DELTA, GameConstants.BOX_STEP);
+		speed = distance.len2()/(delta * delta);
 		
 	
 		if(introductionStep == 0){

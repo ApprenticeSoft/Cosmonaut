@@ -133,7 +133,7 @@ public class Exit extends Obstacle{
 	
 	public void active(){
 		if(open)
-			animTime += Gdx.graphics.getDeltaTime();
+			animTime += GameConstants.FRAME_DELTA;
 		
 		if(exitAnimation.isAnimationFinished(animTime) && heroContact)
 			GameConstants.LEVEL_FINISHED = true;	

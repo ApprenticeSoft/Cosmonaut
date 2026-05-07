@@ -330,20 +330,28 @@ public class TiledMapReader {
 	}
 	
 	public void active(){
-		if(!GameConstants.LEVEL_INTRO && !GameConstants.TUTORIAL)
-			hero.displacement();
+		fixedStep(GameConstants.BOX_STEP);
+		updateTimers(GameConstants.FRAME_DELTA);
+	}
 
-        for(Leak leak : game.leaks)
-        	leak.active(hero);		
-        for(Obstacle obstacle : game.obstacles)
-        	obstacle.active(hero);
-        for(Obstacle obstacle : game.obstaclesWithNinePatch)
-        	obstacle.active(hero);       
-        for(Item item : game.items)
-        	item.active(this);              
-        for(Exit exit : game.exits)
-        	exit.active();
-		for(Gyrophare gyrophare : game.gyrophares)
+	public void fixedStep(float fixedDelta){
+		if(!GameConstants.LEVEL_INTRO && !GameConstants.TUTORIAL)
+			hero.displacement(fixedDelta);
+
+	        for(Leak leak : game.leaks)
+	        	leak.active(hero);		
+	        for(Obstacle obstacle : game.obstacles)
+	        	obstacle.active(hero, fixedDelta);
+	        for(Obstacle obstacle : game.obstaclesWithNinePatch)
+	        	obstacle.active(hero, fixedDelta);
+	        for(Item item : game.items)
+	        	item.active(this);
+	}
+
+	public void updateTimers(float delta){
+	        for(Exit exit : game.exits)
+	        	exit.active();
+			for(Gyrophare gyrophare : game.gyrophares)
 			gyrophare.active();
 		for(ObstacleLightning lightning : game.lightnings)
 			lightning.active(hero);

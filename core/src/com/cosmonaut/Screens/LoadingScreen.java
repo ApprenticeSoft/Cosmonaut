@@ -223,13 +223,15 @@ public class LoadingScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		
+		GameConstants.FRAME_DELTA = Math.min(delta, 1f/15f);
+Gdx.gl.glClearColor(1, 1, 1, 1);
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	    
 	    camera.update();
 		game.batch.setProjectionMatrix(camera.combined);
 	
-	    stage.act();
+	    stage.act(GameConstants.FRAME_DELTA);
 	    stage.draw();
 	    
 	    progressBar.setValue(100*game.assets.getProgress());

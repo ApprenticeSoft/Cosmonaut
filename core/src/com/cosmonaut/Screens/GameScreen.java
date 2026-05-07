@@ -187,6 +187,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
+		GameConstants.FRAME_DELTA = Math.min(delta, 1f/15f);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -198,13 +199,13 @@ public class GameScreen implements Screen{
         game.batch.setProjectionMatrix(camera.combined);
         /****************************************************************/
 
-        //Level finished
-        if(GameConstants.LEVEL_FINISHED)
-        	finishLevel(delta);
+	        //Level finished
+	        if(GameConstants.LEVEL_FINISHED)
+	        	finishLevel(GameConstants.FRAME_DELTA);
 
-		if(!GameConstants.GAME_PAUSED){
-			updateCursorCapture(true);
-			float frameDelta = Math.min(delta, MAX_FRAME_DELTA);
+			if(!GameConstants.GAME_PAUSED){
+				updateCursorCapture(true);
+				float frameDelta = GameConstants.FRAME_DELTA;
 	        //Animation
 	        GameConstants.ANIM_TIME += frameDelta;
 	        backgroundTime += frameDelta;
@@ -213,13 +214,14 @@ public class GameScreen implements Screen{
 			physicsAccumulator = Math.min(
 					physicsAccumulator + frameDelta,
 					GameConstants.BOX_STEP * MAX_PHYSICS_STEPS_PER_FRAME);
-			int stepCount = 0;
-			while(physicsAccumulator >= GameConstants.BOX_STEP && stepCount < MAX_PHYSICS_STEPS_PER_FRAME){
-				world.step(GameConstants.BOX_STEP, GameConstants.BOX_VELOCITY_ITERATIONS, GameConstants.BOX_POSITION_ITERATIONS);
-				physicsAccumulator -= GameConstants.BOX_STEP;
-				stepCount++;
-			}
-			mapReader.active();
+				int stepCount = 0;
+				while(physicsAccumulator >= GameConstants.BOX_STEP && stepCount < MAX_PHYSICS_STEPS_PER_FRAME){
+					mapReader.fixedStep(GameConstants.BOX_STEP);
+					world.step(GameConstants.BOX_STEP, GameConstants.BOX_VELOCITY_ITERATIONS, GameConstants.BOX_POSITION_ITERATIONS);
+					physicsAccumulator -= GameConstants.BOX_STEP;
+					stepCount++;
+				}
+				mapReader.updateTimers(frameDelta);
 
 	        if(Gdx.input.isKeyJustPressed(Keys.ESCAPE))
 	        	hud.pause();
@@ -242,7 +244,7 @@ public class GameScreen implements Screen{
 	        		hud.resume();
 		}
 
-		stage.act(delta);
+			stage.act(GameConstants.FRAME_DELTA);
 
 		//Drawing graphics
 		//Background

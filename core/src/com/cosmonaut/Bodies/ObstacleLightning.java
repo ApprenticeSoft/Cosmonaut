@@ -301,7 +301,7 @@ public class ObstacleLightning extends Obstacle{
 		}
 		else if(cooldowns.length == 1){
 			if(delay > 0){
-				delay -= Gdx.graphics.getDeltaTime();
+				delay -= GameConstants.FRAME_DELTA;
 			}
 			else if(GameConstants.LEVEL_TIME - lastLightningTime > cooldown){
 				if(!strike){
@@ -311,7 +311,7 @@ public class ObstacleLightning extends Obstacle{
 					strike = true;
 				}
 				else {
-					alpha -= 1.4f * Gdx.graphics.getDeltaTime();
+					alpha -= 1.4f * GameConstants.FRAME_DELTA;
 					
 					if(alpha < 0){
 						alpha =0;
@@ -323,7 +323,7 @@ public class ObstacleLightning extends Obstacle{
 		}
 		else if(cooldowns.length == 2){
 			if(delay > 0){
-				delay -= Gdx.graphics.getDeltaTime();
+				delay -= GameConstants.FRAME_DELTA;
 			}
 			else if(GameConstants.LEVEL_TIME - activeTime > (cooldown + activityDuration)){
 				if(!strike){
@@ -333,7 +333,7 @@ public class ObstacleLightning extends Obstacle{
 					strike = true;
 				}
 				else {
-					alpha -= 1.4f * Gdx.graphics.getDeltaTime();
+					alpha -= 1.4f * GameConstants.FRAME_DELTA;
 					
 					if(alpha < 0){
 						alpha = 0;

@@ -19,6 +19,9 @@ import com.cosmonaut.MyGdxGame;
 
 public class TextBox {
 
+	private static final float MAX_FRAME_DELTA = 1f / 15f;
+	private static final float CHARACTERS_PER_SECOND = 60f;
+
 	final MyGdxGame game;
 	private Skin skin;
 	private TextureAtlas textureAtlas;
@@ -32,7 +35,7 @@ public class TextBox {
 	private LabelStyle labelStyle;
 	private Image imageBox;
 	private Vector2 imageBoxSize, imageBoxPosition, interpolatedImageBoxSize, interpolatedImageBoxPosition;
-	private float bordure, labelPosX, labelPosY, timer = 0.0f, timeLimit, baseTimeLimit = 1.2f, factorTimeLimit = 0.035f;
+	private float bordure, labelPosX, labelPosY, timer = 0.0f, timeLimit, baseTimeLimit = 1.2f, factorTimeLimit = 0.035f, characterAccumulator = 0.0f;
 	private int textNum;
 	private String splitStringParagraph = "Text ", splitStringLine = ";";
 
@@ -147,7 +150,7 @@ public class TextBox {
 				paragraphWritten();
 		}	
 
-		timer += Gdx.graphics.getDeltaTime();
+		timer += GameConstants.FRAME_DELTA;
 	}
 	
 	public void dialogueTimer(Array<Interlocutor> interlocutors){
@@ -184,7 +187,7 @@ public class TextBox {
 				paragraphWritten();
 		}	
 
-		timer += Gdx.graphics.getDeltaTime();
+		timer += GameConstants.FRAME_DELTA;
 	}
 
 	public void addToStage(Stage stage){
@@ -234,7 +237,7 @@ public class TextBox {
 		else
 			dialogueFinished();
 		
-		timer += Gdx.graphics.getDeltaTime();
+		timer += GameConstants.FRAME_DELTA;
 	}
 	
 	public void writeLine(int paragraph, int line){
@@ -272,7 +275,7 @@ public class TextBox {
 		if(posLine != line)
 			dialogueFinished();
 
-		timer += Gdx.graphics.getDeltaTime();
+		timer += GameConstants.FRAME_DELTA;
 	}
 	
 	private void lineWritten(){
@@ -294,8 +297,9 @@ public class TextBox {
 	private void paragraphWritten(){
 		if(posParagraph < fileContent.length - 1){
 			posParagraph++;
-			posChar = 0;
-			posLine = 1;
+				posChar = 0;
+				characterAccumulator = 0.0f;
+				posLine = 1;
 			strings = fileContent[posParagraph].split(splitStringLine);
 		}
 		else{
@@ -316,9 +320,10 @@ public class TextBox {
 	private void timerNextLine(){
 		if(timer >= timeLimit){
 			nextLine = true;
-			posLine++;
-			posChar = 0;
-			stringBuilder.delete(0, stringBuilder.length());
+				posLine++;
+				posChar = 0;
+				characterAccumulator = 0.0f;
+				stringBuilder.delete(0, stringBuilder.length());
 
 			imageBoxPosition.set(label.getX() - bordure/2, label.getY() - label.getPrefHeight()/2 - bordure/2);
 			timer = 0;
@@ -345,13 +350,14 @@ public class TextBox {
 	}
 	*/
 	private void buildString2(){
-		posChar += 1+(int)(60*Gdx.graphics.getDeltaTime());
+		characterAccumulator += CHARACTERS_PER_SECOND * Math.min(GameConstants.FRAME_DELTA, MAX_FRAME_DELTA);
+		posChar = Math.max(posChar, Math.max(1, (int)characterAccumulator));
 		if(posChar >= strings[posLine].length()){
 			posChar = strings[posLine].length();
 			tempString = strings[posLine];
 		}
 		else
-			tempString = strings[posLine].substring(0, posChar+1);
+			tempString = strings[posLine].substring(0, posChar);
 		
 		label.setText(tempString);
 		label.setY(labelPosY - label.getPrefHeight()/2);
@@ -394,6 +400,7 @@ public class TextBox {
 		nextLine = true;
 		posLine = 1;
 		posChar = 0;
+		characterAccumulator = 0.0f;
 		stringBuilder.delete(0, stringBuilder.length());
 		timer = 0;
 	}
@@ -402,6 +409,7 @@ public class TextBox {
 		nextLine = true;
 		posLine++;
 		posChar = 0;
+		characterAccumulator = 0.0f;
 		stringBuilder.delete(0, stringBuilder.length());
 		timer = 0;
 	}

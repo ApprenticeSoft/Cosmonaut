@@ -7,10 +7,11 @@ public class GameConstants {
 	//World constants
 	public static float MPP = 0.05f;					//Meter/Pixel
 	public static float PPM = 1/MPP;					//Pixel/Meter
-	public static float BOX_STEP = 1/60f; 
-	public static int BOX_VELOCITY_ITERATIONS = 6;
-	public static int BOX_POSITION_ITERATIONS = 2;
-	public static float GRAVITY = 0;
+		public static float BOX_STEP = 1/60f; 
+		public static int BOX_VELOCITY_ITERATIONS = 6;
+		public static int BOX_POSITION_ITERATIONS = 2;
+		public static float FRAME_DELTA = 1/60f;
+		public static float GRAVITY = 0;
 	public static float DENSITY = 2.0f;
 	public static int LIGHT_RAY_MULTIPLICATOR = 1;
 	

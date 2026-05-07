@@ -211,14 +211,16 @@ public class EndScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		
+		GameConstants.FRAME_DELTA = Math.min(delta, 1f/15f);
+Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.batch.setProjectionMatrix(camera.combined);
 		
 		if(game.blackImage.getColor().a > 0.1f)
 			openDoor();
 		else if (timer < 6){
-			timer += Gdx.graphics.getDeltaTime();
+			timer += GameConstants.FRAME_DELTA;
 			
 			doorMotion();
 			openDoor();
@@ -231,7 +233,7 @@ public class EndScreen implements Screen{
 			}
 		}
 		else if (timer < 15){
-			timer += Gdx.graphics.getDeltaTime();
+			timer += GameConstants.FRAME_DELTA;
 			
 			//Shader
 			if(useEndShaders){
@@ -270,7 +272,7 @@ public class EndScreen implements Screen{
 			}
 		}
 		else if(timer < 26){
-			timer += Gdx.graphics.getDeltaTime();	
+			timer += GameConstants.FRAME_DELTA;	
 			spaceshipMoving();
 			
 			if(timer >= 26){
@@ -280,7 +282,7 @@ public class EndScreen implements Screen{
 			}
 		}
 		else if(vaisseauFinPosition.x < 1.1f*Gdx.graphics.getWidth()){
-			timer += Gdx.graphics.getDeltaTime();
+			timer += GameConstants.FRAME_DELTA;
 			escape();
 
 			if(vaisseauFinPosition.x >= 1.1f*Gdx.graphics.getWidth()){
@@ -297,7 +299,7 @@ public class EndScreen implements Screen{
 			credits();
 		}
 		
-		stage.act();
+		stage.act(GameConstants.FRAME_DELTA);
 		stage.draw();
 	}
 
@@ -337,7 +339,7 @@ public class EndScreen implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.batch.begin();
 		//Background
-		advanceBackgroundX(Gdx.graphics.getDeltaTime());
+		advanceBackgroundX(GameConstants.FRAME_DELTA);
 		drawBackgroundRows(0f, 1);
 		//Couloir
 		game.batch.setColor(0.65f, 0.65f, 0.65f, 1);
@@ -404,31 +406,31 @@ public class EndScreen implements Screen{
 						porteHeight);
 		//Personnage
 		game.batch.draw(skin.getRegion("Fin_Personnage_Dos"), 
-						personnageX += heroWalkSpeedX * Gdx.graphics.getDeltaTime(), 
-						personnageY += heroWalkSpeedY * Gdx.graphics.getDeltaTime(), 
+						personnageX += heroWalkSpeedX * GameConstants.FRAME_DELTA, 
+						personnageY += heroWalkSpeedY * GameConstants.FRAME_DELTA, 
 						0,
 						0,
 						1.3f*porteHeight * skin.getRegion("Fin_Personnage_Dos").getRegionWidth()/skin.getRegion("Fin_Personnage_Dos").getRegionHeight(), 
 						1.3f*porteHeight,
 						1,
 						1,
-						personnageAngle += 0.3f*Gdx.graphics.getDeltaTime());
+						personnageAngle += 0.3f*GameConstants.FRAME_DELTA);
 		game.batch.end();
 		//postProcessor.render();
 	}
 	
 	public void doorMotion(){
 		if(porteGaucheX > porteGaucheLimite)
-			porteGaucheX -= animationSpeed*Gdx.graphics.getDeltaTime();
+			porteGaucheX -= animationSpeed*GameConstants.FRAME_DELTA;
 		else porteGaucheX = porteGaucheLimite;
 		if(porteDroiteX < porteDroiteLimite)
-			porteDroiteX += animationSpeed*Gdx.graphics.getDeltaTime();
+			porteDroiteX += animationSpeed*GameConstants.FRAME_DELTA;
 		else porteDroiteX = porteDroiteLimite;
 		if(porteHautY < porteHautLimite)
-			porteHautY += animationSpeed*Gdx.graphics.getDeltaTime();
+			porteHautY += animationSpeed*GameConstants.FRAME_DELTA;
 		else porteHautY = porteHautLimite;
 		if(porteBasY > porteBasLimite)
-			porteBasY -= animationSpeed*Gdx.graphics.getDeltaTime();
+			porteBasY -= animationSpeed*GameConstants.FRAME_DELTA;
 		else porteBasY = porteBasLimite;
 	}
 	
@@ -444,7 +446,7 @@ public class EndScreen implements Screen{
 		
 		game.batch.begin();
 		//Background
-		advanceBackgroundX(Gdx.graphics.getDeltaTime());
+		advanceBackgroundX(GameConstants.FRAME_DELTA);
 		drawBackgroundRows(0f, 1);
 		//Couloir
 		game.batch.draw(skin.getRegion("Fin_Couloir2"),
@@ -467,11 +469,11 @@ public class EndScreen implements Screen{
 						personnageFaceY, 
 						0,
 						0,
-						personnageFaceWidth += faceGrowthSpeed * Gdx.graphics.getDeltaTime(), 
+						personnageFaceWidth += faceGrowthSpeed * GameConstants.FRAME_DELTA, 
 						personnageFaceWidth * skin.getRegion("Fin_Personnage_Face").getRegionHeight()/skin.getRegion("Fin_Personnage_Face").getRegionWidth(),
 						1,
 						1,
-						personnageFaceAngle += 0.75f*Gdx.graphics.getDeltaTime());
+						personnageFaceAngle += 0.75f*GameConstants.FRAME_DELTA);
 		
 		game.batch.end();
 		//postProcessor.render();
@@ -489,11 +491,11 @@ public class EndScreen implements Screen{
 		
 		game.batch.begin();
 		//Background
-		advanceBackgroundX(Gdx.graphics.getDeltaTime());
+		advanceBackgroundX(GameConstants.FRAME_DELTA);
 		drawBackgroundRows(0f, 1);
 		
 			 game.batch.draw(	skin.getRegion("Vaisseau_Mere"), 
-			 				spaceshipPosX += spaceshipMoveSpeedX * Gdx.graphics.getDeltaTime(), 
+			 				spaceshipPosX += spaceshipMoveSpeedX * GameConstants.FRAME_DELTA, 
 			 				0.3f*Gdx.graphics.getHeight() - 0.5f*spaceshipHeight, 
 			 				spaceshipWidth, 
 			 				spaceshipHeight);
@@ -517,11 +519,11 @@ public class EndScreen implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			
 		if(timer - stepTime > 2)
-			vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha += 0.42f * Gdx.graphics.getDeltaTime(), 0f , 1f);	
+			vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha += 0.42f * GameConstants.FRAME_DELTA, 0f , 1f);	
 		if(vaisseauFinReacteurAlpha > 0.9f){
 
-			speedFactor = MathUtils.clamp(speedFactor -= 0.11f* Gdx.graphics.getDeltaTime(), 0, 1);	
-			backgroundPosY -= speedFactor * speedFactor * Gdx.graphics.getHeight() * Gdx.graphics.getDeltaTime();
+			speedFactor = MathUtils.clamp(speedFactor -= 0.11f* GameConstants.FRAME_DELTA, 0, 1);	
+			backgroundPosY -= speedFactor * speedFactor * Gdx.graphics.getHeight() * GameConstants.FRAME_DELTA;
 			
 			Vector2 vaisseauDirection = Pools.obtain(Vector2.class);
 			if(vaisseauFinWidth > 0.015f * Gdx.graphics.getWidth()){
@@ -537,14 +539,14 @@ public class EndScreen implements Screen{
 			Pools.free(vaisseauDirection);
 			
 			if(vaisseauFinAngle > -72)
-				vaisseauFinAngle -= -0.02f * vaisseauFinAngle +  Gdx.graphics.getDeltaTime();
+				vaisseauFinAngle -= -0.02f * vaisseauFinAngle +  GameConstants.FRAME_DELTA;
 			else
-				vaisseauFinAngle -= 3*Gdx.graphics.getDeltaTime();
+				vaisseauFinAngle -= 3*GameConstants.FRAME_DELTA;
 		}
 		
 		game.batch.begin();
 		//Background
-		advanceBackgroundX(Gdx.graphics.getDeltaTime());
+		advanceBackgroundX(GameConstants.FRAME_DELTA);
 		drawBackgroundRows(backgroundPosY, 4);
 		game.batch.draw(skin.getRegion("Surface_Vaisseau"),
 						0,
@@ -584,22 +586,22 @@ public class EndScreen implements Screen{
 		
 		game.batch.begin();
 		//Background
-		speedFactor = MathUtils.clamp(speedFactor -= 0.11f* Gdx.graphics.getDeltaTime(), 0, 1);	
-		advanceBackgroundX(Gdx.graphics.getDeltaTime());
-		backgroundPosY -= speedFactor * speedFactor * Gdx.graphics.getHeight() * Gdx.graphics.getDeltaTime();
+		speedFactor = MathUtils.clamp(speedFactor -= 0.11f* GameConstants.FRAME_DELTA, 0, 1);	
+		advanceBackgroundX(GameConstants.FRAME_DELTA);
+		backgroundPosY -= speedFactor * speedFactor * Gdx.graphics.getHeight() * GameConstants.FRAME_DELTA;
 		drawBackgroundRows(backgroundPosY, 5);
 		
 		if(vaisseauFinReacteurAlpha < 1 && creditTimer == 0)
-			vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha += 0.65f * Gdx.graphics.getDeltaTime(), 0f , 1f);
+			vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha += 0.65f * GameConstants.FRAME_DELTA, 0f , 1f);
 		else if(vaisseauFinReacteurAlpha == 1){
-			creditTimer += Gdx.graphics.getDeltaTime();
+			creditTimer += GameConstants.FRAME_DELTA;
 			
 			if(creditTimer > 4){
-				vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha -= 0.55f * Gdx.graphics.getDeltaTime(), 0f , 1f);
+				vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha -= 0.55f * GameConstants.FRAME_DELTA, 0f , 1f);
 			}
 		}
 		else{
-			vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha -= 0.55f * Gdx.graphics.getDeltaTime(), 0f , 1f);
+			vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha -= 0.55f * GameConstants.FRAME_DELTA, 0f , 1f);
 			
 			if(vaisseauFinReacteurAlpha == 0){
 				creditTimer = 0;
@@ -654,16 +656,16 @@ public class EndScreen implements Screen{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha += 0.33f * Gdx.graphics.getDeltaTime(), 0f , 1f);
+		vaisseauFinReacteurAlpha = MathUtils.clamp(vaisseauFinReacteurAlpha += 0.33f * GameConstants.FRAME_DELTA, 0f , 1f);
 		for(int i = 0; i < game.musics.size; i++)
 			game.musics.get(i).setVolume(MathUtils.clamp(1 - vaisseauFinReacteurAlpha, 0, 0.9f));
 		
 		game.batch.begin();
 		game.batch.setColor(1 - vaisseauFinReacteurAlpha, 1 - vaisseauFinReacteurAlpha, 1 - vaisseauFinReacteurAlpha, 1 - vaisseauFinReacteurAlpha);
 		//Background
-		speedFactor = MathUtils.clamp(speedFactor -= 0.11f* Gdx.graphics.getDeltaTime(), 0, 1);	
-		advanceBackgroundX(Gdx.graphics.getDeltaTime());
-		backgroundPosY -= speedFactor * speedFactor * Gdx.graphics.getHeight() * Gdx.graphics.getDeltaTime();
+		speedFactor = MathUtils.clamp(speedFactor -= 0.11f* GameConstants.FRAME_DELTA, 0, 1);	
+		advanceBackgroundX(GameConstants.FRAME_DELTA);
+		backgroundPosY -= speedFactor * speedFactor * Gdx.graphics.getHeight() * GameConstants.FRAME_DELTA;
 		drawBackgroundRows(backgroundPosY, 5);
 		game.batch.end();
 		

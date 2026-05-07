@@ -258,13 +258,15 @@ public class MainMenuScreen implements Screen{
 	
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0,0,0,1);
+		
+		GameConstants.FRAME_DELTA = Math.min(delta, 1f/15f);
+Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		//Upgrade button glow
 		if(Data.getUpgradePoint() > 0){
 			if((Data.getFuelLevel() + Data.getOxygenLevel() + Data.getPowerLevel()) == 0){
-				alpha += 4 * delta;
+				alpha += 4 * GameConstants.FRAME_DELTA;
 				float glowAlpha = (float)(1 + Math.cos(alpha)) / 2f;
 				upgradeButton2.setColor(upgradeButton2.getColor().r, upgradeButton2.getColor().g, upgradeButton2.getColor().b, glowAlpha);
 			}
@@ -272,7 +274,7 @@ public class MainMenuScreen implements Screen{
 		
 		game.batch.setProjectionMatrix(camera.combined);
 		
-		stage.act();
+		stage.act(GameConstants.FRAME_DELTA);
 		stage.draw();	
 		
 		/*
@@ -286,7 +288,7 @@ public class MainMenuScreen implements Screen{
 			fullVersionButton.setVisible(false);
 		}
 		else if(game.fullVersionButtonDelay > 0)
-			game.fullVersionButtonDelay -= Gdx.graphics.getDeltaTime();
+			game.fullVersionButtonDelay -= GameConstants.FRAME_DELTA;
 
 		if(!Data.getIntroPlayed())
 			game.assets.update();

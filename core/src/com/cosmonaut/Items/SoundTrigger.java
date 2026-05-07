@@ -90,7 +90,7 @@ public class SoundTrigger extends Item{
 				music.play();
 			
 			if(volume < 0.9f)
-				music.setVolume(MathUtils.clamp(volume += Gdx.graphics.getDeltaTime()/fading, 0, 0.9f));
+				music.setVolume(MathUtils.clamp(volume += GameConstants.FRAME_DELTA/fading, 0, 0.9f));
 		}
 		else{
 			//System.out.println("Stop music");

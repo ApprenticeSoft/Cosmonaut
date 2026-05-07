@@ -166,6 +166,10 @@ public class Obstacle {
 	public void active(Hero hero){
 		
 	}
+
+	public void active(Hero hero, float fixedDelta){
+		active(hero);
+	}
 	
 	public void activate(){
 		

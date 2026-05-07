@@ -136,7 +136,7 @@ public class ItemSwitch {
 	}
 	
 	public void draw(SpriteBatch batch, TextureAtlas textureAtlas){
-		cooldown -= Gdx.graphics.getDeltaTime();
+		cooldown -= GameConstants.FRAME_DELTA;
 		
 		batch.setColor(1, 1, 1, 1);
 		if(isOn){

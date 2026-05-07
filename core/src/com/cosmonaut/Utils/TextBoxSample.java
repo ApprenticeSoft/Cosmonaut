@@ -25,6 +25,8 @@ import com.cosmonaut.MyGdxGame;
  */
 public class TextBoxSample {
 
+	private static final float CHARACTERS_PER_SECOND = 60f;
+
 	final MyGdxGame game;
 	private Skin skin;
 	private TextureAtlas textureAtlas;
@@ -38,7 +40,7 @@ public class TextBoxSample {
 	private boolean initiate = false;
 	public boolean dialogueFinished = false;
 	private Vector2 imageSize, imagePosition, interpolatedImageSize, interpolatedImagePosition;
-	private float border, timer = 0.0f, timeLimit, baseTimeLimit = 1.2f, factorTimeLimit = 0.035f;
+	private float border, timer = 0.0f, timeLimit, baseTimeLimit = 1.2f, factorTimeLimit = 0.035f, characterAccumulator = 0.0f;
 	
 	/*
 	 * Constructor of the TextBox
@@ -136,7 +138,7 @@ public class TextBoxSample {
 			// If the paragraph is completely written
 			dialogueFinished();
 		// The timer to decide when to switch to the next line
-		timer += Gdx.graphics.getDeltaTime();
+		timer += GameConstants.FRAME_DELTA;
 	}
 	
 	/*
@@ -145,7 +147,8 @@ public class TextBoxSample {
 	 * The temporary string is displayed in the label.
 	 */
 	private void buildString(){
-		posChar += 1+(int)(60*Gdx.graphics.getDeltaTime());
+		characterAccumulator += CHARACTERS_PER_SECOND * GameConstants.FRAME_DELTA;
+		posChar = Math.max(posChar, Math.max(1, (int)characterAccumulator));
 		// If the framerate is < 60 frame/seconds, the posChar will be > string length at one point
 		// Thus posChar is adjusted to the string length if that happens
 		if(posChar >= strings[posLine].length()){
@@ -153,7 +156,7 @@ public class TextBoxSample {
 			tempString = strings[posLine];
 		}
 		else
-			tempString = strings[posLine].substring(0, posChar+1);
+			tempString = strings[posLine].substring(0, posChar);
 		
 		label.setText(tempString);
 	}
@@ -184,6 +187,7 @@ public class TextBoxSample {
 	public void nextLine(){
 		posLine++;
 		posChar = 0;
+		characterAccumulator = 0.0f;
 		timer = 0;
 	}
 

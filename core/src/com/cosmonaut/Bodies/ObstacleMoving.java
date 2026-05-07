@@ -137,9 +137,14 @@ public class ObstacleMoving extends Obstacle{
 
 	@Override
 	public void active(Hero hero){
+		active(hero, GameConstants.BOX_STEP);
+	}
+
+	@Override
+	public void active(Hero hero, float fixedDelta){
 		if(active){
 			if(delay > 0){
-				delay -= Gdx.graphics.getDeltaTime();
+				delay -= fixedDelta;
 			}
 			else{
 				currentPosition.set(path[step].x - body.getPosition().x, path[step].y - body.getPosition().y);
@@ -148,7 +153,7 @@ public class ObstacleMoving extends Obstacle{
 					if(!backward){
 
 						if(!currentPosition.hasSameDirection(direction)){    
-					        pauseCooldown -= Gdx.graphics.getDeltaTime();
+					        pauseCooldown -= fixedDelta;
 							body.setTransform(path[step], 0);
 							step++;
 							
@@ -162,7 +167,7 @@ public class ObstacleMoving extends Obstacle{
 					}
 					else{
 						if(!currentPosition.hasSameDirection(direction)){
-							pauseCooldown -= Gdx.graphics.getDeltaTime();
+								pauseCooldown -= fixedDelta;
 							body.setTransform(path[step], 0);
 							step--;
 							
@@ -177,7 +182,7 @@ public class ObstacleMoving extends Obstacle{
 				}
 				else{
 					if(!currentPosition.hasSameDirection(direction)){
-						pauseCooldown -= Gdx.graphics.getDeltaTime();
+							pauseCooldown -= fixedDelta;
 						body.setTransform(path[step], 0);
 						step++;
 						
@@ -194,7 +199,7 @@ public class ObstacleMoving extends Obstacle{
 				}
 				else{
 					body.setLinearVelocity(0,0);
-					pauseCooldown -= Gdx.graphics.getDeltaTime();
+					pauseCooldown -= fixedDelta;
 				}
 			}
 		}

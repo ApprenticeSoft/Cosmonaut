@@ -307,9 +307,14 @@ public class ObstaclePiston extends Obstacle{
 
 	@Override
 	public void active(Hero hero){
+		active(hero, GameConstants.BOX_STEP);
+	}
+
+	@Override
+	public void active(Hero hero, float fixedDelta){
 		if(active){
 			if(delay > 0){
-				delay -= Gdx.graphics.getDeltaTime();
+				delay -= fixedDelta;
 			}
 			else{	
 				soundDistance.set(camera.position.x, camera.position.y).sub(posX, posY);
@@ -332,7 +337,7 @@ public class ObstaclePiston extends Obstacle{
 						sound.pause(soundId);
 					
 					if(pause > 0){
-						pause -= Gdx.graphics.getDeltaTime();
+						pause -= fixedDelta;
 						speed = 0;
 					}
 					else{

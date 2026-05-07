@@ -272,7 +272,9 @@ public class IntroScreen implements Screen{
 		
 	@Override
 	public void render(float delta) {	
-		if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
+		
+		GameConstants.FRAME_DELTA = Math.min(delta, 1f/15f);
+			if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
 			dispose();
 			game.setScreen(new MainMenuScreen(game));
 		}
@@ -282,7 +284,7 @@ public class IntroScreen implements Screen{
 		stage.getCamera().update();
 		game.batch.setProjectionMatrix(stage.getCamera().combined);
 		
-		introTimer += Gdx.graphics.getDeltaTime();
+		introTimer += GameConstants.FRAME_DELTA;
 		
 		//If the 1st level is complete, don`t play the intro anymore
 		/*
@@ -305,18 +307,18 @@ public class IntroScreen implements Screen{
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			
-			updateBackgroundScroll(delta);
+				updateBackgroundScroll(GameConstants.FRAME_DELTA);
 			
 			//Sons
 				if(introTimer < 15){	
 					if(introTimer > 7){
-						labelIntro.setColor(1, 1, 1, labelIntroAlpha = MathUtils.clamp(labelIntroAlpha -= 0.5f * Gdx.graphics.getDeltaTime(), 0, 1));
-						spaceshipSoundVolume = MathUtils.clamp(spaceshipSoundVolume + 0.07f * Gdx.graphics.getDeltaTime(), 0f, 1f);
+						labelIntro.setColor(1, 1, 1, labelIntroAlpha = MathUtils.clamp(labelIntroAlpha -= 0.5f * GameConstants.FRAME_DELTA, 0, 1));
+						spaceshipSoundVolume = MathUtils.clamp(spaceshipSoundVolume + 0.07f * GameConstants.FRAME_DELTA, 0f, 1f);
 						spaceshipSound.setVolume(spaceshipSoundVolume);
 						
 					}
 				else if(introTimer > 2){
-					labelIntro.setColor(1, 1, 1, labelIntroAlpha = MathUtils.clamp(labelIntroAlpha += 0.5f * Gdx.graphics.getDeltaTime(), 0, 1));
+					labelIntro.setColor(1, 1, 1, labelIntroAlpha = MathUtils.clamp(labelIntroAlpha += 0.5f * GameConstants.FRAME_DELTA, 0, 1));
 				}
 			}
 				else if(introTimer > 25){
@@ -326,11 +328,11 @@ public class IntroScreen implements Screen{
 					}
 					
 					if(musicIntroVolume < 0.6f){
-						musicIntroVolume = MathUtils.clamp(musicIntroVolume + 0.05f * Gdx.graphics.getDeltaTime(), 0f, 0.6f);
+						musicIntroVolume = MathUtils.clamp(musicIntroVolume + 0.05f * GameConstants.FRAME_DELTA, 0f, 0.6f);
 						musicIntro.setVolume(musicIntroVolume);
 					}
 					
-					spaceshipSoundVolume = MathUtils.clamp(spaceshipSoundVolume - 0.045f * Gdx.graphics.getDeltaTime(), 0f, 1f);
+					spaceshipSoundVolume = MathUtils.clamp(spaceshipSoundVolume - 0.045f * GameConstants.FRAME_DELTA, 0f, 1f);
 					spaceshipSound.setVolume(spaceshipSoundVolume);
 				}
 			
@@ -347,7 +349,7 @@ public class IntroScreen implements Screen{
 				    game.batch.setColor(1f, 1f, 1f, 1f);
 				    game.batch.begin();
 				    if(introTimer >= spaceshipStartDelay){
-				    	spaceshipPosX += spaceshipSpeed * Gdx.graphics.getDeltaTime();
+				    	spaceshipPosX += spaceshipSpeed * GameConstants.FRAME_DELTA;
 				    	game.batch.draw(skin.getRegion("Vaisseau_Mere"), 
 				    				spaceshipPosX, 
 				    				0.4f*Gdx.graphics.getHeight() - 0.5f*spaceshipHeight, 
@@ -390,7 +392,7 @@ public class IntroScreen implements Screen{
 			  		textureTest.bind(0);
 			  		
 			  		alphaShaderProgram.begin();
-			  		alphaShaderProgram.setUniformf("u_time", shaderTime += Gdx.graphics.getDeltaTime());
+			  		alphaShaderProgram.setUniformf("u_time", shaderTime += GameConstants.FRAME_DELTA);
 			  		alphaShaderProgram.setUniformi("u_mask", 1);
 			  		alphaShaderProgram.end();
 			         
@@ -448,7 +450,7 @@ public class IntroScreen implements Screen{
 		    }
 		    
 		    if(textBox.dialogueFinished){
-		    	transitionAlpha += Gdx.graphics.getDeltaTime();
+		    	transitionAlpha += GameConstants.FRAME_DELTA;
 		    	transitionImage.addAction(Actions.alpha(1, 1.2f));
 		    	
 		    	if(transitionAlpha > 2.5 && !crashSoundPlay){
@@ -468,19 +470,21 @@ public class IntroScreen implements Screen{
 			musicIntro.stop();
 			transitionImage.addAction(Actions.alpha(0));
 			
-	    	//Alarme image
-			Gdx.gl.glClearColor((float)(1 + MathUtils.cos(alerteRougeTimer += 1.8f*Gdx.graphics.getDeltaTime()))/(4.0f*transitionAlpha), 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			
-			//Alarm sound
-			if(MathUtils.cos(alerteRougeTimer += 1.8f*Gdx.graphics.getDeltaTime()) > 0.9f){
+		    	//Alarme image
+				alerteRougeTimer += 1.8f * GameConstants.FRAME_DELTA;
+				float alarmCos = MathUtils.cos(alerteRougeTimer);
+				Gdx.gl.glClearColor((float)(1 + alarmCos)/(4.0f*transitionAlpha), 0, 0, 1);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				
+				//Alarm sound
+				if(alarmCos > 0.9f){
 				if(!alarmSoundPlay){
 					alarmSoundPlay = true;
 					soundId = alarmSound.play();
 				}
 			}
-			else if(MathUtils.cos(alerteRougeTimer += 1.8f*Gdx.graphics.getDeltaTime()) < 0)
-				alarmSoundPlay = false;
+				else if(alarmCos < 0)
+					alarmSoundPlay = false;
 			
 					if(!alarmText){
 						alarmText = true;
@@ -496,7 +500,7 @@ public class IntroScreen implements Screen{
 			
 			//Atténuation de l'alarm/Transition
 		    if(textBox.dialogueFinished){
-		    	transitionAlpha += Gdx.graphics.getDeltaTime();
+		    	transitionAlpha += GameConstants.FRAME_DELTA;
 		    	alarmSound.setVolume(soundId, MathUtils.clamp(1f / transitionAlpha, 0f, 1f));
 		    	
 		    	if(transitionAlpha > 8f)
@@ -504,7 +508,7 @@ public class IntroScreen implements Screen{
 		    }
 		}	
 	    else{
-	    	introStep3Timer += delta;
+	    	introStep3Timer += GameConstants.FRAME_DELTA;
 	    	boolean assetsReady = game.assets.update();
 	    	boolean allowWebFallbackTransition = webRuntime && introStep3Timer > 8f;
 	    	if(assetsReady || allowWebFallbackTransition){
@@ -515,7 +519,7 @@ public class IntroScreen implements Screen{
 	    
 	    /**********************************************************/
 	    game.batch.setShader(null);
-	    stage.act();
+	    stage.act(GameConstants.FRAME_DELTA);
 	    stage.draw();	
 	}
 

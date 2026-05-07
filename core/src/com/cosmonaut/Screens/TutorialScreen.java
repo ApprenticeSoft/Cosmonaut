@@ -81,11 +81,13 @@ public class TutorialScreen extends GameScreen{
 	
 	//@Override
 	public void render(float delta) { 
-		super.render(delta);
+		
+		GameConstants.FRAME_DELTA = Math.min(delta, 1f/15f);
+super.render(delta);
 		
 		if(!GameConstants.GAME_PAUSED){
 			if(directionArrow){
-				arrowAnimationTime += Gdx.graphics.getDeltaTime();
+				arrowAnimationTime += GameConstants.FRAME_DELTA;
 				if(arrowAnimationTime > 3)
 					arrowAnimationTime = 0;
 
@@ -111,7 +113,7 @@ public class TutorialScreen extends GameScreen{
 			
 		if(Data.getGameControls() == 4){
 			if(tutoStep == 3){
-				animationTime += Gdx.graphics.getDeltaTime();
+				animationTime += GameConstants.FRAME_DELTA;
 				game.batch.begin();
 				game.batch.setColor(1, 1, 1, 1);
 				game.batch.draw(rotationControlAnimation.getKeyFrame(animationTime), 
@@ -122,7 +124,7 @@ public class TutorialScreen extends GameScreen{
 		    	game.batch.end();
 			}
 			else if(tutoStep == 5){
-				animationTime += Gdx.graphics.getDeltaTime();
+				animationTime += GameConstants.FRAME_DELTA;
 				game.batch.begin();
 				game.batch.setColor(1, 1, 1, 1);
 				game.batch.draw(jetpackControlAnimation.getKeyFrame(animationTime), 
@@ -365,7 +367,7 @@ public class TutorialScreen extends GameScreen{
 					mapReader.hero.jetpackOff();
 				}
 				else if(Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.D)){
-					tutoCountDown -= Gdx.graphics.getDeltaTime();
+					tutoCountDown -= GameConstants.FRAME_DELTA;
 					GameConstants.TUTORIAL = false;
 					
 					if(tutoCountDown < 0){
@@ -395,7 +397,7 @@ public class TutorialScreen extends GameScreen{
 				hud.leftRightButtonPulse();
 				
 				if(hud.buttonRight.isOver() || hud.buttonLeft.isOver()){
-					tutoCountDown -= Gdx.graphics.getDeltaTime();
+					tutoCountDown -= GameConstants.FRAME_DELTA;
 					GameConstants.TUTORIAL = false;
 					
 					if(tutoCountDown < 0){
@@ -417,14 +419,14 @@ public class TutorialScreen extends GameScreen{
 				tutoTextBox.writeLine(2,8);
 				tutoTextBox.setLabelPos(0.5f*Gdx.graphics.getWidth() + tutoTextBox.getTextBoxWidth()/20, 0.5f*Gdx.graphics.getHeight() - tutoTextBox.getTextBoxHeight()/2);
 				
-				touchSurfaceAlpha += 5f * Gdx.graphics.getDeltaTime();
+				touchSurfaceAlpha += 5f * GameConstants.FRAME_DELTA;
 				imageTouchSurface.addAction(Actions.alpha((float)(1 + MathUtils.cos(touchSurfaceAlpha))/10));
 				
 				if(Gdx.input.isTouched() && Gdx.input.getX() < Gdx.graphics.getWidth()/2){
 					GameConstants.TUTORIAL = false;
 					
 					if(mapReader.hero.isRotating)
-						tutoCountDown -= Gdx.graphics.getDeltaTime();
+						tutoCountDown -= GameConstants.FRAME_DELTA;
 					
 					if(tutoCountDown < 0){
 						mapReader.hero.stopRotating();
@@ -476,7 +478,7 @@ public class TutorialScreen extends GameScreen{
 				tutoTextBox.writeLine(2,4);
 				
 				if(Gdx.input.isKeyPressed(Keys.W)){
-					tutoCountDown -= Gdx.graphics.getDeltaTime();
+					tutoCountDown -= GameConstants.FRAME_DELTA;
 					GameConstants.TUTORIAL = false;
 					
 					if(tutoCountDown < 0){
@@ -505,7 +507,7 @@ public class TutorialScreen extends GameScreen{
 				hud.jetpackButtonPulse();
 				
 				if(hud.buttonJetPack.isOver()){
-					tutoCountDown -= Gdx.graphics.getDeltaTime();
+					tutoCountDown -= GameConstants.FRAME_DELTA;
 					GameConstants.TUTORIAL = false;
 					
 					if(tutoCountDown < 0){
@@ -524,7 +526,7 @@ public class TutorialScreen extends GameScreen{
 				tutoTextBox.writeLine(2,9);
 				tutoTextBox.setLabelPos(0.5f*Gdx.graphics.getWidth() - tutoTextBox.getTextBoxWidth(), 0.8f*Gdx.graphics.getHeight() - tutoTextBox.getTextBoxHeight()/2);
 				
-				touchSurfaceAlpha += 5f * Gdx.graphics.getDeltaTime();
+				touchSurfaceAlpha += 5f * GameConstants.FRAME_DELTA;
 				imageTouchSurface.addAction(Actions.alpha((float)(1 + MathUtils.cos(touchSurfaceAlpha))/10));
 				imageTouchSurface.setX(Gdx.graphics.getWidth()/2);
 				
@@ -532,7 +534,7 @@ public class TutorialScreen extends GameScreen{
 					GameConstants.TUTORIAL = false;
 					
 					if(mapReader.hero.isJetPackActive)
-						tutoCountDown -= Gdx.graphics.getDeltaTime();
+						tutoCountDown -= GameConstants.FRAME_DELTA;
 					
 					if(tutoCountDown < 0){
 						mapReader.hero.stopRotating();
@@ -594,7 +596,7 @@ public class TutorialScreen extends GameScreen{
 				}
 			}
 			
-			tutoCountDown -= Gdx.graphics.getDeltaTime();
+			tutoCountDown -= GameConstants.FRAME_DELTA;
 			
 			if(tutoCountDown > 3){
 				tutoTextBox.writeParagraph(3);
@@ -637,7 +639,7 @@ public class TutorialScreen extends GameScreen{
 				}
 			}
 			
-			tutoCountDown -= Gdx.graphics.getDeltaTime();
+			tutoCountDown -= GameConstants.FRAME_DELTA;
 			
 			if(tutoCountDown > 2.3f){
 				tutoTextBox.writeParagraph(4);
@@ -684,7 +686,7 @@ public class TutorialScreen extends GameScreen{
 				tutoTextBox.dialogueFinished = false;
 			}
 			
-			tutoCountDown -= Gdx.graphics.getDeltaTime();
+			tutoCountDown -= GameConstants.FRAME_DELTA;
 			
 			if(tutoCountDown < 7){
 				if(!tutoTextBox.dialogueFinished){
@@ -834,7 +836,7 @@ public class TutorialScreen extends GameScreen{
 					camera.zoomIn();
 				}			
 				else{
-					tutoCountDown -= Gdx.graphics.getDeltaTime();
+					tutoCountDown -= GameConstants.FRAME_DELTA;
 					camera.positionToCoordinate(mapReader.hero.getX(),mapReader.hero.getY(), tiledMap);
 					if(camera.viewportWidth < GameConstants.SCREEN_WIDTH){
 						camera.zoomOut();
@@ -943,7 +945,7 @@ public class TutorialScreen extends GameScreen{
 			}
 			else if(Data.getGameControls() == 4){				//Android touch controls
 				tutoTextBox.writeParagraph(10);
-				touchSurfaceAlpha += 5f * Gdx.graphics.getDeltaTime();
+				touchSurfaceAlpha += 5f * GameConstants.FRAME_DELTA;
 				imageTouchSurface.addAction(Actions.alpha((float)(1 + MathUtils.cos(touchSurfaceAlpha))/10));
 				imageTouchSurface.setX(0);
 						
@@ -998,7 +1000,7 @@ public class TutorialScreen extends GameScreen{
 				camera.zoomIn();
 			}			
 			else{
-				tutoCountDown -= Gdx.graphics.getDeltaTime();
+				tutoCountDown -= GameConstants.FRAME_DELTA;
 				camera.positionToCoordinate(mapReader.hero.getX(),mapReader.hero.getY(), tiledMap);
 				if(camera.viewportWidth < GameConstants.SCREEN_WIDTH){
 					camera.zoomOut();
