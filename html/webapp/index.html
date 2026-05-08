@@ -12,9 +12,28 @@
 </head>
 <body>
 <div id="page-root">
-    <div id="embed-html"></div>
+    <div id="embed-html" class="loading-shell"></div>
     <div id="rotate-hint">Rotate device to landscape</div>
 </div>
+<script>
+    (function () {
+        var loadingEmbed = document.getElementById('embed-html');
+        if (!loadingEmbed) return;
+
+        function clearLoadingShell() {
+            if (!loadingEmbed.querySelector('canvas')) return false;
+            loadingEmbed.classList.remove('loading-shell');
+            return true;
+        }
+
+        if (!clearLoadingShell()) {
+            var observer = new MutationObserver(function () {
+                if (clearLoadingShell()) observer.disconnect();
+            });
+            observer.observe(loadingEmbed, { childList: true, subtree: true });
+        }
+    }());
+</script>
 <script type="text/javascript" src="html/html.nocache.js"></script>
 <script>
     const embed = document.getElementById('embed-html');
