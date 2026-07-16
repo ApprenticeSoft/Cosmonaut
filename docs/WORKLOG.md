@@ -920,3 +920,37 @@ Deployment:
 - Deployed new dist to Pi `/var/www/cosmonaut`.
 - Restarted `cosmonaut-static.service` -> `active`.
 - Live check `https://cosmonaut.marcvidal.ca` -> `HTTP/1.1 200 OK`.
+
+## 2026-07-16 Browser Smoke Stability and OOM Containment
+
+Root causes:
+
+- The smoke harness clicked the lower edge of `Play` and used an outdated
+  `Options` coordinate after the four-button web menu was restored.
+- Playwright's legacy `headless_shell` renderer could grow past 14 GiB while
+  capturing the WebGL canvas, exhausting WSL RAM and swap.
+- The live site requested a missing `/favicon.ico`, producing the only console
+  error after the functional flow was repaired.
+
+Changes:
+
+- Updated menu/back clicks to target button centers for desktop and touch
+  layouts.
+- Forced Playwright to use its regular Chromium executable instead of
+  `headless_shell`.
+- Captured the canvas only, disabled screenshot animations, and limited each
+  screenshot to 15 seconds.
+- Added optional scenario arguments such as `local-desktop` and `rpi-mobile`
+  for isolated reruns.
+- Added an empty data-URL favicon to the HTML shell.
+
+Validation and deployment:
+
+- `./gradlew --no-daemon :core:compileJava :html:dist` -> **SUCCESS**.
+- Protected browser run used a 5 GiB RAM / 1 GiB swap cgroup; observed peak
+  browser memory was below 1 GiB.
+- Local desktop and mobile smoke scenarios -> **PASS**.
+- Deployed `html/build/dist` to `/var/www/cosmonaut` and restarted
+  `cosmonaut-static.service` -> **active**.
+- Live desktop and mobile smoke scenarios -> **PASS**.
+- Live host-header HTTPS check -> `HTTP/1.1 200 OK`.

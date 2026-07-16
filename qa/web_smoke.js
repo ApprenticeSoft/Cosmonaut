@@ -4,9 +4,14 @@ const path = require('path');
 const { PNG } = require('pngjs');
 
 const OUTPUT_ROOT = path.resolve(__dirname, 'reports');
-const MENU_BUTTON_X = 0.84;
-const MENU_PLAY_Y = 0.35;
-const MENU_OPTIONS_Y = 0.47;
+const MENU_BUTTON_X = 0.83;
+const MENU_PLAY_Y = 0.29;
+const MENU_OPTIONS_DESKTOP_Y = 0.61;
+const MENU_OPTIONS_MOBILE_Y = 0.59;
+const BACK_BUTTON_X = 0.07;
+const BACK_BUTTON_DESKTOP_Y = 0.11;
+const BACK_BUTTON_MOBILE_Y = 0.12;
+const SCREENSHOT_TIMEOUT_MS = 15000;
 const MENU_REGION = [0.70, 0.28, 0.96, 0.66];
 const OPTIONS_LEFT_REGION = [0.02, 0.28, 0.40, 0.70];
 const MENU_REGION_BRIGHT_MIN = 3.0;
@@ -99,7 +104,11 @@ function regionBrightness(filePath, nx1, ny1, nx2, ny2) {
 
 async function shot(page, outDir, name) {
   const file = path.join(outDir, `${name}.png`);
-  await page.screenshot({ path: file, fullPage: true });
+  await page.locator('canvas').screenshot({
+    path: file,
+    animations: 'disabled',
+    timeout: SCREENSHOT_TIMEOUT_MS,
+  });
   return file;
 }
 
@@ -107,7 +116,11 @@ async function waitForNonBlack(page, outDir, label, timeoutMs = 90000) {
   const probeFile = path.join(outDir, `${label}_probe.png`);
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
-    await page.screenshot({ path: probeFile, fullPage: true });
+    await page.locator('canvas').screenshot({
+      path: probeFile,
+      animations: 'disabled',
+      timeout: SCREENSHOT_TIMEOUT_MS,
+    });
     const b = imageBrightness(probeFile);
     if (b > 4) return b;
     await sleep(500);
@@ -135,7 +148,11 @@ async function runScenario(target, mode) {
   const outDir = path.join(OUTPUT_ROOT, testId);
   fs.mkdirSync(outDir, { recursive: true });
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    executablePath: chromium.executablePath(),
+    args: ['--disable-dev-shm-usage'],
+  });
   let context;
   if (mode === 'mobile') {
     const mobileDescriptor = devices['Galaxy S9+'];
@@ -215,7 +232,8 @@ async function runScenario(target, mode) {
     result.steps.push('main_menu_background_visible');
 
     // Options and back
-    await clickNorm(page, MENU_BUTTON_X, MENU_OPTIONS_Y, useTouch);
+    const optionsY = useTouch ? MENU_OPTIONS_MOBILE_Y : MENU_OPTIONS_DESKTOP_Y;
+    await clickNorm(page, MENU_BUTTON_X, optionsY, useTouch);
     await sleep(1800);
     await waitForNonBlack(page, outDir, 'options_open', 15000);
     result.steps.push('opened_options');
@@ -225,7 +243,8 @@ async function runScenario(target, mode) {
       throw new Error(`Main menu -> options transition was not detected (left-region brightness=${optionsLeftBright.toFixed(2)}).`);
     }
 
-    await clickNorm(page, 0.05, 0.08, useTouch);
+    const backY = useTouch ? BACK_BUTTON_MOBILE_Y : BACK_BUTTON_DESKTOP_Y;
+    await clickNorm(page, BACK_BUTTON_X, backY, useTouch);
     await sleep(1800);
     await waitForNonBlack(page, outDir, 'options_back', 15000);
     result.steps.push('back_from_options');
@@ -289,8 +308,13 @@ async function main() {
   ];
 
   const results = [];
+  const requestedTestIds = new Set(process.argv.slice(2));
   for (const target of targets) {
     for (const mode of ['desktop', 'mobile']) {
+      const testId = `${target.name}-${mode}`;
+      if (requestedTestIds.size > 0 && !requestedTestIds.has(testId)) {
+        continue;
+      }
       // eslint-disable-next-line no-console
       console.log(`Running ${target.name} ${mode} ...`);
       const r = await runScenario(target, mode);
